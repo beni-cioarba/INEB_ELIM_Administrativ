@@ -1,438 +1,501 @@
-/* ============================================
-   ELIM Admin - Church Team Scheduling
-   Responsive Design
+﻿/* ============================================
+   ELIM Admin - Material Design Styling
    ============================================ */
 
-/* --- Base & Reset --- */
+/* --- Material Symbols config --- */
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
 :host {
   display: block;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
-  color: #1e293b;
-  background: #f1f5f9;
   min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
+  background: #f5f7fa;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-/* --- Header --- */
-.header {
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #3b82f6 100%);
-  color: white;
-  padding: 1.5rem 1rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
-  pointer-events: none;
+/* --- Header Toolbar --- */
+.header-toolbar {
+  background: linear-gradient(135deg, #0d2137 0%, #1565c0 60%, #1e88e5 100%) !important;
+  padding: 1rem 1rem 0.75rem !important;
+  height: auto !important;
+  min-height: auto !important;
+  flex-direction: column;
 }
 
 .header-content {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
+  width: 100%;
+  text-align: center;
 }
 
 .header-top {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
-.church-logo {
+.header-icon {
   font-size: 2.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-.header-text h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  font-size: 0.85rem;
-  opacity: 0.85;
-  margin: 0.2rem 0 0 0;
-}
-
-.header-title {
-  font-size: 1rem;
-  font-weight: 400;
+  font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48;
   opacity: 0.9;
-  margin: 0;
-  padding-top: 0.5rem;
-  border-top: 1px solid rgba(255,255,255,0.2);
 }
 
-/* --- Navigation --- */
-.nav-bar {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+.church-name {
+  font-size: 1.65rem;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.church-subtitle {
+  display: block;
+  font-size: 0.78rem;
+  opacity: 0.75;
+  font-weight: 300;
+}
+
+.header-tagline {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  margin: 0.4rem 0 0 0;
+  font-weight: 300;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+/* --- Tab Navigation --- */
+.nav-container {
   position: sticky;
   top: 0;
   z-index: 100;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-.nav-content {
-  max-width: 800px;
+.nav-tabs {
+  max-width: 860px;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  gap: 0;
 }
 
-.nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.75rem 1rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+.tab-icon {
+  font-size: 20px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.tab-label {
+  vertical-align: middle;
   font-size: 0.85rem;
-  color: #64748b;
-  transition: all 0.2s ease;
-  border-bottom: 3px solid transparent;
-  font-family: inherit;
-}
-
-.nav-btn:hover {
-  background: #f8fafc;
-  color: #2563eb;
-}
-
-.nav-btn.active {
-  color: #2563eb;
-  border-bottom-color: #2563eb;
-  font-weight: 600;
-}
-
-.nav-icon {
-  font-size: 1.25rem;
-}
-
-.nav-label {
-  font-size: 0.8rem;
 }
 
 /* --- Main Content --- */
 .main-content {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 1rem;
+  min-height: 60vh;
 }
 
 .section {
-  animation: fadeIn 0.3s ease;
+  animation: fadeSlideIn 0.35s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Section Titles --- */
-.section-title {
+.fade-in { animation: fadeSlideIn 0.35s ease; }
+
+/* --- Section Headings --- */
+.section-heading {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #37474f;
+  margin: 1.25rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e3f2fd;
+}
+
+.heading-icon {
+  color: #1565c0;
+  font-size: 22px;
+}
+
+.heading-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 2px 10px;
+  border-radius: 12px;
   font-weight: 600;
-  color: #334155;
-  margin: 1.5rem 0 1rem 0;
 }
 
-.section-icon {
-  font-size: 1.3rem;
-}
-
-/* --- Next Event Card --- */
+/* ---- NEXT EVENT CARD ---- */
 .next-event-card {
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
-  border-radius: 16px;
-  color: white;
+  border-radius: 16px !important;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.25);
+  border: none !important;
+  box-shadow: 0 8px 32px rgba(21, 101, 192, 0.18) !important;
   margin-bottom: 1.5rem;
 }
 
-.next-event-badge {
-  background: rgba(255,255,255,0.15);
-  padding: 0.5rem 1rem;
+.next-event-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  color: white;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+}
+
+.next-event-ribbon .material-symbols-rounded {
+  font-size: 18px;
 }
 
 .next-event-body {
-  padding: 1.25rem;
+  padding: 1.25rem !important;
 }
 
-.next-event-team {
+.next-event-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.team-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.5);
-}
-
-.next-event-team-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.next-event-date {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-bottom: 0.75rem;
-  opacity: 0.95;
-}
-
-.next-event-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.meta-item {
+.next-event-team-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: white;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-.meta-icon {
-  font-size: 1rem;
-}
-
-.next-event-countdown {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255,255,255,0.2);
-  border-radius: 12px;
-  padding: 0.5rem 1rem;
-}
-
-.countdown-number {
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-
-.countdown-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.today-highlight {
-  background: rgba(255, 215, 0, 0.3);
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-/* --- Schedule List --- */
-.schedule-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.schedule-card {
-  display: flex;
-  align-items: stretch;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.schedule-card:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.schedule-card.next-up {
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
-  border: 1px solid #bfdbfe;
-}
-
-.schedule-card.this-week {
-  background: #fefce8;
-}
-
-.schedule-card-left {
-  border-left: 5px solid #ccc;
-  display: flex;
-  align-items: center;
-  padding: 0.75rem;
-}
-
-.schedule-date-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 48px;
-}
-
-.date-day {
-  font-size: 1.4rem;
+  justify-content: center;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #1e293b;
-  line-height: 1;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.date-month {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-}
-
-.schedule-card-body {
+.next-event-info {
   flex: 1;
-  padding: 0.75rem 0.5rem;
   min-width: 0;
 }
 
-.schedule-team-name {
+.next-event-team-name {
+  font-size: 1.3rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  color: #1e293b;
+  margin: 0 0 0.2rem 0;
+  color: #1a237e;
 }
 
-.schedule-coordinator {
-  font-size: 0.8rem;
-  color: #64748b;
-}
-
-.schedule-info {
-  font-size: 0.75rem;
-  color: #94a3b8;
-  margin-top: 0.15rem;
-}
-
-.schedule-card-right {
+.next-event-date {
   display: flex;
   align-items: center;
-  padding: 0.75rem;
+  gap: 0.3rem;
+  font-size: 0.92rem;
+  color: #546e7a;
+  margin: 0;
 }
 
-.days-badge {
-  font-size: 0.75rem;
+.next-event-date .material-symbols-rounded {
+  font-size: 18px;
+  color: #1565c0;
+}
+
+.next-event-details {
+  margin-bottom: 1rem;
+}
+
+.next-event-countdown {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.countdown-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(21, 101, 192, 0.04);
+}
+
+.countdown-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1565c0;
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-size: 0.7rem;
+  color: #78909c;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.today-circle {
+  border-color: #ff6f00 !important;
+  background: rgba(255, 111, 0, 0.06);
+  animation: pulseRing 2s infinite;
+}
+
+.today-icon {
+  font-size: 2rem;
+  color: #ff6f00;
+}
+
+.today-pulse .countdown-unit {
+  color: #ff6f00;
+  font-weight: 700;
+}
+
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 111, 0, 0.3); }
+  70%  { box-shadow: 0 0 0 12px rgba(255, 111, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 111, 0, 0); }
+}
+
+/* ---- TIMELINE SCHEDULE ---- */
+.schedule-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 0;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0.6rem 0.5rem;
+  border-radius: 12px;
+  transition: background 0.2s, transform 0.2s;
+  cursor: default;
+}
+
+.timeline-item:hover {
+  background: rgba(21, 101, 192, 0.04);
+}
+
+.timeline-item.is-next {
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+}
+
+.timeline-item.is-this-week {
+  background: #fff8e1;
+}
+
+.timeline-date {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tl-day {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tl-month {
+  font-size: 0.55rem;
   font-weight: 600;
-  color: #2563eb;
-  background: #eff6ff;
-  padding: 0.25rem 0.6rem;
-  border-radius: 20px;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.timeline-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+  padding: 0 0;
+  position: relative;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 19px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.timeline-line {
+  width: 2px;
+  flex: 1;
+  background: #e0e0e0;
+  margin-top: 2px;
+}
+
+.timeline-content {
+  flex: 1;
+  padding: 0.2rem 0.5rem;
+  min-width: 0;
+}
+
+.tl-team {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #263238;
+}
+
+.tl-team-icon {
+  font-size: 18px;
+}
+
+.tl-coordinator, .tl-program {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  color: #78909c;
+}
+
+.tl-meta-icon {
+  font-size: 15px;
+  color: #b0bec5;
+}
+
+.timeline-badge-area {
+  display: flex;
+  align-items: center;
+  padding-right: 0.25rem;
+}
+
+.tl-days-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1565c0;
+  background: #e3f2fd;
+  padding: 3px 8px;
+  border-radius: 10px;
   white-space: nowrap;
 }
 
-.days-badge.today {
-  background: #fef3c7;
-  color: #d97706;
-  animation: pulse 1.5s infinite;
+.today-badge {
+  background: #fff3e0 !important;
+  color: #e65100 !important;
+  animation: pulseRing 2s infinite;
 }
 
 /* --- Past Schedule --- */
-.past-section {
-  margin-top: 1.5rem;
-}
+.past-divider { margin: 1.5rem 0 0.75rem; }
+
+.past-section { margin-bottom: 1rem; }
 
 .past-toggle {
   width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: #e2e8f0;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #475569;
-  font-weight: 500;
-  transition: background 0.2s;
-  font-family: inherit;
-}
-
-.past-toggle:hover {
-  background: #cbd5e1;
-}
-
-.past-toggle-icon {
-  display: inline-block;
-  transition: transform 0.3s;
-  font-size: 0.7rem;
-}
-
-.past-toggle-icon.open {
-  transform: rotate(90deg);
+  justify-content: center;
+  gap: 0.4rem;
+  color: #78909c !important;
+  font-size: 0.85rem;
 }
 
 .past-list {
   margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
-.schedule-card.past {
-  opacity: 0.55;
-  background: #f8fafc;
+.past-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  cursor: default;
 }
 
-.schedule-card.past:hover {
-  opacity: 0.8;
+.past-item:hover { opacity: 0.75; }
+
+.past-date-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 36px;
 }
 
-.past-date .date-day,
-.past-date .date-month {
-  color: #94a3b8;
+.past-day {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #90a4ae;
+  line-height: 1.1;
 }
 
-.completed-badge {
-  font-size: 0.7rem;
-  color: #059669;
-  background: #ecfdf5;
-  padding: 0.2rem 0.5rem;
-  border-radius: 20px;
-  white-space: nowrap;
-  font-weight: 500;
+.past-month {
+  font-size: 0.6rem;
+  color: #b0bec5;
+  font-weight: 600;
 }
 
-/* --- Teams Grid --- */
+.past-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.past-team {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.past-coord {
+  font-size: 0.75rem;
+  color: #90a4ae;
+}
+
+.past-chip {
+  font-size: 0.65rem !important;
+  min-height: 24px !important;
+  padding: 0 8px !important;
+}
+
+/* ---- TEAMS GRID ---- */
 .teams-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -440,20 +503,23 @@
 }
 
 .team-card {
-  background: white;
-  border-radius: 14px;
+  border-radius: 16px !important;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
+  border: 1px solid #e0e0e0 !important;
 }
 
 .team-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
 }
 
-.team-card-header {
+.team-card.expanded {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+}
+
+.team-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -461,220 +527,228 @@
   color: white;
 }
 
-.team-number {
-  font-size: 2rem;
-  font-weight: 800;
-  opacity: 0.4;
-  min-width: 40px;
-  text-align: center;
-}
-
-.team-header-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.team-card-name {
-  font-weight: 700;
-  font-size: 1.05rem;
-}
-
-.team-card-coordinator,
-.team-card-responsible {
-  font-size: 0.8rem;
-  opacity: 0.9;
-}
-
-.team-members-count {
-  font-size: 0.75rem;
+.team-number-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.2);
-  padding: 0.25rem 0.6rem;
-  border-radius: 20px;
-  white-space: nowrap;
-  font-weight: 600;
-}
-
-.team-next-date {
-  padding: 0.6rem 1rem;
-  background: #fffbeb;
-  font-size: 0.85rem;
-  color: #92400e;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
-.next-date-icon {
+.team-header-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.team-name {
+  font-weight: 600;
   font-size: 1rem;
 }
 
-.next-date-days {
+.team-role-line {
   font-size: 0.75rem;
-  color: #b45309;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
-.team-card-body {
-  padding: 1rem;
-  animation: fadeIn 0.3s ease;
+.team-member-count-badge {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
-.team-contact {
+.team-member-count-badge .material-symbols-rounded {
+  font-size: 16px;
+}
+
+.team-next-banner {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.5rem 0.75rem;
-  background: #eff6ff;
-  border-radius: 8px;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  background: #fff8e1;
+  font-size: 0.82rem;
+  color: #e65100;
   flex-wrap: wrap;
 }
 
-.contact-icon {
-  font-size: 1.1rem;
+.team-next-banner .material-symbols-rounded {
+  font-size: 18px;
+  color: #ff8f00;
+}
+
+.team-next-days {
+  font-size: 0.72rem;
+  color: #bf360c;
+}
+
+.team-body {
+  padding: 0.75rem 1rem 1rem !important;
+}
+
+.team-phone-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #e3f2fd;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #37474f;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.team-phone-bar .material-symbols-rounded {
+  font-size: 20px;
+  color: #1565c0;
 }
 
 .phone-link {
-  color: #2563eb;
+  color: #1565c0;
   text-decoration: none;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
 }
 
-.phone-link:hover {
-  text-decoration: underline;
-}
+.phone-link:hover { text-decoration: underline; }
 
-.members-title {
+.phone-link.small { font-size: 0.78rem; }
+
+.team-members-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #475569;
-  margin-bottom: 0.5rem;
+  color: #546e7a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.team-members-heading .material-symbols-rounded {
+  font-size: 18px;
+}
+
+.members-mat-list {
+  padding: 0 !important;
+}
+
+.member-row {
+  min-height: 40px !important;
+  height: auto !important;
+}
+
+.member-list-icon {
+  font-size: 20px !important;
+}
+
+.coordinator-name {
+  font-weight: 600 !important;
+}
+
+.coord-chip {
+  font-size: 0.6rem;
+  background: #fff8e1;
+  color: #e65100;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.team-expand-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.4rem;
+  font-size: 0.72rem;
+  color: #b0bec5;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.members-list {
+.team-expand-hint .material-symbols-rounded {
+  font-size: 18px;
+}
+
+/* ---- RULES ACCORDION ---- */
+.rules-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rule-panel-icon {
+  font-size: 22px;
+  margin-right: 0.5rem;
+  color: #1565c0;
+  vertical-align: middle;
+}
+
+.rule-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-}
-
-.member-item {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  flex-wrap: wrap;
-}
-
-.member-item:nth-child(odd) {
-  background: #f8fafc;
-}
-
-.member-icon {
-  font-size: 0.9rem;
-}
-
-.member-name {
-  flex: 1;
-  min-width: 0;
-}
-
-.member-name.is-coordinator {
-  font-weight: 600;
-}
-
-.role-badge {
-  font-size: 0.65rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.coord-badge {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.member-phone {
-  font-size: 0.8rem;
-}
-
-.team-card-expand-hint {
-  text-align: center;
-  padding: 0.5rem;
-  font-size: 0.75rem;
-  color: #94a3b8;
-}
-
-/* --- Rules --- */
-.rules-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.rule-card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.rule-header {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  border-bottom: 1px solid #e0e7ff;
-}
-
-.rule-icon {
-  font-size: 1.5rem;
-}
-
-.rule-header h4 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1e3a5f;
-}
-
-.rule-list {
-  padding: 1rem 1.25rem 1rem 2.5rem;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
 .rule-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
   font-size: 0.88rem;
-  line-height: 1.5;
-  color: #475569;
-  position: relative;
+  line-height: 1.55;
+  color: #455a64;
 }
 
-.rule-list li::marker {
-  color: #3b82f6;
+.rule-bullet {
+  font-size: 20px;
+  color: #1565c0;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
-/* --- Footer --- */
+/* ---- FOOTER ---- */
 .footer {
   text-align: center;
   padding: 1.5rem 1rem;
-  background: #1e293b;
-  color: #94a3b8;
-  font-size: 0.8rem;
+  background: #0d2137;
+  color: #78909c;
+  font-size: 0.78rem;
   margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.footer-icon {
+  font-size: 28px;
+  opacity: 0.4;
+  margin-bottom: 0.25rem;
 }
 
 .footer p {
@@ -682,113 +756,58 @@
 }
 
 .footer-sub {
-  margin-top: 0.25rem !important;
-  font-size: 0.7rem;
-  opacity: 0.7;
+  font-size: 0.68rem;
+  opacity: 0.55;
 }
 
 /* ============================================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE
    ============================================ */
-
-/* Tablets and larger phones */
-@media (min-width: 480px) {
+@media (min-width: 520px) {
   .teams-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .team-card.expanded {
     grid-column: 1 / -1;
   }
-
-  .header-text h1 {
+  .church-name {
     font-size: 2rem;
   }
-
-  .header-title {
-    font-size: 1.1rem;
-  }
-
-  .next-event-meta {
-    flex-direction: row;
+  .next-event-details mat-chip-set {
+    display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
   }
 }
 
-/* Desktop */
 @media (min-width: 768px) {
-  .header {
-    padding: 2rem 1.5rem;
+  .header-toolbar {
+    padding: 1.5rem 1.5rem 1rem !important;
   }
+  .header-icon { font-size: 3rem; }
+  .church-name { font-size: 2.25rem; }
+  .main-content { padding: 1.5rem; }
 
-  .main-content {
-    padding: 1.5rem;
-  }
-
-  .church-logo {
-    font-size: 3rem;
-  }
-
-  .header-text h1 {
-    font-size: 2.25rem;
-  }
-
-  .nav-btn {
+  .timeline-content {
     flex-direction: row;
-    gap: 0.5rem;
-    padding: 1rem 1.5rem;
-    flex: unset;
-  }
-
-  .schedule-card-body {
-    display: flex;
     align-items: center;
     gap: 1rem;
   }
-
-  .schedule-coordinator {
-    margin: 0;
-  }
-
-  .schedule-info {
-    margin: 0;
-  }
-
-  .rule-list {
-    padding-left: 3rem;
-    padding-right: 2rem;
-  }
+  .tl-coordinator, .tl-program { margin: 0; }
 }
 
-/* Small phones */
-@media (max-width: 360px) {
-  .header-text h1 {
-    font-size: 1.4rem;
+@media (max-width: 380px) {
+  .header-icon { font-size: 2rem; }
+  .church-name { font-size: 1.35rem; }
+  .tab-label { font-size: 0.72rem; }
+  .tab-icon { font-size: 18px; margin-right: 3px; }
+  .next-event-team-badge {
+    width: 40px; height: 40px; font-size: 1.4rem;
   }
-
-  .next-event-team-name {
-    font-size: 1.1rem;
-  }
-
-  .next-event-date {
-    font-size: 0.95rem;
-  }
-
-  .nav-btn {
-    padding: 0.6rem 0.5rem;
-  }
-
-  .nav-label {
-    font-size: 0.7rem;
-  }
-
-  .team-card-header {
-    padding: 0.75rem;
-  }
-
-  .team-number {
-    font-size: 1.5rem;
-    min-width: 30px;
-  }
+  .next-event-team-name { font-size: 1.1rem; }
+  .timeline-date { width: 40px; height: 40px; }
+  .tl-day { font-size: 1rem; }
+  .team-number-circle { width: 36px; height: 36px; font-size: 1.2rem; }
+  .team-header { padding: 0.75rem; }
+  .countdown-circle { width: 65px; height: 65px; }
+  .countdown-number { font-size: 1.4rem; }
 }

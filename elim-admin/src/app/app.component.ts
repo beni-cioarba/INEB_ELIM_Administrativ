@@ -1,11 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SCHEDULE_DATA, TEAMS_DATA, RULES, ScheduleEntry, Team } from './data/schedule-data';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatTabsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
+    MatExpansionModule,
+    MatListModule,
+    MatBadgeModule,
+    MatDividerModule,
+    MatRippleModule,
+    MatTooltipModule,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -18,7 +44,7 @@ export class AppComponent implements OnInit {
   pastSchedule: ScheduleEntry[] = [];
   nextEvent: ScheduleEntry | null = null;
 
-  activeSection: 'schedule' | 'teams' | 'rules' = 'schedule';
+  activeTab = 0;
   showPastSchedule = false;
   expandedTeam: string | null = null;
 
@@ -31,10 +57,8 @@ export class AppComponent implements OnInit {
 
   categorizeSchedule(): void {
     const sorted = [...this.scheduleData].sort((a, b) => a.date.getTime() - b.date.getTime());
-
     this.pastSchedule = sorted.filter(e => e.date < this.today);
     this.upcomingSchedule = sorted.filter(e => e.date >= this.today);
-
     if (this.upcomingSchedule.length > 0) {
       this.nextEvent = this.upcomingSchedule[0];
     }
@@ -52,6 +76,11 @@ export class AppComponent implements OnInit {
     return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
   }
 
+  getMonthShort(date: Date): string {
+    const months = ['IAN', 'FEB', 'MAR', 'APR', 'MAI', 'IUN', 'IUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    return months[date.getMonth()];
+  }
+
   daysUntil(date: Date): number {
     const diff = date.getTime() - this.today.getTime();
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
@@ -59,19 +88,28 @@ export class AppComponent implements OnInit {
 
   getTeamColor(teamName: string): string {
     const colors: Record<string, string> = {
-      'Echipa 1': '#2563eb',
-      'Echipa 2': '#7c3aed',
-      'Echipa 3': '#059669',
-      'Echipa 4': '#d97706',
-      'Echipa 5': '#dc2626',
-      'Echipa 6': '#0891b2',
-      'Echipa 7': '#be185d',
+      'Echipa 1': '#1565c0',
+      'Echipa 2': '#6a1b9a',
+      'Echipa 3': '#2e7d32',
+      'Echipa 4': '#e65100',
+      'Echipa 5': '#c62828',
+      'Echipa 6': '#00838f',
+      'Echipa 7': '#ad1457',
     };
-    return colors[teamName] || '#6b7280';
+    return colors[teamName] || '#546e7a';
   }
 
-  getTeamForEntry(entry: ScheduleEntry): Team | undefined {
-    return this.teamsData.find(t => t.name === entry.team);
+  getTeamIcon(teamName: string): string {
+    const icons: Record<string, string> = {
+      'Echipa 1': 'looks_one',
+      'Echipa 2': 'looks_two',
+      'Echipa 3': 'looks_3',
+      'Echipa 4': 'looks_4',
+      'Echipa 5': 'looks_5',
+      'Echipa 6': 'looks_6',
+      'Echipa 7': 'filter_7',
+    };
+    return icons[teamName] || 'group';
   }
 
   toggleTeam(teamName: string): void {
@@ -86,10 +124,6 @@ export class AppComponent implements OnInit {
     return teamName.replace('Echipa ', '');
   }
 
-  setSection(section: 'schedule' | 'teams' | 'rules'): void {
-    this.activeSection = section;
-  }
-
   isToday(date: Date): boolean {
     return date.getTime() === this.today.getTime();
   }
@@ -101,5 +135,9 @@ export class AppComponent implements OnInit {
 
   getPhoneHref(phone: string): string {
     return 'tel:+34' + phone.split(' ').join('');
+  }
+
+  getRuleIcon(index: number): string {
+    return ['person', 'checklist', 'schedule', 'cleaning_services'][index] || 'info';
   }
 }
