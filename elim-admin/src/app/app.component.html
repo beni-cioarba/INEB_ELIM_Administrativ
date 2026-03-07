@@ -1,0 +1,242 @@
+﻿<!-- Header -->
+<header class="header">
+  <div class="header-content">
+    <div class="header-top">
+      <div class="church-logo">&#9775;</div>
+      <div class="header-text">
+        <h1>Biserica ELIM</h1>
+        <p class="subtitle">Arganda del Rey &mdash; Departament Administrativ Tineret</p>
+      </div>
+    </div>
+    <h2 class="header-title">Programarea pregătirii mesei &mdash; Tineret</h2>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav-bar">
+  <div class="nav-content">
+    <button class="nav-btn" [class.active]="activeSection === 'schedule'" (click)="setSection('schedule')">
+      <span class="nav-icon">&#128197;</span>
+      <span class="nav-label">Programare</span>
+    </button>
+    <button class="nav-btn" [class.active]="activeSection === 'teams'" (click)="setSection('teams')">
+      <span class="nav-icon">&#128101;</span>
+      <span class="nav-label">Echipe</span>
+    </button>
+    <button class="nav-btn" [class.active]="activeSection === 'rules'" (click)="setSection('rules')">
+      <span class="nav-icon">&#128220;</span>
+      <span class="nav-label">Reguli</span>
+    </button>
+  </div>
+</nav>
+
+<main class="main-content">
+
+  <!-- ===== SCHEDULE SECTION ===== -->
+  <section *ngIf="activeSection === 'schedule'" class="section">
+
+    <!-- Next Event Highlight -->
+    <div *ngIf="nextEvent" class="next-event-card">
+      <div class="next-event-badge">Următorul eveniment</div>
+      <div class="next-event-body">
+        <div class="next-event-team">
+          <span class="team-dot" [style.background-color]="getTeamColor(nextEvent.team)"></span>
+          <span class="next-event-team-name">{{ nextEvent.team }}</span>
+        </div>
+        <div class="next-event-date">{{ formatDate(nextEvent.date) }}</div>
+        <div class="next-event-meta">
+          <span class="meta-item">
+            <span class="meta-icon">&#128100;</span>
+            Coordonator: <strong>{{ nextEvent.coordinator }}</strong>
+          </span>
+          <span class="meta-item">
+            <span class="meta-icon">&#127860;</span>
+            {{ nextEvent.programType }} &mdash; {{ nextEvent.estimatedPersons }} persoane
+          </span>
+        </div>
+        <div class="next-event-countdown" *ngIf="daysUntil(nextEvent.date) > 0">
+          <span class="countdown-number">{{ daysUntil(nextEvent.date) }}</span>
+          <span class="countdown-label">{{ daysUntil(nextEvent.date) === 1 ? 'zi rămasă' : 'zile rămase' }}</span>
+        </div>
+        <div class="next-event-countdown today-highlight" *ngIf="isToday(nextEvent.date)">
+          <span class="countdown-number">!</span>
+          <span class="countdown-label">Astăzi!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Schedule -->
+    <h3 class="section-title">
+      <span class="section-icon">&#128197;</span>
+      Programări viitoare
+    </h3>
+    <div class="schedule-list">
+      <div *ngFor="let entry of upcomingSchedule; let i = index"
+           class="schedule-card"
+           [class.next-up]="i === 0"
+           [class.this-week]="isThisWeek(entry.date)">
+        <div class="schedule-card-left" [style.border-left-color]="getTeamColor(entry.team)">
+          <div class="schedule-date-badge">
+            <span class="date-day">{{ entry.date.getDate() }}</span>
+            <span class="date-month">{{ formatDateShort(entry.date).split(' ')[1] }}</span>
+          </div>
+        </div>
+        <div class="schedule-card-body">
+          <div class="schedule-team-name">{{ entry.team }}</div>
+          <div class="schedule-coordinator">Coordonator: {{ entry.coordinator }}</div>
+          <div class="schedule-info">{{ entry.programType }} &bull; {{ entry.estimatedPersons }} pers.</div>
+        </div>
+        <div class="schedule-card-right">
+          <span class="days-badge" *ngIf="daysUntil(entry.date) > 0">în {{ daysUntil(entry.date) }}z</span>
+          <span class="days-badge today" *ngIf="isToday(entry.date)">Azi!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Past Schedule (Collapsible) -->
+    <div class="past-section">
+      <button class="past-toggle" (click)="showPastSchedule = !showPastSchedule">
+        <span class="past-toggle-icon" [class.open]="showPastSchedule">&#9654;</span>
+        Istoric programări ({{ pastSchedule.length }} evenimente trecute)
+      </button>
+      <div class="past-list" *ngIf="showPastSchedule">
+        <div *ngFor="let entry of pastSchedule.slice().reverse()" class="schedule-card past">
+          <div class="schedule-card-left" [style.border-left-color]="getTeamColor(entry.team)">
+            <div class="schedule-date-badge past-date">
+              <span class="date-day">{{ entry.date.getDate() }}</span>
+              <span class="date-month">{{ formatDateShort(entry.date).split(' ')[1] }}</span>
+            </div>
+          </div>
+          <div class="schedule-card-body">
+            <div class="schedule-team-name">{{ entry.team }}</div>
+            <div class="schedule-coordinator">{{ entry.coordinator }}</div>
+            <div class="schedule-info">{{ entry.programType }}</div>
+          </div>
+          <div class="schedule-card-right">
+            <span class="completed-badge">&#10003; Realizat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAMS SECTION ===== -->
+  <section *ngIf="activeSection === 'teams'" class="section">
+    <h3 class="section-title">
+      <span class="section-icon">&#128101;</span>
+      Echipele &mdash; Rezumat
+    </h3>
+
+    <div class="teams-grid">
+      <div *ngFor="let team of teamsData"
+           class="team-card"
+           [class.expanded]="expandedTeam === team.name"
+           (click)="toggleTeam(team.name)">
+        <div class="team-card-header" [style.background]="'linear-gradient(135deg, ' + getTeamColor(team.name) + ', ' + getTeamColor(team.name) + 'cc)'">
+          <div class="team-number">{{ getTeamNumber(team.name) }}</div>
+          <div class="team-header-info">
+            <div class="team-card-name">{{ team.name }}</div>
+            <div class="team-card-coordinator">Coord: {{ team.coordinator }}</div>
+            <div class="team-card-responsible">Resp: {{ team.responsible }}</div>
+          </div>
+          <div class="team-members-count">{{ team.members.length }} membri</div>
+        </div>
+
+        <div class="team-next-date" *ngIf="getNextDateForTeam(team.name) as nextDate">
+          <span class="next-date-icon">&#128197;</span>
+          Următoarea dată: <strong>{{ formatDateShort(nextDate.date) }}</strong>
+          <span class="next-date-days">(în {{ daysUntil(nextDate.date) }} zile)</span>
+        </div>
+
+        <div class="team-card-body" *ngIf="expandedTeam === team.name">
+          <div class="team-contact">
+            <span class="contact-icon">&#128222;</span>
+            {{ team.responsible }}: <a [href]="getPhoneHref(team.responsiblePhone)" class="phone-link" (click)="$event.stopPropagation()">{{ team.responsiblePhone }}</a>
+          </div>
+          <div class="members-title">Membri echipei:</div>
+          <ul class="members-list">
+            <li *ngFor="let member of team.members" class="member-item">
+              <span class="member-icon" [class.coordinator-icon]="member.name === team.coordinator">
+                {{ member.name === team.coordinator ? '&#11088;' : '&#128100;' }}
+              </span>
+              <span class="member-name" [class.is-coordinator]="member.name === team.coordinator">
+                {{ member.name }}
+              </span>
+              <span *ngIf="member.name === team.coordinator" class="role-badge coord-badge">Coordonator</span>
+              <span *ngIf="member.phone" class="member-phone">
+                <a [href]="getPhoneHref(member.phone)" class="phone-link" (click)="$event.stopPropagation()">{{ member.phone }}</a>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="team-card-expand-hint" *ngIf="expandedTeam !== team.name">
+          Apasă pentru detalii &#9660;
+        </div>
+        <div class="team-card-expand-hint" *ngIf="expandedTeam === team.name">
+          Apasă pentru a închide &#9650;
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RULES SECTION ===== -->
+  <section *ngIf="activeSection === 'rules'" class="section">
+    <h3 class="section-title">
+      <span class="section-icon">&#128220;</span>
+      Pregătirile necesare echipei pentru zilele programate
+    </h3>
+
+    <div class="rules-container">
+      <!-- Coordinator Role -->
+      <div class="rule-card">
+        <div class="rule-header">
+          <span class="rule-icon">&#128100;</span>
+          <h4>{{ rules.coordinatorRole.title }}</h4>
+        </div>
+        <ul class="rule-list">
+          <li *ngFor="let item of rules.coordinatorRole.items">{{ item }}</li>
+        </ul>
+      </div>
+
+      <!-- Coordinator Organization -->
+      <div class="rule-card">
+        <div class="rule-header">
+          <span class="rule-icon">&#128203;</span>
+          <h4>{{ rules.coordinatorOrganization.title }}</h4>
+        </div>
+        <ul class="rule-list">
+          <li *ngFor="let item of rules.coordinatorOrganization.items">{{ item }}</li>
+        </ul>
+      </div>
+
+      <!-- Before Program -->
+      <div class="rule-card">
+        <div class="rule-header">
+          <span class="rule-icon">&#9200;</span>
+          <h4>{{ rules.beforeProgram.title }}</h4>
+        </div>
+        <ul class="rule-list">
+          <li *ngFor="let item of rules.beforeProgram.items">{{ item }}</li>
+        </ul>
+      </div>
+
+      <!-- After Program -->
+      <div class="rule-card">
+        <div class="rule-header">
+          <span class="rule-icon">&#127919;</span>
+          <h4>{{ rules.afterProgram.title }}</h4>
+        </div>
+        <ul class="rule-list">
+          <li *ngFor="let item of rules.afterProgram.items">{{ item }}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Biserica ELIM &mdash; Arganda del Rey &copy; {{ today.getFullYear() }}</p>
+  <p class="footer-sub">Departament Administrativ Tineret</p>
+</footer>
