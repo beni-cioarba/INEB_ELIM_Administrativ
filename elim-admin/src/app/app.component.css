@@ -619,12 +619,25 @@
   font-size: 1rem;
 }
 
-.team-role-line {
-  font-size: 0.75rem;
-  opacity: 1;
-  display: flex;
+.team-coord-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  padding: 3px 10px 3px 6px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.2px;
+  margin-top: 4px;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.team-coord-pill .material-symbols-rounded {
+  font-size: 14px;
   color: #ffd54f;
 }
 
