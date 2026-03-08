@@ -72,7 +72,7 @@ export const TEAMS_DATA: Team[] = [
       { name: 'Mitoseriu Kevin' },
       { name: 'Bîrle Filip' },
       { name: 'Toth Sara' },
-      { name: 'Naomi Muresan' },
+      { name: 'Muresan Naomi'},
       { name: 'Halas Luigi', phone: '643 86 91 66' },
     ]
   },
@@ -85,7 +85,7 @@ export const TEAMS_DATA: Team[] = [
       { name: 'Halas Noemi' },
       { name: 'Dobre Irene' },
       { name: 'Mitoşeriu Miriam' },
-      { name: 'Jesica Zagrean' },
+      { name: 'Zăgrean Jesica' },
       { name: 'Halas Damaris' },
       { name: 'Marcu Nereea' },
       { name: 'Dobre David', phone: '641 45 50 67' },
@@ -119,7 +119,7 @@ export const TEAMS_DATA: Team[] = [
       { name: 'Albu Gabriel' },
       { name: 'Mic Karina' },
       { name: 'Toader Ainoa' },
-      { name: 'Jesica Zăgrean' },
+      { name: 'Zăgrean Jesica' },
       { name: 'Miriam Mitoşeriu', phone: '641 45 43 01' },
     ]
   },
@@ -133,7 +133,7 @@ export const TEAMS_DATA: Team[] = [
       { name: 'Valean Naomi' },
       { name: 'Dragăn Abel' },
       { name: 'Baleanu Samuel' },
-      { name: 'Denisa Muresan' },
+      { name: 'Muresan Denisa' },
       { name: 'Toader Noemi', phone: '643 55 03 01' },
     ]
   },
