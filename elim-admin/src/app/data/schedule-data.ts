@@ -16,9 +16,16 @@ export interface TeamMember {
 export interface Team {
   name: string;
   coordinator: string;
-  responsible: string;
-  responsiblePhone: string;
+  coordinatorPhone: string;
   members: TeamMember[];
+}
+
+export interface TeamHistory {
+  name: string;
+  coordinator: string;
+  coordinatorPhone?: string;
+  members: TeamMember[];
+  endDate: Date;
 }
 
 export const SCHEDULE_DATA: ScheduleEntry[] = [
@@ -57,9 +64,8 @@ export const SCHEDULE_DATA: ScheduleEntry[] = [
 export const TEAMS_DATA: Team[] = [
   {
     name: 'Echipa 1',
-    coordinator: 'Pintilei David',
-    responsible: 'Halas Luigi',
-    responsiblePhone: '643 86 91 66',
+    coordinator: 'Halas Luigi',
+    coordinatorPhone: '643 86 91 66',
     members: [
       { name: 'Pintilei David' },
       { name: 'Halas Timotei' },
@@ -72,9 +78,8 @@ export const TEAMS_DATA: Team[] = [
   },
   {
     name: 'Echipa 2',
-    coordinator: 'Bîrle Tania',
-    responsible: 'Dobre David',
-    responsiblePhone: '641 45 50 67',
+    coordinator: 'Dobre David',
+    coordinatorPhone: '641 45 50 67',
     members: [
       { name: 'Bîrle Tania' },
       { name: 'Halas Noemi' },
@@ -88,9 +93,8 @@ export const TEAMS_DATA: Team[] = [
   },
   {
     name: 'Echipa 3',
-    coordinator: 'Leş Fineas',
-    responsible: 'Istrătoaie Ruben',
-    responsiblePhone: '624 20 97 09',
+    coordinator: 'Istrătoaie Ruben',
+    coordinatorPhone: '624 20 97 09',
     members: [
       { name: 'Leş Fineas' },
       { name: 'Copran David' },
@@ -104,9 +108,8 @@ export const TEAMS_DATA: Team[] = [
   },
   {
     name: 'Echipa 4',
-    coordinator: 'Barbă Levi',
-    responsible: 'Miriam Mitoşeriu',
-    responsiblePhone: '641 45 43 01',
+    coordinator: 'Miriam Mitoşeriu',
+    coordinatorPhone: '641 45 43 01',
     members: [
       { name: 'Barbă Levi' },
       { name: 'Rebeca Levi' },
@@ -122,9 +125,8 @@ export const TEAMS_DATA: Team[] = [
   },
   {
     name: 'Echipa 5',
-    coordinator: 'Valean Noelia',
-    responsible: 'Toader Noemi',
-    responsiblePhone: '643 55 03 01',
+    coordinator: 'Toader Noemi',
+    coordinatorPhone: '643 55 03 01',
     members: [
       { name: 'Valean Noelia' },
       { name: 'Valean Vlad' },
@@ -137,9 +139,8 @@ export const TEAMS_DATA: Team[] = [
   },
   {
     name: 'Echipa 6',
-    coordinator: 'Blejusca David',
-    responsible: 'Bosancu Amalia',
-    responsiblePhone: '672 26 31 77',
+    coordinator: 'Bosancu Amalia',
+    coordinatorPhone: '672 26 31 77',
     members: [
       { name: 'Blejusca David' },
       { name: 'Rus Miriam' },
@@ -152,9 +153,8 @@ export const TEAMS_DATA: Team[] = [
   },
   {
     name: 'Echipa 7',
-    coordinator: 'Filimon Natanael',
-    responsible: 'Bereza Ionatan',
-    responsiblePhone: '643 74 50 12',
+    coordinator: 'Bereza Ionatan',
+    coordinatorPhone: '643 74 50 12',
     members: [
       { name: 'Filimon Natanael' },
       { name: 'Suciu Sara' },
@@ -165,6 +165,21 @@ export const TEAMS_DATA: Team[] = [
       { name: 'Bereza Eduard' },
       { name: 'Bereza Ionatan', phone: '643 74 50 12' },
     ]
+  },
+];
+
+export const TEAMS_HISTORY: TeamHistory[] = [
+  {
+    name: 'Echipa 4',
+    coordinator: 'Ivaşcu Simona',
+    members: [
+      { name: 'Biriş Sara' },
+      { name: 'Biriş David' },
+      { name: 'Jescu Marco' },
+      { name: 'Albu Gabriel' },
+      { name: 'Ivaşcu Simona'},
+    ],
+    endDate: new Date(2026, 1, 27),
   },
 ];
 

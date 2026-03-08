@@ -12,7 +12,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { SCHEDULE_DATA, TEAMS_DATA, RULES, ScheduleEntry, Team } from './data/schedule-data';
+import { SCHEDULE_DATA, TEAMS_DATA, TEAMS_HISTORY, RULES, ScheduleEntry, Team, TeamHistory } from './data/schedule-data';
 
 @Component({
   selector: 'app-root',
@@ -38,6 +38,7 @@ import { SCHEDULE_DATA, TEAMS_DATA, RULES, ScheduleEntry, Team } from './data/sc
 export class AppComponent implements OnInit {
   scheduleData = SCHEDULE_DATA;
   teamsData = TEAMS_DATA;
+  teamsHistory = TEAMS_HISTORY;
   rules = RULES;
 
   upcomingSchedule: ScheduleEntry[] = [];
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
 
   activeTab = 0;
   showPastSchedule = false;
+  showTeamHistory = false;
   expandedTeam: string | null = null;
 
   today = new Date();

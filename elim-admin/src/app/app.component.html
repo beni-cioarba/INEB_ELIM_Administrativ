@@ -2,13 +2,14 @@
 <mat-toolbar class="header-toolbar" color="primary">
   <div class="header-content">
     <div class="header-top">
-      <span class="material-symbols-rounded header-icon">church</span>
+      <div class="logo-frame">
+        <img src="assets/logo-elim.png" alt="Logo Biserica ELIM" class="header-logo">
+      </div>
       <div class="header-text">
-        <h1 class="church-name">Biserica ELIM</h1>
-        <span class="church-subtitle">Arganda del Rey</span>
+        <h1 class="church-name">Departament de Tineret</h1>
+        <p class="header-tagline">Programarea pregătirii mesei</p>
       </div>
     </div>
-    <p class="header-tagline">Programarea pregătirii mesei &mdash; Tineret</p>
   </div>
 </mat-toolbar>
 
@@ -191,10 +192,6 @@
               <span class="material-symbols-rounded" style="font-size:14px">star</span>
               {{ team.coordinator }}
             </span>
-            <span class="team-role-line">
-              <span class="material-symbols-rounded" style="font-size:14px">manage_accounts</span>
-              {{ team.responsible }}
-            </span>
           </div>
           <div class="team-member-count-badge">
             <span class="material-symbols-rounded">person</span>
@@ -213,8 +210,8 @@
         <mat-card-content *ngIf="expandedTeam === team.name" class="team-body" (click)="$event.stopPropagation()">
           <div class="team-phone-bar">
             <span class="material-symbols-rounded">call</span>
-            <span>{{ team.responsible }}:</span>
-            <a [href]="getPhoneHref(team.responsiblePhone)" class="phone-link" (click)="$event.stopPropagation()">{{ team.responsiblePhone }}</a>
+            <span>{{ team.coordinator }}:</span>
+            <a [href]="getPhoneHref(team.coordinatorPhone)" class="phone-link" (click)="$event.stopPropagation()">{{ team.coordinatorPhone }}</a>
           </div>
 
           <mat-divider></mat-divider>
@@ -250,6 +247,60 @@
           {{ expandedTeam === team.name ? 'Închide' : 'Detalii' }}
         </div>
       </mat-card>
+    </div>
+
+    <!-- Team History -->
+    <div *ngIf="teamsHistory.length > 0" class="team-history-section">
+      <mat-divider class="past-divider"></mat-divider>
+      <div class="past-section">
+        <button mat-button class="past-toggle" (click)="showTeamHistory = !showTeamHistory">
+          <span class="material-symbols-rounded">{{ showTeamHistory ? 'expand_less' : 'history' }}</span>
+          Istoric echipe ({{ teamsHistory.length }})
+          <span class="material-symbols-rounded">{{ showTeamHistory ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</span>
+        </button>
+      </div>
+
+      <div class="teams-grid" *ngIf="showTeamHistory">
+        <mat-card *ngFor="let hist of teamsHistory"
+                  class="team-card history-card"
+                  appearance="outlined">
+
+          <div class="team-header history-header" [style.background]="'linear-gradient(135deg, ' + getTeamColor(hist.name) + '88 0%, ' + getTeamColor(hist.name) + '55 100%)'">
+            <div class="team-number-circle">{{ getTeamNumber(hist.name) }}</div>
+            <div class="team-header-text">
+              <span class="team-name">{{ hist.name }}</span>
+              <span class="team-role-line">
+                <span class="material-symbols-rounded" style="font-size:14px">star</span>
+                {{ hist.coordinator }}
+              </span>
+            </div>
+            <div class="history-end-badge">
+              <span class="material-symbols-rounded" style="font-size:14px">event_busy</span>
+              {{ formatDateShort(hist.endDate) }}
+            </div>
+          </div>
+
+          <mat-card-content class="team-body">
+            <div class="team-members-heading">
+              <span class="material-symbols-rounded">group</span>
+              Membri echipei
+            </div>
+
+            <mat-list class="members-mat-list">
+              <mat-list-item *ngFor="let member of hist.members" class="member-row">
+                <span matListItemIcon class="material-symbols-rounded member-list-icon" style="color:#94a3b8">person</span>
+                <span matListItemTitle>{{ member.name }}</span>
+                <span matListItemMeta *ngIf="member.phone">
+                  <a [href]="getPhoneHref(member.phone)" class="phone-link small" (click)="$event.stopPropagation()">
+                    <span class="material-symbols-rounded" style="font-size:16px">call</span>
+                    {{ member.phone }}
+                  </a>
+                </span>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </section>
 
@@ -330,7 +381,12 @@
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
-  <span class="material-symbols-rounded footer-icon">church</span>
-  <p>Biserica ELIM &mdash; Arganda del Rey &copy; {{ today.getFullYear() }}</p>
-  <p class="footer-sub">Departament Administrativ Tineret</p>
+  <div class="footer-content">
+    <img src="assets/logo-elim.png" alt="Logo Biserica ELIM" class="footer-logo footer-logo-elim">
+    <div class="footer-text">
+      <p>Biserica ELIM &mdash; Arganda del Rey &copy; {{ today.getFullYear() }}</p>
+      <p class="footer-sub">Departament Administrativ Tineret</p>
+    </div>
+    <img src="assets/logo-ineb.png" alt="Logo INEB" class="footer-logo footer-logo-ineb">
+  </div>
 </footer>
