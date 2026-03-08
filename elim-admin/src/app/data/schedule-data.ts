@@ -112,13 +112,13 @@ export const TEAMS_DATA: Team[] = [
     coordinatorPhone: '641 45 43 01',
     members: [
       { name: 'Barbă Levi' },
-      { name: 'Rebeca Levi' },
+      { name: 'Barbă Rebeca' },
       { name: 'Biriş Sara' },
       { name: 'Biriş David' },
       { name: 'Jescu Marco' },
       { name: 'Albu Gabriel' },
       { name: 'Mic Karina' },
-      { name: 'Toader Ainoa' },
+      { name: 'Toader Ainhoa' },
       { name: 'Zăgrean Jesica' },
       { name: 'Mitoşeriu Miriam', phone: '641 45 43 01' },
     ]
