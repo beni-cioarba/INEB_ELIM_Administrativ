@@ -150,47 +150,6 @@
             </div>
           }
 
-          <div class="support-section-label">
-            <span class="material-symbols-rounded">groups</span>
-            Echipe atribuite
-          </div>
-          <div class="support-assigned-teams">
-            @for (teamName of data.getTeamsForParent(sp.id); track teamName) {
-              @if (data.getNextEventForTeam(teamName); as nextDate) {
-                <div class="support-team-row" [style.border-left-color]="getTeamColor(teamName)">
-                  <div class="support-team-row-head">
-                    <div class="team-number-circle support-team-mini"
-                         [style.background-color]="getTeamColor(teamName)">
-                      {{ getTeamNumber(teamName) }}
-                    </div>
-                    <div class="support-team-row-info">
-                      <span class="support-team-row-name">{{ teamName }}</span>
-                      <span class="support-team-row-date">
-                        <span class="material-symbols-rounded">event</span>
-                        {{ formatDate(nextDate.date) }}
-                      </span>
-                    </div>
-                    <div class="support-team-row-countdown"
-                         [style.border-color]="getTeamColor(teamName)"
-                         [class.is-today]="isToday(nextDate.date)">
-                      @if (!isToday(nextDate.date)) {
-                        <span class="support-cd-num">{{ daysUntil(nextDate.date) }}</span>
-                        <span class="support-cd-unit">{{ daysUntil(nextDate.date) === 1 ? 'zi' : 'zile' }}</span>
-                      } @else {
-                        <span class="support-cd-unit today-strong">Azi!</span>
-                      }
-                    </div>
-                  </div>
-                </div>
-              }
-            }
-            @if (data.getTeamsForParent(sp.id).length === 0) {
-              <div class="support-no-teams">
-                Acest părinte nu este atribuit niciunei echipe momentan.
-              </div>
-            }
-          </div>
-
           @if (data.getUpcomingEventsForParent(sp.id).length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">event_upcoming</span>

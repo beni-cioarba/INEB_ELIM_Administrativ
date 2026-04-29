@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import {
   SCHEDULE_DATA, TEAMS_DATA, TEAMS_HISTORY, RULES, PARENTS,
-  PARENT_TEAM_ASSIGNMENTS, PARENT_YOUTH_LINKS, YOUTHS, YOUTH_TEAM_MEMBERSHIPS,
+  PARENT_YOUTH_LINKS, YOUTHS, YOUTH_TEAM_MEMBERSHIPS,
 } from '../data/schedule-data';
 import {
   CoordinatorRotation, MonthGroup, Parent, ScheduleEntry, ScheduleStats,
@@ -49,6 +49,7 @@ export class DataService {
 
   private readonly parentsByTeam = new Map<string, Parent[]>();
   private readonly teamsByParent = new Map<string, string[]>();
+  private readonly parentsByEvent = new Map<ScheduleEntry, Parent[]>();
   private readonly youthsForParentMap = new Map<string, Array<{ youth: Youth; relationship: string }>>();
   private readonly parentsForYouthMap = new Map<string, Array<{ parent: Parent; relationship: string }>>();
   private readonly youthsByTeam = new Map<string, Youth[]>();
@@ -212,8 +213,12 @@ export class DataService {
   getYouthById(id: string): Youth | undefined { return this.youthById.get(id); }
   getYouthByName(name: string): Youth | undefined { return this.youthByName.get(name); }
   getParentById(id: string): Parent | undefined { return this.parentById.get(id); }
+  /** @deprecated Părinţii nu mai sunt asignaţi la echipe fixe. Păstrat doar pentru retro‑compat. */
   getTeamsForParent(id: string): string[] { return this.teamsByParent.get(id) ?? []; }
+  /** @deprecated Foloseşte `getParentsForEvent(entry)`. */
   getParentsForTeam(team: string): Parent[] { return this.parentsByTeam.get(team) ?? []; }
+  /** Părinţi care sprijină punctual o programare anume. */
+  getParentsForEvent(entry: ScheduleEntry): Parent[] { return this.parentsByEvent.get(entry) ?? []; }
   getYouthsForTeam(team: string): Youth[] { return this.youthsByTeam.get(team) ?? []; }
   getCoordinatorForTeam(team: string): Youth | undefined { return this.coordinatorByTeam.get(team); }
   getNextEventForTeam(team: string): ScheduleEntry | undefined { return this.nextEventByTeam.get(team); }
@@ -238,10 +243,16 @@ export class DataService {
     }
     for (const p of this.parents) this.parentById.set(p.id, p);
 
-    for (const a of PARENT_TEAM_ASSIGNMENTS) {
-      pushTo(this.teamsByParent, a.parentId, a.teamName);
-      const parent = this.parentById.get(a.parentId);
-      if (parent) pushTo(this.parentsByTeam, a.teamName, parent);
+    /* Index parents per programare from `entry.parentSupporters` (ID-uri). */
+    for (const e of this.sortedSchedule) {
+      const ids = e.parentSupporters;
+      if (!ids || ids.length === 0) continue;
+      const list: Parent[] = [];
+      for (const id of ids) {
+        const p = this.parentById.get(id);
+        if (p) list.push(p);
+      }
+      if (list.length > 0) this.parentsByEvent.set(e, list);
     }
 
     for (const link of PARENT_YOUTH_LINKS) {
@@ -278,10 +289,28 @@ export class DataService {
       this.pastEventsByTeam.set(t, [...list].sort((a, b) => b.date.getTime() - a.date.getTime()));
     }
 
-    for (const [parentId, teams] of this.teamsByParent) {
-      const teamSet = new Set(teams);
-      const ev = this.upcomingSchedule.find(e => teamSet.has(e.team));
-      if (ev) this.nextEventByParent.set(parentId, ev);
+    /* Upcoming/past per parent — derived from per-event parentSupporters. */
+    for (const [entry, supporters] of this.parentsByEvent) {
+      const isPast = entry.date.getTime() < this.today.getTime();
+      for (const p of supporters) {
+        if (isPast) {
+          pushTo(this.pastEventsByParent, p.id, entry);
+        } else {
+          pushTo(this.upcomingEventsByParent, p.id, entry);
+          if (!this.nextEventByParent.has(p.id)) {
+            this.nextEventByParent.set(p.id, entry);
+          }
+        }
+      }
+    }
+    /* Sort: upcoming asc, past desc. */
+    for (const [pid, list] of this.upcomingEventsByParent) {
+      this.upcomingEventsByParent.set(pid, [...list].sort((a, b) => a.date.getTime() - b.date.getTime()));
+      // refresh next event after sorting
+      this.nextEventByParent.set(pid, this.upcomingEventsByParent.get(pid)![0]);
+    }
+    for (const [pid, list] of this.pastEventsByParent) {
+      this.pastEventsByParent.set(pid, [...list].sort((a, b) => b.date.getTime() - a.date.getTime()));
     }
 
     for (const [youthId, activeTeams] of this.activeTeamsByYouth) {
@@ -318,35 +347,6 @@ export class DataService {
           return true;
         });
       this.pastEventsByYouth.set(yid, sorted);
-    }
-
-    /* Past + upcoming participation per parent (respecting assignedSince). */
-    const upcomingPByParent = new Map<string, ScheduleEntry[]>();
-    const pastPByParent = new Map<string, ScheduleEntry[]>();
-    for (const a of PARENT_TEAM_ASSIGNMENTS) {
-      const since = a.assignedSince.getTime();
-      for (const e of this.upcomingSchedule) {
-        if (e.team === a.teamName && e.date.getTime() >= since) {
-          pushTo(upcomingPByParent, a.parentId, e);
-        }
-      }
-      for (const e of this.pastSchedule) {
-        if (e.team === a.teamName && e.date.getTime() >= since) {
-          pushTo(pastPByParent, a.parentId, e);
-        }
-      }
-    }
-    for (const [pid, list] of upcomingPByParent) {
-      const seen = new Set<string>();
-      this.upcomingEventsByParent.set(pid, list
-        .sort((a, b) => a.date.getTime() - b.date.getTime())
-        .filter(e => { const k = e.date.getTime() + '|' + e.team; if (seen.has(k)) return false; seen.add(k); return true; }));
-    }
-    for (const [pid, list] of pastPByParent) {
-      const seen = new Set<string>();
-      this.pastEventsByParent.set(pid, list
-        .sort((a, b) => b.date.getTime() - a.date.getTime())
-        .filter(e => { const k = e.date.getTime() + '|' + e.team; if (seen.has(k)) return false; seen.add(k); return true; }));
     }
   }
 
@@ -420,7 +420,7 @@ export class DataService {
 
   private computeNextParentEvent() {
     for (const entry of this.upcomingSchedule) {
-      const people = this.parentsByTeam.get(entry.team);
+      const people = this.parentsByEvent.get(entry);
       if (people && people.length > 0) return { entry, people };
     }
     return null;

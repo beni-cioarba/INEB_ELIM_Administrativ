@@ -73,10 +73,10 @@
             <span class="material-symbols-rounded">celebration</span>
             {{ nextEvent.programType }}
           </span>
-          @if (data.getParentsForTeam(nextEvent.team).length > 0) {
+          @if (data.getParentsForEvent(nextEvent).length > 0) {
             <span class="hero-meta-pill">
               <span class="material-symbols-rounded">family_restroom</span>
-              {{ data.getParentsForTeam(nextEvent.team).length }} părinți
+              {{ data.getParentsForEvent(nextEvent).length }} părinţi
             </span>
           }
         </div>
@@ -116,13 +116,13 @@
             </span>
           }
         </div>
-        @if (data.getParentsForTeam(nextEvent.team).length > 0) {
+        @if (data.getParentsForEvent(nextEvent).length > 0) {
           <div class="hero-roster-parents">
             <span class="hero-roster-parents-label">
               <span class="material-symbols-rounded">family_restroom</span>
-              Părinți de sprijin:
+              Părinţi de sprijin:
             </span>
-            @for (p of data.getParentsForTeam(nextEvent.team); track p.id) {
+            @for (p of data.getParentsForEvent(nextEvent); track p.id) {
               <span class="hero-roster-avatar small linkable-chip"
                     [style.background]="'linear-gradient(135deg, ' + p.accentColor + ', ' + p.accentColor + 'cc)'"
                     [matTooltip]="p.name + (p.role ? ' — ' + p.role : '')"
@@ -227,6 +227,21 @@
               <span class="sr-note-text">{{ entry.observations }}</span>
             </div>
           }
+          @if (data.getParentsForEvent(entry).length > 0) {
+            <div class="sr-parents">
+              <span class="material-symbols-rounded">family_restroom</span>
+              <span class="sr-parents-text">
+                @for (p of data.getParentsForEvent(entry); track p.id) {
+                  <span class="sr-parent-chip"
+                        [style.background]="p.accentColor + '22'"
+                        [style.border-color]="p.accentColor + '55'"
+                        [style.color]="p.accentColor"
+                        (click)="nav.goTo('parent', p.id, $event)"
+                        [matTooltip]="p.name">{{ p.name }}</span>
+                }
+              </span>
+            </div>
+          }
         </div>
       }
     </div>
@@ -317,6 +332,21 @@
                   <div class="sr-note">
                     <span class="material-symbols-rounded">sticky_note_2</span>
                     <span class="sr-note-text">{{ entry.observations }}</span>
+                  </div>
+                }
+                @if (data.getParentsForEvent(entry).length > 0) {
+                  <div class="sr-parents">
+                    <span class="material-symbols-rounded">family_restroom</span>
+                    <span class="sr-parents-text">
+                      @for (p of data.getParentsForEvent(entry); track p.id) {
+                        <span class="sr-parent-chip"
+                              [style.background]="p.accentColor + '22'"
+                              [style.border-color]="p.accentColor + '55'"
+                              [style.color]="p.accentColor"
+                              (click)="nav.goTo('parent', p.id, $event)"
+                              [matTooltip]="p.name">{{ p.name }}</span>
+                      }
+                    </span>
                   </div>
                 }
               </div>

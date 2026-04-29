@@ -46,11 +46,17 @@ export class YouthsComponent implements OnInit {
     this.notes.open(entry);
   }
 
-  /** Echipe la care părintele este implicat ca sprijin pentru tânărul respectiv. */
+  /** Echipe la care părintele a sprijinit programări coincidente cu echipele active ale tânărului. */
   getInvolvedTeams(youthId: string, parentId: string): string[] {
-    const parentTeams = new Set(this.data.getTeamsForParent(parentId));
-    const youthTeams = this.data.getActiveTeamsForYouth(youthId).map(t => t.teamName);
-    return youthTeams.filter(t => parentTeams.has(t));
+    const youthTeams = new Set(
+      this.data.getActiveTeamsForYouth(youthId).map(t => t.teamName)
+    );
+    if (youthTeams.size === 0) return [];
+    const parentEventTeams = new Set<string>([
+      ...this.data.getUpcomingEventsForParent(parentId).map(e => e.team),
+      ...this.data.getPastEventsForParent(parentId).map(e => e.team),
+    ]);
+    return [...parentEventTeams].filter(t => youthTeams.has(t));
   }
 
   protected readonly formatDate = formatDate;
