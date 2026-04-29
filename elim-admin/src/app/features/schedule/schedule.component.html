@@ -108,7 +108,7 @@
         <div class="hero-roster-avatars">
           @for (y of data.getYouthsForTeam(nextEvent.team); track y.id) {
             <span class="hero-roster-avatar linkable-chip"
-                  [class.is-coord]="y.isCoordinator"
+                  [class.is-coord]="data.isActiveCoordinator(y.id)"
                   [style.background]="'linear-gradient(135deg, ' + y.accentColor + ', ' + y.accentColor + 'cc)'"
                   [matTooltip]="y.fullName"
                   (click)="nav.goTo('youth', y.id, $event)">
@@ -308,8 +308,12 @@
           <div class="schedule-rows">
             @for (entry of group.entries; track entry.date.getTime() + '|' + entry.team) {
               <div class="schedule-row past-row"
+                   [class.is-historical-comp]="data.isHistoricalEvent(entry)"
                    [style.--accent]="getTeamColor(entry.team)"
-                   (click)="nav.goTo('team', entry.team)"
+                   (click)="data.isHistoricalEvent(entry)
+                              ? nav.goToHistoricalTeam(data.getHistoryKeyForEvent(entry)!, $event)
+                              : nav.goTo('team', entry.team)"
+                   [matTooltip]="data.isHistoricalEvent(entry) ? 'Compoziție istorică — vezi cardul în istoric echipe' : ''"
                    matRipple>
                 <div class="sr-date past">
                   <span class="sr-dow">{{ DAYS_LETTER[entry.date.getDay()] }}</span>
@@ -318,13 +322,21 @@
                 <div class="sr-bar past"></div>
                 <div class="sr-info">
                   <div class="sr-top">
-                    <span class="sr-team">{{ entry.team }}</span>
+                    <span class="sr-team">
+                      {{ entry.team }}
+                      @if (data.isHistoricalEvent(entry)) {
+                        <span class="historical-comp-pill inline">
+                          <span class="material-symbols-rounded">history</span>
+                          istoric
+                        </span>
+                      }
+                    </span>
                     <span class="material-symbols-rounded sr-done">check_circle</span>
                   </div>
                   <div class="sr-bottom">
                     <span class="sr-coord">
                       <span class="material-symbols-rounded">person</span>
-                      {{ entry.coordinator }}
+                      {{ data.getCoordinatorNameForEvent(entry) }}
                     </span>
                   </div>
                 </div>

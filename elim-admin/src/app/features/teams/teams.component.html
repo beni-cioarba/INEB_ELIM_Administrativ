@@ -127,7 +127,12 @@
             @if (isPastEventsOpen(team.name)) {
               <div class="event-history-list past-events-list">
                 @for (e of data.getPastEventsForTeam(team.name); track e.date.getTime()) {
-                  <div class="event-history-row past" [style.border-left-color]="getTeamColor(e.team) + '99'">
+                  <div class="event-history-row past"
+                       [class.is-historical-comp]="data.isHistoricalEvent(e)"
+                       [style.border-left-color]="getTeamColor(e.team) + '99'"
+                       [class.linkable]="data.isHistoricalEvent(e)"
+                       [matTooltip]="data.isHistoricalEvent(e) ? 'Vezi compoziția istorică a echipei' : ''"
+                       (click)="data.isHistoricalEvent(e) && nav.goToHistoricalTeam(data.getHistoryKeyForEvent(e)!, $event)">
                     <div class="event-history-date">
                       <span class="event-history-day">{{ e.date.getDate() }}</span>
                       <span class="event-history-mo">{{ formatDateShort(e.date).split(' ')[1] }}</span>
@@ -136,9 +141,16 @@
                       <span class="event-history-team">{{ e.programType }}</span>
                       <span class="event-history-type">
                         <span class="material-symbols-rounded" style="font-size:12px;vertical-align:middle">person</span>
-                        {{ e.coordinator }}
+                        {{ data.getCoordinatorNameForEvent(e) }}
                       </span>
                     </div>
+                    @if (data.isHistoricalEvent(e)) {
+                      <span class="historical-comp-pill"
+                            [matTooltip]="'Compoziție \u00eencheiat\u0103 la ' + formatDateShort(data.getCompositionForEvent(e)!.end!)">
+                        <span class="material-symbols-rounded">history</span>
+                        istoric
+                      </span>
+                    }
                     <span class="event-history-year">{{ e.date.getFullYear() }}</span>
                     @if (notes.hasNotes(e)) {
                       <div class="sr-note">
@@ -190,8 +202,9 @@
 
     @if (showHistory()) {
       <div class="teams-grid">
-        @for (hist of data.teamsHistory; track hist.name) {
-          <mat-card class="team-card history-card" appearance="outlined">
+        @for (hist of data.teamsHistory; track hist.name + '-' + hist.endDate.getTime()) {
+          <mat-card class="team-card history-card" appearance="outlined"
+                    [id]="'card-team-history-' + hist.name + '-' + hist.endDate.getTime()">
             <div class="team-header history-header"
                  [style.background]="'linear-gradient(135deg, ' + getTeamColor(hist.name) + '88 0%, ' + getTeamColor(hist.name) + '55 100%)'">
               <div class="team-number-circle">{{ getTeamNumber(hist.name) }}</div>

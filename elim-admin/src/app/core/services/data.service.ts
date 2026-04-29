@@ -12,6 +12,24 @@ import { startOfDay } from '../utils/date.utils';
 import { getTeamColor } from '../utils/team.utils';
 
 /**
+ * Represents a single composition (roster) of a team valid for a given time window.
+ *  - `isActive: true` → currently running composition (no end date).
+ *  - `isActive: false` → historical composition closed at `end`.
+ * The `historyKey` (only present for historical comps) is used as DOM anchor and
+ * navigation token so that past events can deep-link to the exact composition
+ * that prepared them.
+ */
+export interface TeamComposition {
+  teamName: string;
+  coordinator?: Youth;
+  coordinatorName: string;
+  members: Youth[];
+  end?: Date;
+  isActive: boolean;
+  historyKey?: string;
+}
+
+/**
  * Centralized read-only access to all domain data.
  * Heavy aggregations are precomputed once at construction (data is static at runtime),
  * and reactive concerns (filters, search) are exposed as signals.
@@ -56,6 +74,10 @@ export class DataService {
   private readonly coordinatorByTeam = new Map<string, Youth | undefined>();
   private readonly activeTeamsByYouth = new Map<string, Array<{ teamName: string; role: YouthRole }>>();
   private readonly historicalTeamsByYouth = new Map<string, Array<{ teamName: string; role: YouthRole; endDate?: Date }>>();
+  /** Per team: timestamp marking the start of the current active composition
+   * (= latest historical endDate + 1ms; 0 if no history). Used as the implicit
+   * joinedDate for active memberships that don't specify one. */
+  private readonly activeStartByTeam = new Map<string, number>();
   private readonly nextEventByTeam = new Map<string, ScheduleEntry>();
   private readonly upcomingEventsByTeam = new Map<string, ScheduleEntry[]>();
   private readonly pastEventsByTeam = new Map<string, ScheduleEntry[]>();
@@ -65,6 +87,11 @@ export class DataService {
   private readonly pastEventsByYouth = new Map<string, Array<{ entry: ScheduleEntry; role: YouthRole; teamName: string; historical: boolean }>>();
   private readonly upcomingEventsByParent = new Map<string, ScheduleEntry[]>();
   private readonly pastEventsByParent = new Map<string, ScheduleEntry[]>();
+
+  /** Per-team timeline of compositions (historical first asc, active last). */
+  private readonly compositionsByTeam = new Map<string, TeamComposition[]>();
+  /** Cached resolution of `entry → composition` (built once at startup). */
+  private readonly compositionByEvent = new Map<ScheduleEntry, TeamComposition>();
 
   /* ─────── Sorted / partitioned schedule ─────── */
   readonly sortedSchedule: readonly ScheduleEntry[];
@@ -127,8 +154,9 @@ export class DataService {
     const list = this.activeYouths();
     if (!term && filter === 'toti') return list;
     return list.filter(y => {
-      if (filter === 'coordonatori' && !y.isCoordinator) return false;
-      if (filter === 'membri' && y.isCoordinator) return false;
+      const isActiveCoord = this.isActiveCoordinator(y.id);
+      if (filter === 'coordonatori' && !isActiveCoord) return false;
+      if (filter === 'membri' && isActiveCoord) return false;
       if (term && !y.fullName.toLowerCase().includes(term)) return false;
       return true;
     });
@@ -235,6 +263,85 @@ export class DataService {
   getActiveTeamsForYouth(id: string) { return this.activeTeamsByYouth.get(id) ?? []; }
   getHistoricalTeamsForYouth(id: string) { return this.historicalTeamsByYouth.get(id) ?? []; }
 
+  /**
+   * True only if the youth currently coordinates at least one ACTIVE team.
+   * A youth flagged `isCoordinator` in mock data who only coordinated
+   * historical (closed) compositions reverts to a regular member here.
+   */
+  isActiveCoordinator(id: string): boolean {
+    const teams = this.activeTeamsByYouth.get(id);
+    if (!teams) return false;
+    for (const t of teams) if (t.role === 'coordonator') return true;
+    return false;
+  }
+  /** True if the youth was the coordinator of a historical (closed) team composition by name. */
+  wasCoordinatorOfHistoricalTeam(id: string, teamName: string): boolean {
+    const hist = this.historicalTeamsByYouth.get(id);
+    if (!hist) return false;
+    for (const h of hist) if (h.teamName === teamName && h.role === 'coordonator') return true;
+    return false;
+  }
+
+  /* ─────── Composition timeline (echipe + istoric) ─────── */
+  /** All compositions of a team, oldest historical first → active last. */
+  getCompositionsForTeam(team: string): TeamComposition[] {
+    return this.compositionsByTeam.get(team) ?? [];
+  }
+  /** Resolve which composition was running when the event happened. */
+  getCompositionForEvent(entry: ScheduleEntry): TeamComposition | undefined {
+    return this.compositionByEvent.get(entry);
+  }
+  /** True if the event belongs to a closed (historical) composition. */
+  isHistoricalEvent(entry: ScheduleEntry): boolean {
+    const c = this.compositionByEvent.get(entry);
+    return !!c && !c.isActive;
+  }
+  /** Stable DOM/anchor key for a historical composition (or null when active). */
+  getHistoryKeyForEvent(entry: ScheduleEntry): string | null {
+    const c = this.compositionByEvent.get(entry);
+    return c && !c.isActive ? (c.historyKey ?? null) : null;
+  }
+  /** Coordinator name resolved through the timeline (matches `entry.coordinator` if recorded). */
+  getCoordinatorNameForEvent(entry: ScheduleEntry): string {
+    /* Always trust the per-event coordinator recorded on the schedule entry — that
+     * is the source of truth for who actually led the program on that date.
+     * Falls back to composition coordinator only if missing. */
+    return entry.coordinator || this.compositionByEvent.get(entry)?.coordinatorName || '—';
+  }
+  /** Members snapshot for the composition that handled the event, filtered by joinedDate/endDate. */
+  getMembersForEvent(entry: ScheduleEntry): Youth[] {
+    const t = entry.date.getTime();
+    const out: Youth[] = [];
+    const seen = new Set<string>();
+    for (const m of YOUTH_TEAM_MEMBERSHIPS) {
+      if (m.teamName !== entry.team) continue;
+      if (!this.membershipCoversDate(m, t)) continue;
+      if (seen.has(m.youthId)) continue;
+      const y = this.youthById.get(m.youthId);
+      if (y) { out.push(y); seen.add(m.youthId); }
+    }
+    return out;
+  }
+
+  /**
+   * True iff a membership row "covers" the given event timestamp.
+   * Rules:
+   *   • Historical (active=false): joinedDate (or default 0) ≤ t ≤ endDate.
+   *   • Active: effective start = joinedDate ?? activeStartByTeam[team] ?? 0; t ≥ start.
+   * The default for active rows is "the day after the latest historic composition
+   * ended", so newly added members do not get attributed to past programari
+   * that happened before they joined.
+   */
+  private membershipCoversDate(m: { teamName: string; active: boolean; joinedDate?: Date; endDate?: Date }, t: number): boolean {
+    if (!m.active) {
+      const start = m.joinedDate?.getTime() ?? 0;
+      const end = m.endDate?.getTime() ?? Number.MAX_SAFE_INTEGER;
+      return t >= start && t <= end;
+    }
+    const start = m.joinedDate?.getTime() ?? this.activeStartByTeam.get(m.teamName) ?? 0;
+    return t >= start;
+  }
+
   /* ─────── Internals ─────── */
   private buildLookupMaps(): void {
     for (const y of this.youths) {
@@ -260,6 +367,15 @@ export class DataService {
       const parent = this.parentById.get(link.parentId);
       if (youth) pushTo(this.youthsForParentMap, link.parentId, { youth, relationship: link.relationship });
       if (parent) pushTo(this.parentsForYouthMap, link.youthId, { parent, relationship: link.relationship });
+    }
+
+    /* Per-team active-window start = latest historical endDate + 1ms.
+     * Defaults to 0 (epoch) for teams without any historical composition. */
+    for (const m of YOUTH_TEAM_MEMBERSHIPS) {
+      if (m.active || !m.endDate) continue;
+      const t = m.endDate.getTime() + 1;
+      const cur = this.activeStartByTeam.get(m.teamName) ?? 0;
+      if (t > cur) this.activeStartByTeam.set(m.teamName, t);
     }
 
     for (const m of YOUTH_TEAM_MEMBERSHIPS) {
@@ -315,23 +431,35 @@ export class DataService {
 
     for (const [youthId, activeTeams] of this.activeTeamsByYouth) {
       const teamSet = new Set(activeTeams.map(t => t.teamName));
-      const upcoming = this.upcomingSchedule.filter(e => teamSet.has(e.team));
+      /* Per-team effective joinedDate (auto-defaulted from active window). */
+      const startByTeam = new Map<string, number>();
+      for (const m of YOUTH_TEAM_MEMBERSHIPS) {
+        if (m.youthId !== youthId || !m.active) continue;
+        const start = m.joinedDate?.getTime() ?? this.activeStartByTeam.get(m.teamName) ?? 0;
+        const cur = startByTeam.get(m.teamName);
+        /* If a youth has multiple active rows for same team, take the earliest. */
+        if (cur === undefined || start < cur) startByTeam.set(m.teamName, start);
+      }
+      const upcoming = this.upcomingSchedule.filter(e => {
+        if (!teamSet.has(e.team)) return false;
+        const start = startByTeam.get(e.team) ?? 0;
+        return e.date.getTime() >= start;
+      });
       if (upcoming.length > 0) {
         this.nextEventByYouth.set(youthId, upcoming[0]);
         this.upcomingEventsByYouth.set(youthId, upcoming);
       }
     }
 
-    /* Past participation per youth (active + historical memberships, respecting joinedDate/endDate). */
+    /* Past participation per youth (active + historical memberships, respecting
+     * joinedDate/endDate; for active rows without joinedDate, the implicit start
+     * is the active-window start of the team — i.e. day after the latest closed
+     * composition ended). */
     const pastByYouth = new Map<string, Array<{ entry: ScheduleEntry; role: YouthRole; teamName: string; historical: boolean }>>();
     for (const m of YOUTH_TEAM_MEMBERSHIPS) {
-      const joined = m.joinedDate?.getTime();
-      const ended = m.endDate?.getTime();
       for (const e of this.pastSchedule) {
         if (e.team !== m.teamName) continue;
-        const t = e.date.getTime();
-        if (joined !== undefined && t < joined) continue;
-        if (ended !== undefined && t > ended) continue;
+        if (!this.membershipCoversDate(m, e.date.getTime())) continue;
         pushTo(pastByYouth, m.youthId, { entry: e, role: m.role, teamName: m.teamName, historical: !m.active });
       }
     }
@@ -347,6 +475,72 @@ export class DataService {
           return true;
         });
       this.pastEventsByYouth.set(yid, sorted);
+    }
+
+    this.buildCompositionTimeline();
+  }
+
+  /**
+   * Build per-team composition timeline from membership rows, then resolve each
+   * event to the composition active on its date. Events that fall before the
+   * earliest historical end-date or any anomaly default to the active comp.
+   */
+  private buildCompositionTimeline(): void {
+    /* 1. Group memberships per (team, endDateKey). */
+    interface Bucket { teamName: string; end?: Date; active: boolean; rows: typeof YOUTH_TEAM_MEMBERSHIPS; }
+    const buckets = new Map<string, Bucket>();
+    for (const m of YOUTH_TEAM_MEMBERSHIPS) {
+      const key = m.active
+        ? `${m.teamName}|active`
+        : `${m.teamName}|${m.endDate?.getTime() ?? 0}`;
+      let b = buckets.get(key);
+      if (!b) {
+        b = { teamName: m.teamName, end: m.active ? undefined : m.endDate, active: m.active, rows: [] as any };
+        buckets.set(key, b);
+      }
+      (b.rows as any).push(m);
+    }
+    /* 2. Materialize compositions and group per team. */
+    for (const b of buckets.values()) {
+      const coordRow = b.rows.find(r => r.role === 'coordonator');
+      const coord = coordRow ? this.youthById.get(coordRow.youthId) : undefined;
+      const members: Youth[] = [];
+      const seen = new Set<string>();
+      for (const r of b.rows) {
+        if (seen.has(r.youthId)) continue;
+        const y = this.youthById.get(r.youthId);
+        if (y) { members.push(y); seen.add(r.youthId); }
+      }
+      const comp: TeamComposition = {
+        teamName: b.teamName,
+        coordinator: coord,
+        coordinatorName: coord?.fullName ?? '—',
+        members,
+        end: b.end,
+        isActive: b.active,
+        historyKey: b.active ? undefined : `${b.teamName}-${b.end?.getTime() ?? 0}`,
+      };
+      pushTo(this.compositionsByTeam, b.teamName, comp);
+    }
+    /* 3. Sort: historical first by ascending end, active last. */
+    for (const [team, list] of this.compositionsByTeam) {
+      list.sort((a, b) => {
+        if (a.isActive !== b.isActive) return a.isActive ? 1 : -1;
+        return (a.end?.getTime() ?? 0) - (b.end?.getTime() ?? 0);
+      });
+      this.compositionsByTeam.set(team, list);
+    }
+    /* 4. Resolve each event to its composition (first historical whose end >= date, else active). */
+    for (const e of this.sortedSchedule) {
+      const comps = this.compositionsByTeam.get(e.team);
+      if (!comps || comps.length === 0) continue;
+      const t = e.date.getTime();
+      let chosen: TeamComposition | undefined;
+      for (const c of comps) {
+        if (!c.isActive && c.end && t <= c.end.getTime()) { chosen = c; break; }
+      }
+      if (!chosen) chosen = comps.find(c => c.isActive) ?? comps[comps.length - 1];
+      this.compositionByEvent.set(e, chosen);
     }
   }
 
@@ -410,7 +604,7 @@ export class DataService {
     for (const y of this.youths) {
       if (y.active === false) continue;
       total++;
-      if (y.isCoordinator) coordinators++;
+      if (this.isActiveCoordinator(y.id)) coordinators++;
     }
     const thisWeek = this.nextEvent
       ? (this.youthsByTeam.get(this.nextEvent.team)?.length ?? 0)

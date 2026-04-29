@@ -271,14 +271,16 @@ export const YOUTHS: Youth[] = [
   // ---- Foști coordonatori (istoric) ----
   youth('y-ivascu-simona',      'Simona',   'Ivaşcu',     'F', new Date(1995, 1, 10), 2026, { isCoordinator: true }, 4),
   youth('y-bosancu-amalia',     'Amalia',   'Bosancu',    'F', new Date(1996, 5, 22), 2026, { isCoordinator: true }, 5),
-
+  
+  /* 
   // ---- Foști membri (arhivați — nu mai participă activ, dar păstrăm istoricul) ----
   youth('y-arhiva-andrei',      'Andrei',   'Petrescu',   'M', new Date(2003, 5, 14), 2022,
         { active: false, inactiveSince: new Date(2025, 5, 30), inactiveReason: 'Mutat în alt oraș pentru studii.' }, 6),
   youth('y-arhiva-elena',       'Elena',    'Crăciun',    'F', new Date(2004, 8,  3), 2023,
         { active: false, inactiveSince: new Date(2025, 11, 15), inactiveReason: 'Pauză personală.' }, 7),
   youth('y-arhiva-mihai',       'Mihai',    'Stoica',     'M', new Date(2002, 2, 19), 2021,
-        { active: false, inactiveSince: new Date(2024, 8, 1),  inactiveReason: 'A trecut la grupa de adulți.' }, 8),
+        { active: false, inactiveSince: new Date(2024, 8, 1),  inactiveReason: 'A trecut la grupa de adulți.' }, 8), 
+  */
 ];
 
 /* ===================== TABEL INTERMEDIAR TÂNĂR ↔ ECHIPĂ ===================== */
@@ -382,7 +384,7 @@ export const YOUTH_TEAM_MEMBERSHIPS: YouthTeamMembership[] = [
   membership('y-dulca-david',        'Echipa 3', 'membru',     false, new Date(2026, 3, 17)),
   membership('y-gherasim-sara',  'Echipa 3', 'membru',     false, new Date(2026, 3, 17)),
   membership('y-istratoaie-dina',  'Echipa 3', 'membru',     false, new Date(2026, 3, 17)),
-  membership('y-istratoaie-ruben',    'Echipa 3', 'coordonator',false, new Date(2026, 3, 17)),
+  membership('y-istratoaie-ruben',    'Echipa 3', 'coordonator', false, new Date(2026, 3, 17)),
 ];
 
 /* ===================== ECHIPE (DERIVATE) ===================== */

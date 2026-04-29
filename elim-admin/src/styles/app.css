@@ -3612,6 +3612,12 @@ app-root, .app-shell {
   letter-spacing: 0.04em;
 }
 .youth-role-pill .material-symbols-rounded { font-size: 11px !important; color: #d97706 !important; font-variation-settings: 'FILL' 1; }
+.youth-role-pill.historical {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.youth-role-pill.historical .material-symbols-rounded { color: #64748b !important; }
 
 .youth-history-list {
   display: flex;
@@ -5157,4 +5163,38 @@ main.main-content { flex: 1 0 auto !important; }
   border-color: #e2e8f0;
   border-left-color: #94a3b8;
   color: #475569;
+}
+
+/* === Historical composition pill (eveniment ce aparține unei echipe-istoric) === */
+.historical-comp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+  border: 1px solid #c4b5fd;
+  color: #6d28d9;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.historical-comp-pill.inline { margin-left: 6px; vertical-align: middle; }
+.historical-comp-pill .material-symbols-rounded {
+  font-size: 11px;
+  color: #7c3aed;
+}
+.event-history-row.is-historical-comp,
+.schedule-row.past-row.is-historical-comp {
+  background: linear-gradient(90deg, rgba(237, 233, 254, 0.35), transparent 70%);
+}
+.event-history-row.is-historical-comp.linkable,
+.schedule-row.past-row.is-historical-comp {
+  cursor: pointer;
+}
+.event-history-row.is-historical-comp.linkable:hover,
+.schedule-row.past-row.is-historical-comp:hover {
+  background: linear-gradient(90deg, rgba(221, 214, 254, 0.55), transparent 80%);
 }

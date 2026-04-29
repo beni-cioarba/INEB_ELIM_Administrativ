@@ -37,6 +37,9 @@ export class TeamsComponent implements OnInit {
   ngOnInit(): void {
     const pending = this.nav.consumeExpanded('team');
     if (pending) this.expandedTeam.set(pending);
+    /* Open history section if a historical-team navigation is pending. */
+    const histKey = this.nav.consumeHistoryKey();
+    if (histKey) this.showHistory.set(true);
   }
 
   toggle(name: string): void {

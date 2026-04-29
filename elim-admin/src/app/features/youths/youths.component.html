@@ -76,7 +76,7 @@
     <mat-card class="youth-card"
               [id]="'card-youth-' + y.id"
               [class.expanded]="expanded() === y.id"
-              [class.is-coord]="y.isCoordinator"
+              [class.is-coord]="data.isActiveCoordinator(y.id)"
               appearance="outlined"
               (click)="toggle(y.id)"
               >
@@ -97,14 +97,14 @@
                 <span class="material-symbols-rounded">male</span>
               </span>
             }
-            @if (y.isCoordinator) {
+            @if (data.isActiveCoordinator(y.id)) {
               <span class="youth-meta-pill">
                 <span class="material-symbols-rounded">star</span>Coordonator
               </span>
             }
           </div>
         </div>
-        @if (y.isCoordinator) {
+        @if (data.isActiveCoordinator(y.id)) {
           <span class="youth-coord-badge" matTooltip="Coordonator">
             <span class="material-symbols-rounded">star</span>
           </span>
@@ -210,7 +210,14 @@
                     {{ getTeamNumber(h.teamName) }}
                   </span>
                   <div class="youth-history-meta">
-                    <span class="youth-history-team">{{ h.teamName }}</span>
+                    <span class="youth-history-team">
+                      {{ h.teamName }}
+                      @if (h.role === 'coordonator') {
+                        <span class="youth-role-pill historical" matTooltip="Coordonator al acestei echipe anterioare">
+                          <span class="material-symbols-rounded">star</span> Coordonator
+                        </span>
+                      }
+                    </span>
                     @if (h.endDate) {
                       <span class="youth-history-end">până la {{ formatDateShort(h.endDate) }}</span>
                     }
@@ -278,7 +285,11 @@
               <div class="event-history-list past-events-list">
                 @for (h of data.getPastEventsForYouth(y.id); track h.entry.date.getTime() + h.teamName) {
                   <div class="event-history-row past"
-                       [style.border-left-color]="getTeamColor(h.teamName) + '99'">
+                       [class.is-historical-comp]="data.isHistoricalEvent(h.entry)"
+                       [class.linkable]="data.isHistoricalEvent(h.entry)"
+                       [style.border-left-color]="getTeamColor(h.teamName) + '99'"
+                       [matTooltip]="data.isHistoricalEvent(h.entry) ? 'Vezi compoziția istorică a echipei' : ''"
+                       (click)="data.isHistoricalEvent(h.entry) && nav.goToHistoricalTeam(data.getHistoryKeyForEvent(h.entry)!, $event)">
                     <div class="event-history-date">
                       <span class="event-history-day">{{ h.entry.date.getDate() }}</span>
                       <span class="event-history-mo">{{ formatDateShort(h.entry.date).split(' ')[1] }}</span>
@@ -295,9 +306,11 @@
                             <span class="material-symbols-rounded">star</span>
                           </span>
                         }
-                        @if (h.historical) {
-                          <span class="event-history-hist" matTooltip="Echipă anterioară">
+                        @if (data.isHistoricalEvent(h.entry)) {
+                          <span class="historical-comp-pill inline"
+                                [matTooltip]="'Compoziție încheiată la ' + formatDateShort(data.getCompositionForEvent(h.entry)!.end!)">
                             <span class="material-symbols-rounded">history</span>
+                            istoric
                           </span>
                         }
                       </span>
