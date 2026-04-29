@@ -175,7 +175,7 @@
           <span class="hero-roster-count">{{ getYouthsForTeam(nextEvent.team).length }}</span>
         </div>
         <div class="hero-roster-avatars">
-          <span *ngFor="let y of getYouthsForTeam(nextEvent.team)"
+          <span *ngFor="let y of getYouthsForTeam(nextEvent.team); trackBy: trackByYouthId"
                 class="hero-roster-avatar linkable-chip"
                 [class.is-coord]="y.isCoordinator"
                 [style.background]="'linear-gradient(135deg, ' + y.accentColor + ', ' + y.accentColor + 'cc)'"
@@ -189,7 +189,7 @@
             <span class="material-symbols-rounded">family_restroom</span>
             Părinți de sprijin:
           </span>
-          <span *ngFor="let p of getParentsForTeam(nextEvent.team)"
+          <span *ngFor="let p of getParentsForTeam(nextEvent.team); trackBy: trackByParentId"
                 class="hero-roster-avatar small linkable-chip"
                 [style.background]="'linear-gradient(135deg, ' + p.accentColor + ', ' + p.accentColor + 'cc)'"
                 [matTooltip]="p.name + (p.role ? ' — ' + p.role : '')"
@@ -206,7 +206,7 @@
       În curând
     </h3>
     <div class="next-three-grid" *ngIf="nextThree.length > 0">
-      <div *ngFor="let entry of nextThree; let i = index"
+      <div *ngFor="let entry of nextThree; let i = index; trackBy: trackByScheduleDate"
            class="next-three-card"
            [class.is-first]="i === 0"
            [style.--accent]="getTeamColor(entry.team)"
@@ -238,14 +238,14 @@
       <span class="heading-count">{{ upcomingSchedule.length }}</span>
     </h3>
 
-    <div class="month-group" *ngFor="let group of upcomingByMonth">
+    <div class="month-group" *ngFor="let group of upcomingByMonth; trackBy: trackByMonthKey">
       <div class="month-header">
         <span class="material-symbols-rounded">calendar_today</span>
         {{ group.label }}
         <span class="month-count">{{ group.entries.length }}</span>
       </div>
       <div class="schedule-rows">
-        <div *ngFor="let entry of group.entries"
+        <div *ngFor="let entry of group.entries; trackBy: trackByScheduleDate"
              class="schedule-row"
              [class.is-this-week]="isThisWeek(entry.date)"
              [class.is-today]="isToday(entry.date)"
@@ -289,7 +289,7 @@
       Rezumat coordonatori (istoric)
     </h3>
     <div class="coord-summary" *ngIf="coordinatorRotations.length > 0">
-      <div *ngFor="let c of coordinatorRotations.slice(0, 8)"
+      <div *ngFor="let c of coordinatorRotations.slice(0, 8); trackBy: trackByCoordKey"
            class="coord-summary-row linkable"
            [style.--accent]="c.color"
            (click)="getYouthByName(c.name) && goTo('youth', getYouthByName(c.name)!.id)"
@@ -326,14 +326,14 @@
       </button>
 
       <div class="past-by-month" *ngIf="showPastSchedule">
-        <div class="month-group" *ngFor="let group of pastByMonth">
+        <div class="month-group" *ngFor="let group of pastByMonth; trackBy: trackByMonthKey">
           <div class="month-header past">
             <span class="material-symbols-rounded">history</span>
             {{ group.label }}
             <span class="month-count">{{ group.entries.length }}</span>
           </div>
           <div class="schedule-rows">
-            <div *ngFor="let entry of group.entries"
+            <div *ngFor="let entry of group.entries; trackBy: trackByScheduleDate"
                  class="schedule-row past-row"
                  [style.--accent]="getTeamColor(entry.team)"
                  (click)="goTo('team', entry.team)"
@@ -365,7 +365,7 @@
   <!-- ================ TEAMS TAB ================ -->
   <section *ngIf="activeTab === 1" class="section fade-in">
     <div class="teams-grid">
-      <mat-card *ngFor="let team of teamsData"
+      <mat-card *ngFor="let team of teamsData; trackBy: trackByTeamName"
                 class="team-card"
                 [id]="'card-team-' + team.name"
                 [class.expanded]="expandedTeam === team.name"
@@ -420,7 +420,7 @@
           </div>
 
           <mat-list class="members-mat-list">
-            <mat-list-item *ngFor="let member of team.members"
+            <mat-list-item *ngFor="let member of team.members; trackBy: trackByMember"
                            class="member-row"
                            [class.linkable]="member.youthId"
                            (click)="member.youthId && (activeTab = 2); member.youthId && (expandedYouthId = member.youthId); $event.stopPropagation()">
@@ -438,7 +438,7 @@
               <span class="support-count-pill">{{ getParentsForTeam(team.name).length }}</span>
             </div>
             <div class="team-support-list">
-              <div *ngFor="let sp of getParentsForTeam(team.name)"
+              <div *ngFor="let sp of getParentsForTeam(team.name); trackBy: trackByParentId"
                    class="team-support-chip linkable"
                    (click)="activeTab = 3; expandedParentId = sp.id; $event.stopPropagation()"
                    matTooltip="Vezi profil părinte">
@@ -473,7 +473,7 @@
       </div>
 
       <div class="teams-grid" *ngIf="showTeamHistory">
-        <mat-card *ngFor="let hist of teamsHistory"
+        <mat-card *ngFor="let hist of teamsHistory; trackBy: trackByTeamHistName"
                   class="team-card history-card"
                   appearance="outlined">
 
@@ -499,7 +499,7 @@
             </div>
 
             <div class="members-list">
-              <div *ngFor="let member of hist.members"
+              <div *ngFor="let member of hist.members; trackBy: trackByMember"
                    class="member-row"
                    [class.linkable]="member.youthId"
                    (click)="member.youthId ? goTo('youth', member.youthId, $event) : null">
@@ -561,7 +561,7 @@
         </div>
         <div class="rule-card-body">
           <ol class="rule-steps">
-            <li *ngFor="let item of rules.coordinatorRole.items; let i = index">
+            <li *ngFor="let item of rules.coordinatorRole.items; let i = index; trackBy: trackByIndex">
               <span class="rule-step-num">{{ i + 1 }}</span>
               <span class="rule-step-text">{{ item }}</span>
             </li>
@@ -583,7 +583,7 @@
         </div>
         <div class="rule-card-body">
           <ol class="rule-steps">
-            <li *ngFor="let item of rules.coordinatorOrganization.items; let i = index">
+            <li *ngFor="let item of rules.coordinatorOrganization.items; let i = index; trackBy: trackByIndex">
               <span class="rule-step-num">{{ i + 1 }}</span>
               <span class="rule-step-text">{{ item }}</span>
             </li>
@@ -605,7 +605,7 @@
         </div>
         <div class="rule-card-body">
           <ol class="rule-steps">
-            <li *ngFor="let item of rules.beforeProgram.items; let i = index">
+            <li *ngFor="let item of rules.beforeProgram.items; let i = index; trackBy: trackByIndex">
               <span class="rule-step-num">{{ i + 1 }}</span>
               <span class="rule-step-text">{{ item }}</span>
             </li>
@@ -627,7 +627,7 @@
         </div>
         <div class="rule-card-body">
           <ol class="rule-steps">
-            <li *ngFor="let item of rules.afterProgram.items; let i = index">
+            <li *ngFor="let item of rules.afterProgram.items; let i = index; trackBy: trackByIndex">
               <span class="rule-step-num">{{ i + 1 }}</span>
               <span class="rule-step-text">{{ item }}</span>
             </li>
@@ -668,7 +668,7 @@
               Părinți alocați
             </div>
             <div class="support-hero-people-list">
-              <div *ngFor="let sp of nextSp.people" class="support-hero-person">
+              <div *ngFor="let sp of nextSp.people; trackBy: trackByParentId" class="support-hero-person">
                 <span class="team-support-avatar lg" [style.background]="'linear-gradient(135deg, ' + sp.accentColor + ', ' + sp.accentColor + 'cc)'">{{ sp.initials }}</span>
                 <div>
                   <div class="support-hero-person-name">{{ sp.name }}</div>
@@ -704,7 +704,7 @@
     </p>
 
     <div class="support-grid">
-      <mat-card *ngFor="let sp of parents"
+      <mat-card *ngFor="let sp of parents; trackBy: trackByParentId"
                 class="support-card"
                 [id]="'card-parent-' + sp.id"
                 [class.expanded]="expandedParentId === sp.id"
@@ -756,7 +756,7 @@
               Abilități
             </div>
             <mat-chip-set class="support-skills">
-              <mat-chip *ngFor="let s of sp.skills" class="support-skill-chip"
+              <mat-chip *ngFor="let s of sp.skills; trackBy: trackByTeamNameStr" class="support-skill-chip"
                         [style.border-color]="sp.accentColor + '55'">
                 {{ s }}
               </mat-chip>
@@ -770,7 +770,7 @@
               Copii în departament
             </div>
             <div class="parent-children-list">
-              <div *ngFor="let link of getYouthsForParent(sp.id)" class="parent-child-row"
+              <div *ngFor="let link of getYouthsForParent(sp.id); trackBy: trackByYouthLink" class="parent-child-row"
                    (click)="goTo('youth', link.youth.id, $event)">
                 <span class="team-support-avatar"
                       [style.background]="'linear-gradient(135deg, ' + link.youth.accentColor + ', ' + link.youth.accentColor + 'cc)'">
@@ -791,7 +791,7 @@
             Echipe atribuite
           </div>
           <div class="support-assigned-teams">
-            <ng-container *ngFor="let teamName of getTeamsForParent(sp.id)">
+            <ng-container *ngFor="let teamName of getTeamsForParent(sp.id); trackBy: trackByTeamNameStr">
               <ng-container *ngIf="getNextDateForTeam(teamName) as nextDate">
                 <div class="support-team-row" [style.border-left-color]="getTeamColor(teamName)">
                   <div class="support-team-row-head">
@@ -922,7 +922,7 @@
 
     <!-- Youth grid -->
     <div class="youth-grid">
-      <mat-card *ngFor="let y of filteredYouths"
+      <mat-card *ngFor="let y of filteredYouths; trackBy: trackByYouthId"
                 class="youth-card"
                 [id]="'card-youth-' + y.id"
                 [class.expanded]="expandedYouthId === y.id"
@@ -998,7 +998,7 @@
             Echipe active
           </div>
           <div class="support-assigned-teams">
-            <ng-container *ngFor="let t of getActiveTeamsForYouth(y.id)">
+            <ng-container *ngFor="let t of getActiveTeamsForYouth(y.id); trackBy: trackByActiveTeam">
               <ng-container *ngIf="getNextDateForTeam(t.teamName) as nextDate">
                 <div class="support-team-row" [style.border-left-color]="getTeamColor(t.teamName)">
                   <div class="support-team-row-head">
@@ -1045,7 +1045,7 @@
               Echipe anterioare
             </div>
             <div class="youth-history-list">
-              <div *ngFor="let h of getHistoricalTeamsForYouth(y.id)" class="youth-history-chip"
+              <div *ngFor="let h of getHistoricalTeamsForYouth(y.id); trackBy: trackByActiveTeam" class="youth-history-chip"
                    [style.border-color]="getTeamColor(h.teamName) + '44'">
                 <span class="team-number-circle support-team-mini"
                       [style.background-color]="getTeamColor(h.teamName) + 'aa'">
@@ -1068,7 +1068,7 @@
               Interese
             </div>
             <mat-chip-set class="support-skills">
-              <mat-chip *ngFor="let i of y.interests" class="support-skill-chip"
+              <mat-chip *ngFor="let i of y.interests; trackBy: trackByTeamNameStr" class="support-skill-chip"
                         [style.border-color]="y.accentColor + '55'">
                 {{ i }}
               </mat-chip>
@@ -1082,7 +1082,7 @@
               Părinți / tutori
             </div>
             <div class="parent-children-list">
-              <div *ngFor="let link of getParentsForYouth(y.id)" class="parent-child-row"
+              <div *ngFor="let link of getParentsForYouth(y.id); trackBy: trackByParentLink" class="parent-child-row"
                    (click)="goTo('parent', link.parent.id, $event)">
                 <span class="team-support-avatar"
                       [style.background]="'linear-gradient(135deg, ' + link.parent.accentColor + ', ' + link.parent.accentColor + 'cc)'">
