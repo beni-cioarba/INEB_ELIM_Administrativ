@@ -65,6 +65,12 @@ export interface Youth {
   notes?: string;
   interests?: string[];
   isCoordinator?: boolean;
+  /** False = arhivat (istoric, nu mai participă activ). Default: true. */
+  active?: boolean;
+  /** Data de la care nu mai este activ. */
+  inactiveSince?: Date;
+  /** Motivul retragerii (ex: „mutat în alt oraș”, „pauză personală”). */
+  inactiveReason?: string;
 }
 
 /** Tabel intermediar tânăr ↔ echipă (cu rol și status istoric/activ). */
@@ -90,6 +96,10 @@ export interface Parent {
   initials: string;
   accentColor: string;
   available: boolean;
+  /** False = arhivat (nu mai oferă sprijin activ). Default: true. */
+  active?: boolean;
+  inactiveSince?: Date;
+  inactiveReason?: string;
 }
 
 /** Tabel intermediar părinte ↔ echipă. */
@@ -146,7 +156,7 @@ export const SCHEDULE_DATA: ScheduleEntry[] = [
   { team: 'Echipa 6', coordinator: 'Halas Noemi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 10),  observations: '', completed: false },
   { team: 'Echipa 7', coordinator: 'Bereza Ionatan',  programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 17),  observations: '', completed: false },
   { team: 'Echipa 1', coordinator: 'Halas Luigi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 24),  observations: '', completed: false },
-  { team: 'Echipa 2', coordinator: 'Dobre David',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 31),  observations: '', completed: false },
+  { team: 'Echipa 2', coordinator: 'Dobre David',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 31),  observations: 'Pregătiri speciale: aniversare 5 ani.', completed: false },
 ];
 
 /* ===================== TINERI (sursa unică) ===================== */
@@ -259,6 +269,14 @@ export const YOUTHS: Youth[] = [
   // ---- Foști coordonatori (istoric) ----
   youth('y-ivascu-simona',      'Simona',   'Ivaşcu',     'F', new Date(1995, 1, 10), 2026, { isCoordinator: true }, 4),
   youth('y-bosancu-amalia',     'Amalia',   'Bosancu',    'F', new Date(1996, 5, 22), 2026, { isCoordinator: true }, 5),
+
+  // ---- Foști membri (arhivați — nu mai participă activ, dar păstrăm istoricul) ----
+  youth('y-arhiva-andrei',      'Andrei',   'Petrescu',   'M', new Date(2003, 5, 14), 2022,
+        { active: false, inactiveSince: new Date(2025, 5, 30), inactiveReason: 'Mutat în alt oraș pentru studii.' }, 6),
+  youth('y-arhiva-elena',       'Elena',    'Crăciun',    'F', new Date(2004, 8,  3), 2023,
+        { active: false, inactiveSince: new Date(2025, 11, 15), inactiveReason: 'Pauză personală.' }, 7),
+  youth('y-arhiva-mihai',       'Mihai',    'Stoica',     'M', new Date(2002, 2, 19), 2021,
+        { active: false, inactiveSince: new Date(2024, 8, 1),  inactiveReason: 'A trecut la grupa de adulți.' }, 8),
 ];
 
 /* ===================== TABEL INTERMEDIAR TÂNĂR ↔ ECHIPĂ ===================== */
@@ -481,6 +499,40 @@ export const PARENTS: Parent[] = [
     initials: 'CD',
     accentColor: '#00838f',
     available: true,
+  },
+
+  // ⬇️ Părinți arhivați (foști sprijin — nu mai sunt activi, dar îi păstrăm pentru istoric).
+  {
+    id: 'p-arhiva-001',
+    name: 'Sorina Munteanu',
+    phone: '660 11 22 33',
+    email: 'sorina.munteanu@example.com',
+    role: 'Bucătărie',
+    skills: ['Gătit', 'Patiserie'],
+    joinedDate: new Date(2024, 1, 10),
+    notes: 'A ajutat 2 ani consecutiv la programele de iarnă.',
+    initials: 'SM',
+    accentColor: '#ad1457',
+    available: false,
+    active: false,
+    inactiveSince: new Date(2025, 11, 31),
+    inactiveReason: 'Schimbare de program profesional.',
+  },
+  {
+    id: 'p-arhiva-002',
+    name: 'Ion Lazăr',
+    phone: '660 44 55 66',
+    email: 'ion.lazar@example.com',
+    role: 'Logistică',
+    skills: ['Aranjare săli', 'Sonorizare'],
+    joinedDate: new Date(2023, 8, 5),
+    notes: '',
+    initials: 'IL',
+    accentColor: '#283593',
+    available: false,
+    active: false,
+    inactiveSince: new Date(2025, 4, 20),
+    inactiveReason: 'S-a mutat în altă localitate.',
   },
 ];
 

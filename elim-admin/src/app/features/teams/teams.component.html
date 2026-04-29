@@ -1,0 +1,230 @@
+<div class="teams-grid">
+  @for (team of data.teams; track team.name) {
+    <mat-card class="team-card"
+              [id]="'card-team-' + team.name"
+              [class.expanded]="expandedTeam() === team.name"
+              appearance="outlined"
+              (click)="toggle(team.name)">
+
+      <div class="team-header"
+           [style.background]="'linear-gradient(135deg, ' + getTeamColor(team.name) + ' 0%, ' + getTeamColor(team.name) + 'bb 100%)'">
+        <div class="team-number-circle">{{ getTeamNumber(team.name) }}</div>
+        <div class="team-header-text">
+          <span class="team-name">{{ team.name }}</span>
+          <span class="team-coord-pill">
+            <span class="material-symbols-rounded">star</span>
+            {{ team.coordinator }}
+          </span>
+        </div>
+        <div class="team-member-count-badge">
+          <span class="material-symbols-rounded">person</span>
+          {{ team.members.length }}
+        </div>
+      </div>
+
+      @if (data.getNextEventForTeam(team.name); as nextDate) {
+        <div class="team-next-banner">
+          <span class="material-symbols-rounded">event</span>
+          Următoarea dată: <strong>{{ formatDateShort(nextDate.date) }}</strong>
+          <span class="team-next-days">&mdash; în {{ daysUntil(nextDate.date) }} zile</span>
+        </div>
+      }
+
+      @if (expandedTeam() === team.name) {
+        <mat-card-content class="team-body" (click)="$event.stopPropagation()">
+          @if (data.getCoordinatorForTeam(team.name); as coord) {
+            <div class="team-coordinator-card linkable"
+                 [style.border-left-color]="getTeamColor(team.name)"
+                 (click)="nav.goTo('youth', coord.id, $event)"
+                 matTooltip="Vezi profil coordonator">
+              <div class="team-coord-row">
+                <span class="material-symbols-rounded team-coord-star">star</span>
+                <div class="team-coord-info">
+                  <span class="team-coord-label">Coordonator</span>
+                  <span class="team-coord-name">{{ team.coordinator }}</span>
+                </div>
+                <span class="material-symbols-rounded link-arrow">chevron_right</span>
+              </div>
+            </div>
+          }
+
+          <div class="team-members-heading">
+            <span class="material-symbols-rounded">group</span>
+            Membri echipei
+          </div>
+
+          <div class="members-list">
+            @for (member of team.members; track member.name) {
+              <div class="member-row"
+                   [class.linkable]="member.youthId"
+                   (click)="member.youthId && nav.goTo('youth', member.youthId, $event)">
+                <span class="material-symbols-rounded member-list-icon">person</span>
+                <span class="member-row-name">{{ member.name }}</span>
+                @if (member.youthId) {
+                  <span class="material-symbols-rounded link-arrow">chevron_right</span>
+                }
+              </div>
+            }
+          </div>
+
+          @if (data.getParentsForTeam(team.name).length > 0) {
+            <div class="team-members-heading support-heading">
+              <span class="material-symbols-rounded">family_restroom</span>
+              Părinți de sprijin
+              <span class="support-count-pill">{{ data.getParentsForTeam(team.name).length }}</span>
+            </div>
+            <div class="team-support-list">
+              @for (sp of data.getParentsForTeam(team.name); track sp.id) {
+                <div class="team-support-chip linkable"
+                     (click)="nav.goTo('parent', sp.id, $event)"
+                     matTooltip="Vezi profil părinte">
+                  <span class="team-support-avatar"
+                        [style.background]="'linear-gradient(135deg, ' + sp.accentColor + ', ' + sp.accentColor + 'cc)'">{{ sp.initials }}</span>
+                  <div class="team-support-meta">
+                    <span class="team-support-name">{{ sp.name }}</span>
+                    @if (sp.role) {
+                      <span class="team-support-role">{{ sp.role }}</span>
+                    }
+                  </div>
+                  <span class="material-symbols-rounded link-arrow">chevron_right</span>
+                </div>
+              }
+            </div>
+          }
+
+          @if (data.getUpcomingEventsForTeam(team.name).length > 0) {
+            <div class="support-section-label">
+              <span class="material-symbols-rounded">event_upcoming</span>
+              Programări viitoare
+              <span class="section-count-pill">{{ data.getUpcomingEventsForTeam(team.name).length }}</span>
+            </div>
+            <div class="event-history-list">
+              @for (e of data.getUpcomingEventsForTeam(team.name); track e.date.getTime()) {
+                <div class="event-history-row" [style.border-left-color]="getTeamColor(e.team)">
+                  <div class="event-history-date">
+                    <span class="event-history-day">{{ e.date.getDate() }}</span>
+                    <span class="event-history-mo">{{ formatDateShort(e.date).split(' ')[1] }}</span>
+                  </div>
+                  <div class="event-history-info">
+                    <span class="event-history-team">{{ e.programType }}</span>
+                    <span class="event-history-type">
+                      <span class="material-symbols-rounded" style="font-size:12px;vertical-align:middle">person</span>
+                      {{ e.coordinator }}
+                    </span>
+                  </div>
+                  @if (notes.hasNotes(e)) {
+                    <div class="sr-note">
+                      <span class="material-symbols-rounded">sticky_note_2</span>
+                      <span class="sr-note-text">{{ e.observations }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (data.getPastEventsForTeam(team.name).length > 0) {
+            <div class="support-section-label history-toggle-label"
+                 (click)="togglePastEvents(team.name, $event)"
+                 role="button">
+              <span class="material-symbols-rounded">history</span>
+              Istoric programări
+              <span class="section-count-pill">{{ data.getPastEventsForTeam(team.name).length }}</span>
+              <span class="material-symbols-rounded history-toggle-chevron">
+                {{ isPastEventsOpen(team.name) ? 'expand_less' : 'expand_more' }}
+              </span>
+            </div>
+            @if (isPastEventsOpen(team.name)) {
+              <div class="event-history-list past-events-list">
+                @for (e of data.getPastEventsForTeam(team.name); track e.date.getTime()) {
+                  <div class="event-history-row past" [style.border-left-color]="getTeamColor(e.team) + '99'">
+                    <div class="event-history-date">
+                      <span class="event-history-day">{{ e.date.getDate() }}</span>
+                      <span class="event-history-mo">{{ formatDateShort(e.date).split(' ')[1] }}</span>
+                    </div>
+                    <div class="event-history-info">
+                      <span class="event-history-team">{{ e.programType }}</span>
+                      <span class="event-history-type">
+                        <span class="material-symbols-rounded" style="font-size:12px;vertical-align:middle">person</span>
+                        {{ e.coordinator }}
+                      </span>
+                    </div>
+                    <span class="event-history-year">{{ e.date.getFullYear() }}</span>
+                    @if (notes.hasNotes(e)) {
+                      <div class="sr-note">
+                        <span class="material-symbols-rounded">sticky_note_2</span>
+                        <span class="sr-note-text">{{ e.observations }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
+        </mat-card-content>
+      }
+
+      <div class="team-expand-hint">
+        <span class="material-symbols-rounded">{{ expandedTeam() === team.name ? 'expand_less' : 'expand_more' }}</span>
+        {{ expandedTeam() === team.name ? 'Închide' : 'Detalii' }}
+      </div>
+    </mat-card>
+  }
+</div>
+
+@if (data.teamsHistory.length > 0) {
+  <div class="team-history-section">
+    <mat-divider class="past-divider"></mat-divider>
+    <div class="past-section">
+      <button mat-button class="past-toggle" (click)="showHistory.set(!showHistory())">
+        <span class="material-symbols-rounded">{{ showHistory() ? 'expand_less' : 'history' }}</span>
+        Istoric echipe ({{ data.teamsHistory.length }})
+        <span class="material-symbols-rounded">{{ showHistory() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</span>
+      </button>
+    </div>
+
+    @if (showHistory()) {
+      <div class="teams-grid">
+        @for (hist of data.teamsHistory; track hist.name) {
+          <mat-card class="team-card history-card" appearance="outlined">
+            <div class="team-header history-header"
+                 [style.background]="'linear-gradient(135deg, ' + getTeamColor(hist.name) + '88 0%, ' + getTeamColor(hist.name) + '55 100%)'">
+              <div class="team-number-circle">{{ getTeamNumber(hist.name) }}</div>
+              <div class="team-header-text">
+                <span class="team-name">{{ hist.name }}</span>
+                <span class="team-role-line">
+                  <span class="material-symbols-rounded" style="font-size:14px">star</span>
+                  {{ hist.coordinator }}
+                </span>
+              </div>
+              <div class="history-end-badge">
+                <span class="material-symbols-rounded" style="font-size:14px">event_busy</span>
+                {{ formatDateShort(hist.endDate) }}
+              </div>
+            </div>
+
+            <mat-card-content class="team-body">
+              <div class="team-members-heading">
+                <span class="material-symbols-rounded">group</span>
+                Membri echipei
+              </div>
+              <div class="members-list">
+                @for (member of hist.members; track member.name) {
+                  <div class="member-row"
+                       [class.linkable]="member.youthId"
+                       (click)="member.youthId && nav.goTo('youth', member.youthId, $event)">
+                    <span class="material-symbols-rounded member-list-icon">person</span>
+                    <span class="member-row-name">{{ member.name }}</span>
+                    @if (member.youthId) {
+                      <span class="material-symbols-rounded link-arrow">chevron_right</span>
+                    }
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+}

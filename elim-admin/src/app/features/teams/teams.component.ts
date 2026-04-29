@@ -1,0 +1,60 @@
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DataService } from '../../core/services/data.service';
+import { NavigationService } from '../../core/services/navigation.service';
+import { EventNotesService } from '../../core/services/event-notes.service';
+import { ScheduleEntry } from '../../core/models';
+import { formatDateShort, daysBetween } from '../../core/utils/date.utils';
+import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
+
+@Component({
+  selector: 'app-teams',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule, MatCardModule, MatButtonModule,
+    MatDividerModule, MatTooltipModule,
+  ],
+  templateUrl: './teams.component.html',
+})
+export class TeamsComponent implements OnInit {
+  protected readonly data = inject(DataService);
+  protected readonly nav = inject(NavigationService);
+  protected readonly notes = inject(EventNotesService);
+
+  readonly expandedTeam = signal<string | null>(null);
+  readonly showHistory = signal(false);
+  readonly pastEventsOpen = signal<Set<string>>(new Set());
+
+  protected readonly formatDateShort = formatDateShort;
+  protected readonly getTeamColor = getTeamColor;
+  protected readonly getTeamNumber = getTeamNumber;
+
+  ngOnInit(): void {
+    const pending = this.nav.consumeExpanded('team');
+    if (pending) this.expandedTeam.set(pending);
+  }
+
+  toggle(name: string): void {
+    this.expandedTeam.update(v => v === name ? null : name);
+  }
+
+  togglePastEvents(name: string, ev: Event): void {
+    ev.stopPropagation();
+    const next = new Set(this.pastEventsOpen());
+    if (next.has(name)) next.delete(name); else next.add(name);
+    this.pastEventsOpen.set(next);
+  }
+  isPastEventsOpen(name: string): boolean { return this.pastEventsOpen().has(name); }
+
+  openNotes(entry: ScheduleEntry, ev: Event): void {
+    ev.stopPropagation();
+    this.notes.open(entry);
+  }
+
+  daysUntil(date: Date): number { return daysBetween(date, this.data.today); }
+}

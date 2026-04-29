@@ -1,0 +1,351 @@
+@if (data.nextParentEvent; as nextSp) {
+  <mat-card class="next-event-card support-hero" appearance="outlined">
+    <div class="next-event-ribbon" [style.background-color]="getTeamColor(nextSp.entry.team)">
+      <span class="material-symbols-rounded">family_restroom</span>
+      Următorul sprijin
+    </div>
+    <mat-card-content class="next-event-body">
+      <div class="next-event-header">
+        <div class="next-event-team-badge" [style.background-color]="getTeamColor(nextSp.entry.team)">
+          {{ getTeamNumber(nextSp.entry.team) }}
+        </div>
+        <div class="next-event-info">
+          <h2 class="next-event-team-name">{{ nextSp.entry.team }}</h2>
+          <p class="next-event-date">
+            <span class="material-symbols-rounded">event</span>
+            {{ formatDate(nextSp.entry.date) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="support-hero-people">
+        <div class="support-hero-label">
+          <span class="material-symbols-rounded">groups_2</span>
+          Părinți alocați
+        </div>
+        <div class="support-hero-people-list">
+          @for (sp of nextSp.people; track sp.id) {
+            <div class="support-hero-person">
+              <span class="team-support-avatar lg"
+                    [style.background]="'linear-gradient(135deg, ' + sp.accentColor + ', ' + sp.accentColor + 'cc)'">{{ sp.initials }}</span>
+              <div>
+                <div class="support-hero-person-name">{{ sp.name }}</div>
+                @if (sp.role) {
+                  <div class="support-hero-person-role">{{ sp.role }}</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (daysUntil(nextSp.entry.date) > 0) {
+        <div class="next-event-countdown">
+          <div class="countdown-circle" [style.border-color]="getTeamColor(nextSp.entry.team)">
+            <span class="countdown-number">{{ daysUntil(nextSp.entry.date) }}</span>
+            <span class="countdown-unit">{{ daysUntil(nextSp.entry.date) === 1 ? 'zi' : 'zile' }}</span>
+          </div>
+        </div>
+      }
+      @if (isToday(nextSp.entry.date)) {
+        <div class="next-event-countdown today-pulse">
+          <div class="countdown-circle today-circle">
+            <span class="material-symbols-rounded today-icon">priority_high</span>
+            <span class="countdown-unit">Astăzi!</span>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+
+<h3 class="section-heading">
+  <span class="material-symbols-rounded heading-icon">diversity_3</span>
+  Părinți de sprijin
+  <span class="heading-count">{{ data.activeParents().length }}</span>
+</h3>
+<p class="support-intro">
+  Părinți și voluntari care ajută echipele atunci când le vine rândul în programare. Apasă pe un card pentru a vedea profilul complet.
+</p>
+
+<div class="support-grid">
+  @for (sp of data.activeParents(); track sp.id) {
+    <mat-card class="support-card"
+              [id]="'card-parent-' + sp.id"
+              [class.expanded]="expanded() === sp.id"
+              appearance="outlined"
+              (click)="toggle(sp.id)"
+              >
+      <div class="support-card-header"
+           [style.background]="'linear-gradient(135deg, ' + sp.accentColor + ' 0%, ' + sp.accentColor + 'cc 100%)'">
+        <div class="support-avatar-lg">{{ sp.initials }}</div>
+        <div class="support-header-text">
+          <span class="support-name">{{ sp.name }}</span>
+          @if (sp.role) {
+            <span class="support-role-pill">
+              <span class="material-symbols-rounded">work</span>
+              {{ sp.role }}
+            </span>
+          }
+        </div>
+        <span class="support-status-dot"
+              [class.offline]="!sp.available"
+              [matTooltip]="sp.available ? 'Disponibil' : 'Indisponibil'"></span>
+      </div>
+
+      @if (data.getNextEventForParent(sp.id); as nextEv) {
+        <div class="team-next-banner support-next-banner">
+          <span class="material-symbols-rounded">event_available</span>
+          <span>Urm. <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
+          @if (!isToday(nextEv.date)) {
+            <span class="tl-days-badge support-days-badge"
+                  [style.background-color]="getTeamColor(nextEv.team) + '22'"
+                  [style.color]="getTeamColor(nextEv.team)">
+              {{ daysUntil(nextEv.date) }}z
+            </span>
+          } @else {
+            <span class="tl-days-badge today-badge">Azi!</span>
+          }
+        </div>
+      } @else {
+        <div class="team-next-banner support-no-assignment">
+          <span class="material-symbols-rounded">event_busy</span>
+          Fără echipă alocată momentan
+        </div>
+      }
+
+      @if (expanded() === sp.id) {
+        <mat-card-content class="support-body" (click)="$event.stopPropagation()">
+          @if (sp.skills.length > 0) {
+            <div class="support-section-label">
+              <span class="material-symbols-rounded">stars</span>
+              Abilități
+            </div>
+            <mat-chip-set class="support-skills">
+              @for (s of sp.skills; track s) {
+                <mat-chip class="support-skill-chip" [style.border-color]="sp.accentColor + '55'">{{ s }}</mat-chip>
+              }
+            </mat-chip-set>
+          }
+
+          @if (data.getYouthsForParent(sp.id).length > 0) {
+            <div class="support-section-label">
+              <span class="material-symbols-rounded">escalator_warning</span>
+              Copii în departament
+            </div>
+            <div class="parent-children-list">
+              @for (link of data.getYouthsForParent(sp.id); track link.youth.id) {
+                <div class="parent-child-row" (click)="nav.goTo('youth', link.youth.id, $event)">
+                  <span class="team-support-avatar"
+                        [style.background]="'linear-gradient(135deg, ' + link.youth.accentColor + ', ' + link.youth.accentColor + 'cc)'">
+                    {{ link.youth.initials }}
+                  </span>
+                  <div class="parent-child-info">
+                    <span class="parent-child-name">{{ link.youth.fullName }}</span>
+                    <span class="parent-child-rel">{{ link.relationship }}</span>
+                  </div>
+                  <span class="material-symbols-rounded parent-child-arrow">chevron_right</span>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="support-section-label">
+            <span class="material-symbols-rounded">groups</span>
+            Echipe atribuite
+          </div>
+          <div class="support-assigned-teams">
+            @for (teamName of data.getTeamsForParent(sp.id); track teamName) {
+              @if (data.getNextEventForTeam(teamName); as nextDate) {
+                <div class="support-team-row" [style.border-left-color]="getTeamColor(teamName)">
+                  <div class="support-team-row-head">
+                    <div class="team-number-circle support-team-mini"
+                         [style.background-color]="getTeamColor(teamName)">
+                      {{ getTeamNumber(teamName) }}
+                    </div>
+                    <div class="support-team-row-info">
+                      <span class="support-team-row-name">{{ teamName }}</span>
+                      <span class="support-team-row-date">
+                        <span class="material-symbols-rounded">event</span>
+                        {{ formatDate(nextDate.date) }}
+                      </span>
+                    </div>
+                    <div class="support-team-row-countdown"
+                         [style.border-color]="getTeamColor(teamName)"
+                         [class.is-today]="isToday(nextDate.date)">
+                      @if (!isToday(nextDate.date)) {
+                        <span class="support-cd-num">{{ daysUntil(nextDate.date) }}</span>
+                        <span class="support-cd-unit">{{ daysUntil(nextDate.date) === 1 ? 'zi' : 'zile' }}</span>
+                      } @else {
+                        <span class="support-cd-unit today-strong">Azi!</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+            @if (data.getTeamsForParent(sp.id).length === 0) {
+              <div class="support-no-teams">
+                Acest părinte nu este atribuit niciunei echipe momentan.
+              </div>
+            }
+          </div>
+
+          @if (data.getUpcomingEventsForParent(sp.id).length > 0) {
+            <div class="support-section-label">
+              <span class="material-symbols-rounded">event_upcoming</span>
+              Programări viitoare
+              <span class="section-count-pill">{{ data.getUpcomingEventsForParent(sp.id).length }}</span>
+            </div>
+            <div class="event-history-list">
+              @for (e of data.getUpcomingEventsForParent(sp.id); track e.date.getTime() + e.team) {
+                <div class="event-history-row" [style.border-left-color]="getTeamColor(e.team)">
+                  <div class="event-history-date">
+                    <span class="event-history-day">{{ e.date.getDate() }}</span>
+                    <span class="event-history-mo">{{ formatDateShort(e.date).split(' ')[1] }}</span>
+                  </div>
+                  <div class="event-history-info">
+                    <span class="event-history-team">
+                      <span class="team-number-circle event-history-mini"
+                            [style.background-color]="getTeamColor(e.team)">
+                        {{ getTeamNumber(e.team) }}
+                      </span>
+                      {{ e.team }}
+                    </span>
+                    <span class="event-history-type">{{ e.programType }}</span>
+                  </div>
+                  @if (isToday(e.date)) {
+                    <span class="event-history-badge today-badge">Azi!</span>
+                  } @else {
+                    <span class="event-history-badge"
+                          [style.background-color]="getTeamColor(e.team) + '22'"
+                          [style.color]="getTeamColor(e.team)">
+                      în {{ daysUntil(e.date) }}z
+                    </span>
+                  }
+                  @if (notes.hasNotes(e)) {
+                    <div class="sr-note">
+                      <span class="material-symbols-rounded">sticky_note_2</span>
+                      <span class="sr-note-text">{{ e.observations }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (data.getPastEventsForParent(sp.id).length > 0) {
+            <div class="support-section-label history-toggle-label"
+                 (click)="togglePastEvents(sp.id, $event)"
+                 role="button">
+              <span class="material-symbols-rounded">restaurant_menu</span>
+              Istoric programări
+              <span class="section-count-pill">{{ data.getPastEventsForParent(sp.id).length }}</span>
+              <span class="material-symbols-rounded history-toggle-chevron">
+                {{ isPastEventsOpen(sp.id) ? 'expand_less' : 'expand_more' }}
+              </span>
+            </div>
+            @if (isPastEventsOpen(sp.id)) {
+              <div class="event-history-list past-events-list">
+                @for (e of data.getPastEventsForParent(sp.id); track e.date.getTime() + e.team) {
+                  <div class="event-history-row past"
+                       [style.border-left-color]="getTeamColor(e.team) + '99'">
+                    <div class="event-history-date">
+                      <span class="event-history-day">{{ e.date.getDate() }}</span>
+                      <span class="event-history-mo">{{ formatDateShort(e.date).split(' ')[1] }}</span>
+                    </div>
+                    <div class="event-history-info">
+                      <span class="event-history-team">
+                        <span class="team-number-circle event-history-mini"
+                              [style.background-color]="getTeamColor(e.team) + 'cc'">
+                          {{ getTeamNumber(e.team) }}
+                        </span>
+                        {{ e.team }}
+                      </span>
+                      <span class="event-history-type">{{ e.programType }}</span>
+                    </div>
+                    <span class="event-history-year">{{ e.date.getFullYear() }}</span>
+                    @if (notes.hasNotes(e)) {
+                      <div class="sr-note">
+                        <span class="material-symbols-rounded">sticky_note_2</span>
+                        <span class="sr-note-text">{{ e.observations }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
+
+          <div class="support-meta-row">
+            <div class="support-meta-pill">
+              <span class="material-symbols-rounded">how_to_reg</span>
+              Din {{ formatJoinedDate(sp.joinedDate) }}
+            </div>
+          </div>
+
+          @if (sp.notes) {
+            <div class="support-notes">
+              <span class="material-symbols-rounded">sticky_note_2</span>
+              <p>{{ sp.notes }}</p>
+            </div>
+          }
+        </mat-card-content>
+      }
+
+      <div class="team-expand-hint">
+        <span class="material-symbols-rounded">{{ expanded() === sp.id ? 'expand_less' : 'expand_more' }}</span>
+        {{ expanded() === sp.id ? 'Închide profil' : 'Vezi profil' }}
+      </div>
+    </mat-card>
+  }
+</div>
+
+<!-- ── Foşti părinţi de sprijin (arhivă) ── -->
+@if (data.inactiveParents().length > 0) {
+  <mat-divider class="past-divider"></mat-divider>
+  <div class="past-section">
+    <button mat-button class="past-toggle" type="button"
+            (click)="showArchived.set(!showArchived())">
+      <span class="material-symbols-rounded">{{ showArchived() ? 'expand_less' : 'history' }}</span>
+      Foşti părinţi de sprijin ({{ data.inactiveParents().length }})
+      <span class="material-symbols-rounded">{{ showArchived() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</span>
+    </button>
+
+    @if (showArchived()) {
+      <div class="support-grid archived-grid">
+        @for (sp of data.inactiveParents(); track sp.id) {
+          <mat-card class="support-card archived-card" appearance="outlined">
+            <div class="support-card-header"
+                 [style.background]="'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'">
+              <div class="support-avatar-lg">{{ sp.initials }}</div>
+              <div class="support-header-text">
+                <span class="support-name">{{ sp.name }}</span>
+                <span class="support-role-pill">
+                  <span class="material-symbols-rounded">history</span>
+                  Arhivat
+                </span>
+              </div>
+            </div>
+            <mat-card-content class="support-body">
+              @if (sp.inactiveSince) {
+                <div class="support-meta-row">
+                  <div class="support-meta-pill">
+                    <span class="material-symbols-rounded">event_busy</span>
+                    Inactiv din {{ formatDateShort(sp.inactiveSince) }}
+                  </div>
+                </div>
+              }
+              @if (sp.inactiveReason) {
+                <div class="support-notes">
+                  <span class="material-symbols-rounded">info</span>
+                  <p>{{ sp.inactiveReason }}</p>
+                </div>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+}
