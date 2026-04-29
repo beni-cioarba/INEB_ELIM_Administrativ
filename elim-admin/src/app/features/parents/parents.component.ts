@@ -55,7 +55,12 @@ export class ParentsComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.nav.consumeExpanded('parent');
-    if (id) this.expanded.set(id);
+    if (id) {
+      this.expanded.set(id);
+      if (this.data.inactiveParents().some(p => p.id === id)) {
+        this.showArchived.set(true);
+      }
+    }
   }
 
   toggle(id: string): void {

@@ -4706,6 +4706,55 @@ main.main-content { flex: 1 0 auto !important; }
   opacity: 0.85;
 }
 
+/* === Inactiv (membri / părinți arhivați) === */
+.youth-card.is-inactive,
+.support-card.is-inactive {
+  filter: grayscale(0.55);
+  opacity: 0.95;
+}
+.youth-card.is-inactive .youth-name,
+.support-card.is-inactive .support-name {
+  text-decoration: none;
+}
+.youth-card.is-inactive .support-body,
+.support-card.is-inactive .support-body {
+  opacity: 0.92;
+}
+.youth-meta-pill.inactive-pill,
+.support-role-pill.inactive-pill {
+  background: rgba(71, 85, 105, 0.95) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+.youth-inactive-banner {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+  color: #475569 !important;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+}
+.youth-inactive-banner .material-symbols-rounded {
+  color: #64748b;
+}
+.youth-personal-pill.inactive-personal-pill,
+.support-meta-pill.inactive-personal-pill {
+  background: rgba(71, 85, 105, 0.10);
+  border-color: rgba(71, 85, 105, 0.35);
+  color: #334155;
+}
+.youth-personal-pill.inactive-personal-pill .youth-personal-icon,
+.support-meta-pill.inactive-personal-pill .material-symbols-rounded {
+  color: #64748b;
+}
+.support-notes.inactive-reason-notes {
+  background: rgba(71, 85, 105, 0.08);
+  border-left: 3px solid #94a3b8;
+}
+.support-notes.inactive-reason-notes .material-symbols-rounded {
+  color: #64748b;
+}
+
 .logo-group-link {
   display: flex !important;
   align-items: flex-end;

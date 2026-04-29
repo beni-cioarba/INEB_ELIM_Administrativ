@@ -73,16 +73,24 @@
 
 <div class="youth-grid">
   @for (y of data.filteredYouths(); track y.id) {
+    <ng-container *ngTemplateOutlet="youthCardTpl; context: { $implicit: y }"></ng-container>
+  }
+</div>
+
+<ng-template #youthCardTpl let-y>
     <mat-card class="youth-card"
               [id]="'card-youth-' + y.id"
               [class.expanded]="expanded() === y.id"
               [class.is-coord]="data.isActiveCoordinator(y.id)"
+              [class.is-inactive]="y.active === false"
               appearance="outlined"
               (click)="toggle(y.id)"
               >
 
       <div class="youth-card-header"
-           [style.background]="'linear-gradient(135deg, ' + y.accentColor + ' 0%, ' + y.accentColor + 'cc 100%)'">
+           [style.background]="y.active === false
+             ? 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+             : 'linear-gradient(135deg, ' + y.accentColor + ' 0%, ' + y.accentColor + 'cc 100%)'">
         <div class="youth-avatar">{{ y.initials }}</div>
         <div class="youth-header-text">
           <span class="youth-name">{{ y.fullName }}</span>
@@ -97,39 +105,52 @@
                 <span class="material-symbols-rounded">male</span>
               </span>
             }
-            @if (data.isActiveCoordinator(y.id)) {
+            @if (y.active === false) {
+              <span class="youth-meta-pill inactive-pill" matTooltip="Membru arhivat">
+                <span class="material-symbols-rounded">history</span>Inactiv
+              </span>
+            } @else if (data.isActiveCoordinator(y.id)) {
               <span class="youth-meta-pill">
                 <span class="material-symbols-rounded">star</span>Coordonator
               </span>
             }
           </div>
         </div>
-        @if (data.isActiveCoordinator(y.id)) {
+        @if (data.isActiveCoordinator(y.id) && y.active !== false) {
           <span class="youth-coord-badge" matTooltip="Coordonator">
             <span class="material-symbols-rounded">star</span>
           </span>
         }
       </div>
 
-      @if (data.getNextEventForYouth(y.id); as nextEv) {
-        <div class="team-next-banner youth-next-banner">
-          <span class="material-symbols-rounded">event_available</span>
-          <span>Urm. <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
-          @if (!isToday(nextEv.date)) {
-            <span class="tl-days-badge support-days-badge"
-                  [style.background-color]="getTeamColor(nextEv.team) + '22'"
-                  [style.color]="getTeamColor(nextEv.team)">
-              {{ daysUntil(nextEv.date) }}z
-            </span>
-          } @else {
-            <span class="tl-days-badge today-badge">Azi!</span>
-          }
+      @if (y.active === false) {
+        <div class="team-next-banner youth-inactive-banner">
+          <span class="material-symbols-rounded">event_busy</span>
+          <span>
+            Inactiv@if (y.inactiveSince) { din <strong>{{ formatDateShort(y.inactiveSince) }}</strong> }
+          </span>
         </div>
       } @else {
-        <div class="team-next-banner support-no-assignment">
-          <span class="material-symbols-rounded">event_busy</span>
-          Fără echipă activă
-        </div>
+        @if (data.getNextEventForYouth(y.id); as nextEv) {
+          <div class="team-next-banner youth-next-banner">
+            <span class="material-symbols-rounded">event_available</span>
+            <span>Urm. <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
+            @if (!isToday(nextEv.date)) {
+              <span class="tl-days-badge support-days-badge"
+                    [style.background-color]="getTeamColor(nextEv.team) + '22'"
+                    [style.color]="getTeamColor(nextEv.team)">
+                {{ daysUntil(nextEv.date) }}z
+              </span>
+            } @else {
+              <span class="tl-days-badge today-badge">Azi!</span>
+            }
+          </div>
+        } @else {
+          <div class="team-next-banner support-no-assignment">
+            <span class="material-symbols-rounded">event_busy</span>
+            Fără echipă activă
+          </div>
+        }
       }
 
       @if (expanded() === y.id) {
@@ -146,13 +167,30 @@
                 <span class="youth-personal-value">{{ y.joinedYear }}</span>
               </div>
             </div>
+            @if (y.active === false && y.inactiveSince) {
+              <div class="youth-personal-pill inactive-personal-pill">
+                <span class="youth-personal-icon material-symbols-rounded">event_busy</span>
+                <div>
+                  <span class="youth-personal-label">Inactiv din</span>
+                  <span class="youth-personal-value">{{ formatDateShort(y.inactiveSince) }}</span>
+                </div>
+              </div>
+            }
           </div>
 
-          <div class="support-section-label">
-            <span class="material-symbols-rounded">groups</span>
-            Echipe active
-          </div>
-          <div class="support-assigned-teams">
+          @if (y.active === false && y.inactiveReason) {
+            <div class="support-notes inactive-reason-notes">
+              <span class="material-symbols-rounded">info</span>
+              <p>{{ y.inactiveReason }}</p>
+            </div>
+          }
+
+          @if (y.active !== false) {
+            <div class="support-section-label">
+              <span class="material-symbols-rounded">groups</span>
+              Echipe active
+            </div>
+            <div class="support-assigned-teams">
             @for (t of data.getActiveTeamsForYouth(y.id); track t.teamName) {
               @if (data.getNextEventForTeam(t.teamName); as nextDate) {
                 <div class="support-team-row" [style.border-left-color]="getTeamColor(t.teamName)">
@@ -195,6 +233,7 @@
               </div>
             }
           </div>
+          }
 
           @if (data.getHistoricalTeamsForYouth(y.id).length > 0) {
             <div class="support-section-label">
@@ -386,8 +425,7 @@
         {{ expanded() === y.id ? 'Închide profil' : 'Vezi profil' }}
       </div>
     </mat-card>
-  }
-</div>
+</ng-template>
 
 <!-- ── Foști membri (arhivă) ── -->
 @if (data.inactiveYouths().length > 0) {
@@ -403,37 +441,7 @@
     @if (showArchived()) {
       <div class="youth-grid archived-grid">
         @for (y of data.inactiveYouths(); track y.id) {
-          <mat-card class="youth-card archived-card" appearance="outlined">
-            <div class="youth-card-header"
-                 [style.background]="'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'">
-              <div class="youth-avatar">{{ y.initials }}</div>
-              <div class="youth-header-text">
-                <span class="youth-name">{{ y.fullName }}</span>
-                <div class="youth-header-meta">
-                  <span class="youth-meta-pill">
-                    <span class="material-symbols-rounded">history</span>
-                    Arhivat
-                  </span>
-                </div>
-              </div>
-            </div>
-            <mat-card-content class="support-body">
-              @if (y.inactiveSince) {
-                <div class="support-meta-row">
-                  <div class="support-meta-pill">
-                    <span class="material-symbols-rounded">event_busy</span>
-                    Inactiv din {{ formatDateShort(y.inactiveSince) }}
-                  </div>
-                </div>
-              }
-              @if (y.inactiveReason) {
-                <div class="support-notes">
-                  <span class="material-symbols-rounded">info</span>
-                  <p>{{ y.inactiveReason }}</p>
-                </div>
-              }
-            </mat-card-content>
-          </mat-card>
+          <ng-container *ngTemplateOutlet="youthCardTpl; context: { $implicit: y }"></ng-container>
         }
       </div>
     }

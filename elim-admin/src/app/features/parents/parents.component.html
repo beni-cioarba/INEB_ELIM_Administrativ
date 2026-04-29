@@ -5,15 +5,33 @@
       Următorul sprijin
     </div>
     <mat-card-content class="next-event-body">
-      <div class="next-event-header">
+      <div class="next-event-header linkable-chip"
+           (click)="nav.goTo('team', nextSp.entry.team, $event)"
+           matTooltip="Vezi detalii echipă"
+           style="cursor: pointer;">
         <div class="next-event-team-badge" [style.background-color]="getTeamColor(nextSp.entry.team)">
           {{ getTeamNumber(nextSp.entry.team) }}
         </div>
         <div class="next-event-info">
-          <h2 class="next-event-team-name">{{ nextSp.entry.team }}</h2>
-          <p class="next-event-date">
-            <span class="material-symbols-rounded">event</span>
-            {{ formatDate(nextSp.entry.date) }}
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <h2 class="next-event-team-name">{{ nextSp.entry.team }}</h2>
+            <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
+              • Coord: {{ nextSp.entry.coordinator }}
+            </span>
+          </div>
+          <p class="next-event-date" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <span>
+              <span class="material-symbols-rounded">event</span>
+              {{ formatDate(nextSp.entry.date) }}
+            </span>
+            <span style="display: flex; align-items: center; gap: 4px;">
+              <span class="material-symbols-rounded" style="font-size: 14px;">restaurant</span>
+              {{ nextSp.entry.estimatedPersons }}
+            </span>
+            <span style="display: flex; align-items: center; gap: 4px;">
+              <span class="material-symbols-rounded" style="font-size: 14px;">celebration</span>
+              {{ nextSp.entry.programType }}
+            </span>
           </p>
         </div>
       </div>
@@ -70,30 +88,53 @@
 
 <div class="support-grid">
   @for (sp of data.activeParents(); track sp.id) {
+    <ng-container *ngTemplateOutlet="parentCardTpl; context: { $implicit: sp }"></ng-container>
+  }
+</div>
+
+<ng-template #parentCardTpl let-sp>
     <mat-card class="support-card"
               [id]="'card-parent-' + sp.id"
               [class.expanded]="expanded() === sp.id"
+              [class.is-inactive]="sp.active === false"
               appearance="outlined"
               (click)="toggle(sp.id)"
               >
       <div class="support-card-header"
-           [style.background]="'linear-gradient(135deg, ' + sp.accentColor + ' 0%, ' + sp.accentColor + 'cc 100%)'">
+           [style.background]="sp.active === false
+             ? 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+             : 'linear-gradient(135deg, ' + sp.accentColor + ' 0%, ' + sp.accentColor + 'cc 100%)'">
         <div class="support-avatar-lg">{{ sp.initials }}</div>
         <div class="support-header-text">
           <span class="support-name">{{ sp.name }}</span>
-          @if (sp.role) {
+          @if (sp.active === false) {
+            <span class="support-role-pill inactive-pill">
+              <span class="material-symbols-rounded">history</span>
+              Inactiv
+            </span>
+          } @else if (sp.role) {
             <span class="support-role-pill">
               <span class="material-symbols-rounded">work</span>
               {{ sp.role }}
             </span>
           }
         </div>
-        <span class="support-status-dot"
-              [class.offline]="!sp.available"
-              [matTooltip]="sp.available ? 'Disponibil' : 'Indisponibil'"></span>
+        @if (sp.active !== false) {
+          <span class="support-status-dot"
+                [class.offline]="!sp.available"
+                [matTooltip]="sp.available ? 'Disponibil' : 'Indisponibil'"></span>
+        }
       </div>
 
-      @if (data.getNextEventForParent(sp.id); as nextEv) {
+      @if (sp.active === false) {
+        <div class="team-next-banner youth-inactive-banner">
+          <span class="material-symbols-rounded">event_busy</span>
+          <span>
+            Inactiv@if (sp.inactiveSince) { din <strong>{{ formatDateShort(sp.inactiveSince) }}</strong> }
+          </span>
+        </div>
+      } @else {
+        @if (data.getNextEventForParent(sp.id); as nextEv) {
         <div class="team-next-banner support-next-banner">
           <span class="material-symbols-rounded">event_available</span>
           <span>Urm. <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
@@ -112,6 +153,7 @@
           <span class="material-symbols-rounded">event_busy</span>
           Fără echipă alocată momentan
         </div>
+        }
       }
 
       @if (expanded() === sp.id) {
@@ -252,7 +294,20 @@
               <span class="material-symbols-rounded">how_to_reg</span>
               Din {{ formatJoinedDate(sp.joinedDate) }}
             </div>
+            @if (sp.active === false && sp.inactiveSince) {
+              <div class="support-meta-pill inactive-personal-pill">
+                <span class="material-symbols-rounded">event_busy</span>
+                Inactiv din {{ formatDateShort(sp.inactiveSince) }}
+              </div>
+            }
           </div>
+
+          @if (sp.active === false && sp.inactiveReason) {
+            <div class="support-notes inactive-reason-notes">
+              <span class="material-symbols-rounded">info</span>
+              <p>{{ sp.inactiveReason }}</p>
+            </div>
+          }
 
           @if (sp.notes) {
             <div class="support-notes">
@@ -268,8 +323,7 @@
         {{ expanded() === sp.id ? 'Închide profil' : 'Vezi profil' }}
       </div>
     </mat-card>
-  }
-</div>
+</ng-template>
 
 <!-- ── Foşti părinţi de sprijin (arhivă) ── -->
 @if (data.inactiveParents().length > 0) {
@@ -285,35 +339,7 @@
     @if (showArchived()) {
       <div class="support-grid archived-grid">
         @for (sp of data.inactiveParents(); track sp.id) {
-          <mat-card class="support-card archived-card" appearance="outlined">
-            <div class="support-card-header"
-                 [style.background]="'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'">
-              <div class="support-avatar-lg">{{ sp.initials }}</div>
-              <div class="support-header-text">
-                <span class="support-name">{{ sp.name }}</span>
-                <span class="support-role-pill">
-                  <span class="material-symbols-rounded">history</span>
-                  Arhivat
-                </span>
-              </div>
-            </div>
-            <mat-card-content class="support-body">
-              @if (sp.inactiveSince) {
-                <div class="support-meta-row">
-                  <div class="support-meta-pill">
-                    <span class="material-symbols-rounded">event_busy</span>
-                    Inactiv din {{ formatDateShort(sp.inactiveSince) }}
-                  </div>
-                </div>
-              }
-              @if (sp.inactiveReason) {
-                <div class="support-notes">
-                  <span class="material-symbols-rounded">info</span>
-                  <p>{{ sp.inactiveReason }}</p>
-                </div>
-              }
-            </mat-card-content>
-          </mat-card>
+          <ng-container *ngTemplateOutlet="parentCardTpl; context: { $implicit: sp }"></ng-container>
         }
       </div>
     }

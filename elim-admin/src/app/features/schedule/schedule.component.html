@@ -123,11 +123,13 @@
               Părinţi de sprijin:
             </span>
             @for (p of data.getParentsForEvent(nextEvent); track p.id) {
-              <span class="hero-roster-avatar small linkable-chip"
-                    [style.background]="'linear-gradient(135deg, ' + p.accentColor + ', ' + p.accentColor + 'cc)'"
+              <span class="sr-parent-chip linkable-chip"
+                    [style.background]="p.accentColor + '22'"
+                    [style.border-color]="p.accentColor + '55'"
+                    [style.color]="p.accentColor"
                     [matTooltip]="p.name + (p.role ? ' — ' + p.role : '')"
                     (click)="nav.goTo('parent', p.id, $event)">
-                {{ p.initials }}
+                {{ p.name }}
               </span>
             }
           </div>

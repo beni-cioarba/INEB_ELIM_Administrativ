@@ -146,14 +146,14 @@ export const SCHEDULE_DATA: ScheduleEntry[] = [
   { team: 'Echipa 1', coordinator: 'Halas Luigi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 3, 10),  observations: '', completed: true },
   { team: 'Echipa 2', coordinator: 'Dobre David',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 3, 17),  observations: '', completed: true },
   { team: 'Echipa 3', coordinator: 'Istrătoaie Dina',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 3, 24),  observations: '', completed: true },
-  { team: 'Echipa 4', coordinator: 'Mitoşeriu Miriam',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 8),   observations: 'Primul program în care părinții vor fi implicați din nou la pregătirea mesei.', completed: false, parentSupporters: ['p-003', 'p-004'] },
-  { team: 'Echipa 5', coordinator: 'Toader Noemi',    programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 15),   observations: '', completed: false },
-  { team: 'Echipa 6', coordinator: 'Halas Noemi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 22),  observations: '', completed: false },
-  { team: 'Echipa 7', coordinator: 'Bereza Ionatan',  programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 29),  observations: '', completed: false },
-  { team: 'Echipa 1', coordinator: 'Halas Luigi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 5),  observations: '', completed: false },
-  { team: 'Echipa 2', coordinator: 'Dobre David',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 12),   observations: '', completed: false },
-  { team: 'Echipa 3', coordinator: 'Istrătoaie Dina',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 19),  observations: '', completed: false },
-  { team: 'Echipa 4', coordinator: 'Mitoşeriu Miriam',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 26),  observations: '', completed: false },
+  { team: 'Echipa 4', coordinator: 'Mitoşeriu Miriam',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 8),   observations: 'Primul program în care părinții vor fi implicați din nou la pregătirea mesei.', completed: false, parentSupporters: ['p-004']},
+  { team: 'Echipa 5', coordinator: 'Toader Noemi',    programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 15),   observations: '', completed: false, parentSupporters: ['p-002', 'p-007']},
+  { team: 'Echipa 6', coordinator: 'Halas Noemi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 22),  observations: '', completed: false, parentSupporters: ['p-008']},
+  { team: 'Echipa 7', coordinator: 'Bereza Ionatan',  programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 29),  observations: '', completed: false, parentSupporters: ['p-003', 'p-004']},
+  { team: 'Echipa 1', coordinator: 'Halas Luigi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 5),  observations: '', completed: false, parentSupporters: ['p-007']},
+  { team: 'Echipa 2', coordinator: 'Dobre David',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 12),   observations: '', completed: false, parentSupporters: ['p-007,p-001'] },
+  { team: 'Echipa 3', coordinator: 'Istrătoaie Dina',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 19),  observations: '', completed: false, parentSupporters: ['p-005', 'p-006']},
+  { team: 'Echipa 4', coordinator: 'Mitoşeriu Miriam',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 5, 26),  observations: '', completed: false, parentSupporters: ['p-003', 'p-004']},
   { team: 'Echipa 5', coordinator: 'Toader Noemi',    programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 3),   observations: '', completed: false },
   { team: 'Echipa 6', coordinator: 'Halas Noemi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 10),  observations: '', completed: false },
   { team: 'Echipa 7', coordinator: 'Bereza Ionatan',  programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 6, 17),  observations: '', completed: false },
@@ -208,8 +208,6 @@ export const YOUTHS: Youth[] = [
   youth('y-toth-sara',          'Sara',     'Toth',       'F', new Date(2006, 3, 25), 2026, {}, 4),
   youth('y-muresan-naomi',      'Naomi',    'Muresan',    'F', new Date(2007, 8, 14), 2026, {}, 5),
   youth('y-halas-luigi',        'Luigi',    'Halas',      'M', new Date(1998, 6, 30), 2026, { phone: '643 86 91 66', email: '', isCoordinator: true }, 6),
-
-  // ---- Echipa 2 ----
   youth('y-birle-tania',        'Tania',    'Bîrle',      'F', new Date(2005, 9, 17), 2026, { phone: '611 22 33 44' }, 7),
   youth('y-halas-noemi',        'Noemi',    'Halas',      'F', new Date(2002, 5, 11), 2026, { phone: '642 46 11 08', email: '', isCoordinator: true }, 8),
   youth('y-dobre-irene',        'Irene',    'Dobre',      'F', new Date(2006, 11, 1), 2026, {}, 9),
@@ -218,8 +216,6 @@ export const YOUTHS: Youth[] = [
   youth('y-halas-damaris',      'Damaris',  'Halas',      'F', new Date(2008, 0, 5),  2026, {}, 2),
   youth('y-marcu-nereea',       'Nereea',   'Marcu',      'F', new Date(2007, 6, 28), 2026, {}, 3),
   youth('y-dobre-david',        'David',    'Dobre',      'M', new Date(2001, 3, 14), 2026, { phone: '641 45 50 67', email: '', isCoordinator: true }, 4),
-
-  // ---- Echipa 3 ----
   youth('y-les-fineas',         'Fineas',   'Leş',        'M', new Date(2006, 5, 9),  2026, {}, 5),
   youth('y-copran-david',       'David',    'Copran',     'M', new Date(2007, 1, 21), 2026, {}, 6),
   youth('y-dulca-daniel',       'Daniel',   'Dulcă',      'M', new Date(2005, 8, 3),  2026, {}, 7),
@@ -228,8 +224,6 @@ export const YOUTHS: Youth[] = [
   youth('y-gherasim-sara',      'Sara',     'Gherasim',   'F', new Date(2007, 2, 4),  2026, {}, 0),
   youth('y-istratoaie-dina',    'Dina',     'Istrătoaie', 'F', new Date(2005, 11, 8), 2026, {}, 1),
   youth('y-istratoaie-ruben',   'Ruben',    'Istrătoaie', 'M', new Date(2000, 7, 13), 2026, { phone: '624 20 97 09', email: '', isCoordinator: true }, 2),
-
-  // ---- Echipa 4 ----
   youth('y-barba-levi',         'Levi',     'Barbă',      'M', new Date(2006, 0, 24), 2026, {}, 3),
   youth('y-barba-rebeca',       'Rebeca',   'Barbă',      'F', new Date(2008, 5, 7),  2026, {}, 4),
   youth('y-biris-sara',         'Sara',     'Biriş',      'F', new Date(2007, 9, 30), 2026, {}, 5),
@@ -238,8 +232,7 @@ export const YOUTHS: Youth[] = [
   youth('y-albu-gabriel',       'Gabriel',  'Albu',       'M', new Date(2007, 11, 12),2026, {}, 8),
   youth('y-mic-karina',         'Karina',   'Mic',        'F', new Date(2008, 3, 6),  2026, {}, 9),
   youth('y-negrusier-rut',      'Rut',      'Negrusier',  'F', new Date(2007, 7, 17), 2026, {}, 0),
-
-  // ---- Echipa 5 ----
+  youth('y-bosancu-amalia',         'Amalia',     'Bosancu',      'F', new Date(2006, 0, 24), 2026, {}, 3),
   youth('y-valean-noelia',      'Noelia',   'Valean',     'F', new Date(2006, 4, 28), 2026, {}, 1),
   youth('y-valean-vlad',        'Vlad',     'Valean',     'M', new Date(2005, 1, 11), 2026, {}, 2),
   youth('y-valean-naomi',       'Naomi',    'Valean',     'F', new Date(2008, 6, 22), 2026, {}, 3),
@@ -247,8 +240,6 @@ export const YOUTHS: Youth[] = [
   youth('y-baleanu-samuel',     'Samuel',   'Baleanu',    'M', new Date(2006, 8, 1),  2026, {}, 5),
   youth('y-muresan-denisa',     'Denisa',   'Muresan',    'F', new Date(2007, 0, 15), 2026, {}, 6),
   youth('y-toader-noemi',       'Noemi',    'Toader',     'F', new Date(2001, 9, 4),  2026, { phone: '643 55 03 01', email: '', isCoordinator: true }, 7),
-
-  // ---- Echipa 6 ----
   youth('y-blejusca-david',     'David',    'Blejusca',   'M', new Date(2006, 7, 25), 2026, {}, 8),
   youth('y-rus-miriam',         'Miriam',   'Rus',        'F', new Date(2007, 4, 18), 2026, {}, 9),
   youth('y-romosan-david',      'David',    'Romoşan',    'M', new Date(2005, 3, 9),  2026, {}, 0),
@@ -257,8 +248,6 @@ export const YOUTHS: Youth[] = [
   youth('y-istratoaie-david',   'David',    'Istrătoaie', 'M', new Date(2006, 10, 3), 2026, {}, 3),
   youth('y-toader-carla',       'Carla',    'Toader',     'F', new Date(2008, 2, 21), 2026, {}, 4),
   youth('y-toader-ainoa',       'Ainoa',    'Toader',     'F', new Date(2009, 6, 8),  2026, {}, 5),
-
-  // ---- Echipa 7 ----
   youth('y-filimon-natanael',   'Natanael', 'Filimon',    'M', new Date(2006, 11, 17),2026, {}, 6),
   youth('y-suciu-sara',         'Sara',     'Suciu',      'F', new Date(2007, 8, 23), 2026, {}, 7),
   youth('y-stulianec-sara',     'Sara',     'Stulianec',  'F', new Date(2008, 4, 11), 2026, {}, 8),
@@ -268,18 +257,35 @@ export const YOUTHS: Youth[] = [
   youth('y-bereza-eduard',      'Eduard',   'Bereza',     'M', new Date(2008, 7, 4),  2026, {}, 2),
   youth('y-bereza-ionatan',     'Ionatan',  'Bereza',     'M', new Date(1999, 11, 28),2026, { phone: '643 74 50 12', email: '', isCoordinator: true }, 3),
 
-  // ---- Foști coordonatori (istoric) ----
-  youth('y-ivascu-simona',      'Simona',   'Ivaşcu',     'F', new Date(1995, 1, 10), 2026, { isCoordinator: true }, 4),
-  youth('y-bosancu-amalia',     'Amalia',   'Bosancu',    'F', new Date(1996, 5, 22), 2026, { isCoordinator: true }, 5),
-  
+  // ---- Foști coordonatori (istoric) — au coordonat compoziții de echipă închise și nu mai sunt activi ----
+  youth('y-ivascu-simona',
+    'Simona',
+    'Ivaşcu',
+    'F',
+    new Date(1995, 1, 10),
+    2026,
+    { isCoordinator: true, 
+      phone: '624 18 33 02',
+      active: false,
+      inactiveSince: new Date(2026, 1, 28),
+      inactiveReason: ''
+    }, 
+    4
+  ),
   /* 
   // ---- Foști membri (arhivați — nu mai participă activ, dar păstrăm istoricul) ----
   youth('y-arhiva-andrei',      'Andrei',   'Petrescu',   'M', new Date(2003, 5, 14), 2022,
-        { active: false, inactiveSince: new Date(2025, 5, 30), inactiveReason: 'Mutat în alt oraș pentru studii.' }, 6),
+    { active: false, phone: '610 88 11 22',
+      inactiveSince: new Date(2025, 5, 30),
+      inactiveReason: 'Mutat în alt oraș pentru studii.' }, 6),
   youth('y-arhiva-elena',       'Elena',    'Crăciun',    'F', new Date(2004, 8,  3), 2023,
-        { active: false, inactiveSince: new Date(2025, 11, 15), inactiveReason: 'Pauză personală.' }, 7),
+    { active: false,
+      inactiveSince: new Date(2025, 11, 15),
+      inactiveReason: 'Pauză personală.' }, 7),
   youth('y-arhiva-mihai',       'Mihai',    'Stoica',     'M', new Date(2002, 2, 19), 2021,
-        { active: false, inactiveSince: new Date(2024, 8, 1),  inactiveReason: 'A trecut la grupa de adulți.' }, 8), 
+    { active: false,
+      inactiveSince: new Date(2024, 8, 1),
+      inactiveReason: 'A trecut la grupa de adulți.' }, 8), 
   */
 ];
 
@@ -347,6 +353,7 @@ export const YOUTH_TEAM_MEMBERSHIPS: YouthTeamMembership[] = [
   membership('y-rus-miriam',        'Echipa 6'),
   membership('y-romosan-david',     'Echipa 6'),
   membership('y-romosan-iosif',     'Echipa 6'),
+  membership('y-bosancu-amalia',    'Echipa 6'),
   membership('y-istratoaie-rebeca', 'Echipa 6'),
   membership('y-istratoaie-david',  'Echipa 6'),
   membership('y-toader-carla',      'Echipa 6'),
@@ -385,6 +392,13 @@ export const YOUTH_TEAM_MEMBERSHIPS: YouthTeamMembership[] = [
   membership('y-gherasim-sara',  'Echipa 3', 'membru',     false, new Date(2026, 3, 17)),
   membership('y-istratoaie-dina',  'Echipa 3', 'membru',     false, new Date(2026, 3, 17)),
   membership('y-istratoaie-ruben',    'Echipa 3', 'coordonator', false, new Date(2026, 3, 17)),
+
+  // ---- Foști membri (arhivați) — apartenențe istorice care au generat istoric de programări ----
+  /* 
+  membership('y-arhiva-andrei',     'Echipa 1', 'membru', false, new Date(2025, 5, 30)),
+  membership('y-arhiva-elena',      'Echipa 5', 'membru', false, new Date(2025, 11, 15)),
+  membership('y-arhiva-mihai',      'Echipa 7', 'membru', false, new Date(2024, 8, 1)), 
+  */
 ];
 
 /* ===================== ECHIPE (DERIVATE) ===================== */
@@ -550,6 +564,7 @@ export const PARENTS: Parent[] = [
     accentColor: '#2745b1',
     available: true,
   },
+
   /* 
   // ✅ Singurul exemplu COMPLET — copiază structura pentru părinți reali.
   {
@@ -579,45 +594,6 @@ export const PARENTS: Parent[] = [
     accentColor: '#6a1b9a',
     available: true,
   },
-  {
-    id: 'p-003',
-    name: 'Daniel Mateescu',
-    phone: '634 56 78 90',
-    email: 'daniel.mateescu@example.com',
-    role: '',
-    skills: [],
-    joinedDate: new Date(2026, 0, 1),
-    notes: '',
-    initials: 'DM',
-    accentColor: '#2e7d32',
-    available: true,
-  },
-  {
-    id: 'p-004',
-    name: 'Elena Vasilescu',
-    phone: '645 67 89 01',
-    email: 'elena.vasilescu@example.com',
-    role: '',
-    skills: [],
-    joinedDate: new Date(2026, 0, 1),
-    notes: '',
-    initials: 'EV',
-    accentColor: '#e65100',
-    available: true,
-  },
-  {
-    id: 'p-005',
-    name: 'Cristian Dumitru',
-    phone: '656 78 90 12',
-    email: 'cristian.dumitru@example.com',
-    role: '',
-    skills: [],
-    joinedDate: new Date(2026, 0, 1),
-    notes: '',
-    initials: 'CD',
-    accentColor: '#00838f',
-    available: true,
-  }, 
   */
 
   /* 
@@ -638,22 +614,6 @@ export const PARENTS: Parent[] = [
     inactiveSince: new Date(2025, 11, 31),
     inactiveReason: 'Schimbare de program profesional.',
   },
-  {
-    id: 'p-arhiva-002',
-    name: 'Ion Lazăr',
-    phone: '660 44 55 66',
-    email: 'ion.lazar@example.com',
-    role: 'Logistică',
-    skills: ['Aranjare săli', 'Sonorizare'],
-    joinedDate: new Date(2023, 8, 5),
-    notes: '',
-    initials: 'IL',
-    accentColor: '#283593',
-    available: false,
-    active: false,
-    inactiveSince: new Date(2025, 4, 20),
-    inactiveReason: 'S-a mutat în altă localitate.',
-  }, 
   */
 ];
 
@@ -665,16 +625,20 @@ export const PARENT_TEAM_ASSIGNMENTS: ParentTeamAssignment[] = [
   */
 ];
 
-/** Legături familiale părinte ↔ tânăr (pentru a conecta toate datele). */
+/** Legături familiale părinte ↔ tânăr (pentru a conecta toate datele). relationship: mamă - tată */
 export const PARENT_YOUTH_LINKS: ParentYouthLink[] = [
-  /* 
-  { parentId: 'p-001', youthId: 'y-pintilei-david',  relationship: 'tată' },
-  { parentId: 'p-002', youthId: 'y-mic-karina',      relationship: 'mamă' },
-  { parentId: 'p-002', youthId: 'y-jescu-marco',     relationship: 'mamă' },
-  { parentId: 'p-003', youthId: 'y-blejusca-david',  relationship: 'tată' },
-  { parentId: 'p-004', youthId: 'y-valean-noelia',   relationship: 'mamă' },
-  { parentId: 'p-005', youthId: 'y-bereza-eduard',   relationship: 'tată' },
-  */
+  { parentId: 'p-001', youthId: 'y-birle-tania',  relationship: 'mamă' },
+  { parentId: 'p-001', youthId: 'y-birle-filip',  relationship: 'mamă' },
+  { parentId: 'p-002', youthId: 'y-dobre-irene',  relationship: 'mamă' },
+  { parentId: 'p-002', youthId: 'y-dobre-david',  relationship: 'mamă' },
+  { parentId: 'p-003', youthId: 'y-mitoseriu-miriam',  relationship: 'mamă' },
+  { parentId: 'p-003', youthId: 'y-mitoseriu-kevin',  relationship: 'mamă' },
+  { parentId: 'p-004', youthId: 'y-negrusier-rut',  relationship: 'mamă' },
+  { parentId: 'p-005', youthId: 'y-dulca-daniel',  relationship: 'mamă' },
+  { parentId: 'p-005', youthId: 'y-dulca-david',  relationship: 'mamă' },
+  { parentId: 'p-006', youthId: 'y-apalaghiei-samuel',  relationship: 'mamă' },
+  { parentId: 'p-007', youthId: 'y-pintilei-david',  relationship: 'mamă' },
+  { parentId: 'p-008', youthId: 'y-rus-miriam',  relationship: 'mamă' },
 ];
 
 /* ===================== REGULI ===================== */

@@ -66,7 +66,12 @@ export class YouthsComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.nav.consumeExpanded('youth');
-    if (id) this.expanded.set(id);
+    if (id) {
+      this.expanded.set(id);
+      if (this.data.inactiveYouths().some(y => y.id === id)) {
+        this.showArchived.set(true);
+      }
+    }
   }
 
   toggle(id: string): void {
