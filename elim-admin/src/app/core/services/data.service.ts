@@ -108,6 +108,7 @@ export class DataService {
   readonly scheduleStats: ScheduleStats;
   readonly youthStats: YouthStats;
   readonly nextParentEvent: { entry: ScheduleEntry; people: Parent[] } | null;
+  readonly upcomingParentEvents: Array<{ entry: ScheduleEntry; people: Parent[] }>;
 
   /* ─────── Reactive UI state (signals) ─────── */
   private readonly _youthSearch = signal('');
@@ -183,6 +184,7 @@ export class DataService {
     this.scheduleStats = this.computeScheduleStats();
     this.youthStats = this.computeYouthStats();
     this.nextParentEvent = this.computeNextParentEvent();
+    this.upcomingParentEvents = this.computeUpcomingParentEvents();
   }
 
   /* ─────── Public mutators (signals) ─────── */
@@ -618,6 +620,16 @@ export class DataService {
       if (people && people.length > 0) return { entry, people };
     }
     return null;
+  }
+
+  private computeUpcomingParentEvents() {
+    const list: Array<{ entry: ScheduleEntry; people: Parent[] }> = [];
+    for (const entry of this.upcomingSchedule) {
+      const people = this.parentsByEvent.get(entry);
+      if (people && people.length > 0) list.push({ entry, people });
+    }
+    // Return all except the very first one (which is `nextParentEvent`)
+    return list.slice(1);
   }
 }
 

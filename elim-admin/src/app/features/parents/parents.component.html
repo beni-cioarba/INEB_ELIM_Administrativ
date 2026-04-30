@@ -90,6 +90,41 @@
   </mat-card>
 }
 
+@if (data.upcomingParentEvents.length > 0) {
+  <div class="parents-upcoming-summary">
+    <div class="purs-header">
+      <span class="material-symbols-rounded">calendar_month</span>
+      Următoarele programări cu părinți implicați
+      <span class="purs-count">{{ data.upcomingParentEvents.length }}</span>
+    </div>
+    <div class="purs-list">
+      @for (up of data.upcomingParentEvents; track up.entry.date.getTime() + '|' + up.entry.team) {
+        <div class="purs-item" [style.--accent]="getTeamColor(up.entry.team)" (click)="nav.goTo('team', up.entry.team)">
+          <div class="purs-date">
+            <span class="purs-day">{{ up.entry.date.getDate() }}</span>
+            <span class="purs-mo">{{ formatDateShort(up.entry.date).split(' ')[1] }}</span>
+          </div>
+          <div class="purs-bar"></div>
+          <div class="purs-info">
+            <span class="purs-team">
+              {{ up.entry.team }}
+            </span>
+            <div class="purs-people-names">
+              @for (p of up.people; track p.id) {
+                <span class="purs-person">
+                  <span class="material-symbols-rounded">person</span>
+                  {{ p.name }}
+                </span>
+              }
+            </div>
+          </div>
+          <div class="purs-badge">în {{ daysUntil(up.entry.date) }}z</div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
 <h3 class="section-heading">
   <span class="material-symbols-rounded heading-icon">diversity_3</span>
   Părinți de sprijin

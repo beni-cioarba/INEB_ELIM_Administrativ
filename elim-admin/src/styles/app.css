@@ -5048,6 +5048,52 @@ main.main-content { flex: 1 0 auto !important; }
   .event-history-row { padding: 0.4rem 0.5rem; gap: 0.5rem; }
 }
 
+/* ── Parents upcoming summary (beneath hero) ── */
+.parents-upcoming-summary { margin-bottom: 2rem; margin-top: 1rem; }
+.purs-header {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; font-weight: 700; color: #475569;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.6rem; margin-left: 0.3rem;
+}
+.purs-header .material-symbols-rounded { color: #f59e0b; font-size: 20px; font-variation-settings: 'FILL' 1; }
+.purs-count {
+  background: #f1f5f9; color: #64748b; font-size: 0.72rem;
+  padding: 2px 8px; border-radius: 999px; margin-left: auto;
+}
+.purs-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem;
+}
+.purs-item {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 0.6rem 0.8rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.purs-item:hover {
+  transform: translateY(-2px); border-color: var(--accent);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+}
+.purs-date { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 40px; }
+.purs-day { font-size: 1.15rem; font-weight: 800; color: #0f172a; line-height: 1; }
+.purs-mo { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-top: 2px; }
+.purs-bar { width: 3px; height: 32px; background: var(--accent, #cbd5e1); border-radius: 999px; }
+.purs-info { display: flex; flex-direction: column; flex: 1; }
+.purs-team { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: #1e293b; }
+.purs-people-names {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px;
+}
+.purs-person {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 0.72rem; font-weight: 600; color: #475569;
+  background: #f1f5f9; padding: 2px 6px; border-radius: 6px;
+}
+.purs-person .material-symbols-rounded { font-size: 13px; color: #94a3b8; }
+.purs-badge {
+  font-size: 0.68rem; font-weight: 700; background: color-mix(in srgb, var(--accent) 15%, white);
+  color: var(--accent); padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+}
+
 /* === Event notes dialog === */
 .evnotes-backdrop {
   position: fixed; inset: 0;

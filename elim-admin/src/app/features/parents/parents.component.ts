@@ -47,6 +47,10 @@ export class ParentsComponent implements OnInit {
     this.notes.open(entry);
   }
 
+  getTooltipNames(people: {id: string, name: string}[]): string {
+    return people.map(p => p.name).join(', ');
+  }
+
   protected readonly formatDate = formatDate;
   protected readonly formatDateShort = formatDateShort;
   protected readonly formatJoinedDate = formatJoinedDate;
