@@ -3414,17 +3414,24 @@ app-root, .app-shell {
   }
 }
 .youth-search {
-  flex: 1 1 220px;
+  width: 100%;
   min-width: 0;
   display: flex !important;
   align-items: center;
   gap: 6px;
   background: #fff !important;
   border: var(--ds-border) !important;
-  border-radius: var(--ds-radius-pill) !important;
+  border-radius: 99px !important;
   padding: 5px 10px 5px 12px !important;
   box-shadow: var(--ds-shadow-sm) !important;
   min-height: 38px;
+  max-width: 100%;
+}
+@media (min-width: 600px) {
+  .youth-search {
+    flex: 1 1 220px;
+    width: auto;
+  }
 }
 .youth-search:focus-within {
   border-color: #1565c0 !important;
