@@ -79,6 +79,10 @@
               {{ data.getParentsForEvent(nextEvent).length }} părinţi
             </span>
           }
+          <span class="hero-meta-pill">
+            <span class="material-symbols-rounded">school</span>
+            {{ data.getYouthsForTeam(nextEvent.team).length }} tineri
+          </span>
         </div>
       </div>
 
@@ -117,21 +121,24 @@
           }
         </div>
         @if (data.getParentsForEvent(nextEvent).length > 0) {
-          <div class="hero-roster-parents">
-            <span class="hero-roster-parents-label">
-              <span class="material-symbols-rounded">family_restroom</span>
-              Părinţi de sprijin:
-            </span>
-            @for (p of data.getParentsForEvent(nextEvent); track p.id) {
-              <span class="sr-parent-chip linkable-chip"
-                    [style.background]="p.accentColor + '22'"
-                    [style.border-color]="p.accentColor + '55'"
-                    [style.color]="p.accentColor"
-                    [matTooltip]="p.name + (p.role ? ' — ' + p.role : '')"
-                    (click)="nav.goTo('parent', p.id, $event)">
-                {{ p.name }}
+          <div class="hero-roster-parents" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span class="hero-roster-parents-label">
+                <span class="material-symbols-rounded">family_restroom</span>
+                Părinţi de sprijin:
               </span>
-            }
+              @for (p of data.getParentsForEvent(nextEvent); track p.id) {
+                <span class="sr-parent-chip linkable-chip"
+                      [style.background]="p.accentColor + '22'"
+                      [style.border-color]="p.accentColor + '55'"
+                      [style.color]="p.accentColor"
+                      [matTooltip]="p.name + (p.role ? ' — ' + p.role : '')"
+                      (click)="nav.goTo('parent', p.id, $event)">
+                  {{ p.name }}
+                </span>
+              }
+            </div>
+            <span class="hero-roster-count" style="margin-left: 0;">{{ data.getParentsForEvent(nextEvent).length }}</span>
           </div>
         }
       </div>

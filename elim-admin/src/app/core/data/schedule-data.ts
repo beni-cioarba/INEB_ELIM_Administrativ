@@ -679,5 +679,12 @@ export const RULES = {
       'Demontarea meselor și repunerea lor.',
       'Măturarea și spălarea cu mopul a podelei din hol și a locurilor unde a avut loc activitatea.',
     ]
+  },
+  parentsRole: {
+    title: 'Funcția părinților de sprijin',
+    items: [
+      'Ajutarea și îmbogățirea mesei cu aperitive sau prăjituri mai consistente, care să fie adăugate ca un compliment la fiecare masă pregătită de tineri.',
+      'Responsabilitatea de a aduce mâncarea pregătită la biserică cu cel puțin 30 de minute înainte de începerea programului.'
+    ]
   }
 };

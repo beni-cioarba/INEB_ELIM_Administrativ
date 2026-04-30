@@ -78,5 +78,6 @@ export class RulesComponent {
     { tone: 'success', num: 2, icon: 'checklist',          eyebrow: 'Organizare',  title: this.r.coordinatorOrganization.title, items: this.r.coordinatorOrganization.items },
     { tone: 'info',    num: 3, icon: 'schedule',           eyebrow: 'Înainte',     title: this.r.beforeProgram.title,           items: this.r.beforeProgram.items },
     { tone: 'warn',    num: 4, icon: 'cleaning_services',  eyebrow: 'După',        title: this.r.afterProgram.title,            items: this.r.afterProgram.items },
+    { tone: 'primary', num: 5, icon: 'family_restroom',    eyebrow: 'Părinți',     title: this.r.parentsRole.title,             items: this.r.parentsRole.items },
   ];
 }
