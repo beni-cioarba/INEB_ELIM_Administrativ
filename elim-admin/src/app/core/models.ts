@@ -14,6 +14,13 @@ export type {
   ParentYouthLink,
 } from './data/schedule-data';
 
+export {
+  DEFAULT_PROGRAM_START_TIME,
+  DEFAULT_YOUTHS_ARRIVAL_TIME,
+  DEFAULT_PARENTS_FOOD_OFFSET_MIN,
+  getEntryTimes,
+} from './data/schedule-data';
+
 export type YouthRole = 'coordonator' | 'membru';
 export type YouthFilter = 'toti' | 'coordonatori' | 'membri';
 export type NavTarget = 'team' | 'youth' | 'parent';

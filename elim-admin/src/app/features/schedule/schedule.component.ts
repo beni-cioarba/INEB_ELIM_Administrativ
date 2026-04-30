@@ -8,7 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DataService } from '../../core/services/data.service';
 import { NavigationService } from '../../core/services/navigation.service';
 import { EventNotesService } from '../../core/services/event-notes.service';
-import { ScheduleEntry } from '../../core/models';
+import { ScheduleEntry, getEntryTimes } from '../../core/models';
 import {
   formatDate, formatDateShort, getMonthShort, daysBetween, isSameDay,
 } from '../../core/utils/date.utils';
@@ -46,6 +46,7 @@ export class ScheduleComponent {
   protected readonly getMonthShort = getMonthShort;
   protected readonly getTeamColor = getTeamColor;
   protected readonly getTeamNumber = getTeamNumber;
+  protected readonly getEntryTimes = getEntryTimes;
 
   daysUntil(date: Date): number { return daysBetween(date, this.data.today); }
   isToday(date: Date): boolean { return isSameDay(date, this.data.today); }

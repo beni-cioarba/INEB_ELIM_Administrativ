@@ -286,6 +286,11 @@
                         {{ getTeamNumber(e.team) }}
                       </span>
                       {{ e.team }}
+                      @if (data.getCoordinatorForTeam(e.team)?.id === y.id) {
+                        <span class="event-history-role" matTooltip="Coordonator al echipei">
+                          <span class="material-symbols-rounded">star</span>
+                        </span>
+                      }
                     </span>
                     <span class="event-history-type">{{ e.programType }}</span>
                   </div>

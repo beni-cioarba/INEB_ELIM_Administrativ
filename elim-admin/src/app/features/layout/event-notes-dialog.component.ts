@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EventNotesService } from '../../core/services/event-notes.service';
 import { formatDate } from '../../core/utils/date.utils';
 import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
+import { getEntryTimes } from '../../core/models';
 
 @Component({
   selector: 'app-event-notes-dialog',
@@ -41,6 +42,18 @@ import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
               <span class="material-symbols-rounded">celebration</span>
               {{ entry.programType }}
             </span>
+            <span class="evnotes-pill" title="Începere program de tineret">
+              <span class="material-symbols-rounded">event</span>
+              Program {{ getEntryTimes(entry).programStart }}
+            </span>
+            <span class="evnotes-pill" title="Tinerii prezenți la biserică pentru pregătirea mesei">
+              <span class="material-symbols-rounded">schedule</span>
+              Tineri {{ getEntryTimes(entry).youthsArrival }}
+            </span>
+            <span class="evnotes-pill parents" title="Părinții aduc mâncarea pregătită (cu 30 min înainte de începere)">
+              <span class="material-symbols-rounded">restaurant_menu</span>
+              Mâncare {{ getEntryTimes(entry).parentsFoodArrival }}
+            </span>
             @if (entry.completed) {
               <span class="evnotes-pill done">
                 <span class="material-symbols-rounded">check_circle</span>
@@ -68,6 +81,7 @@ import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
 export class EventNotesDialogComponent {
   protected readonly notes = inject(EventNotesService);
   protected readonly format = formatDate;
+  protected readonly getEntryTimes = getEntryTimes;
 
   teamColor = computed(() => {
     const e = this.notes.openEntry();

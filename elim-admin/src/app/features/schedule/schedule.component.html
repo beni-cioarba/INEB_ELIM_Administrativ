@@ -84,6 +84,24 @@
             {{ data.getYouthsForTeam(nextEvent.team).length }} tineri
           </span>
         </div>
+
+        <div class="hero-times-row">
+          <span class="hero-time-pill" matTooltip="Ora la care începe programul de tineret">
+            <span class="material-symbols-rounded">event</span>
+            <span class="hero-time-label">Program</span>
+            <span class="hero-time-val">{{ getEntryTimes(nextEvent).programStart }}</span>
+          </span>
+          <span class="hero-time-pill" matTooltip="Ora la care tinerii trebuie să fie la biserică pentru pregătirea mesei">
+            <span class="material-symbols-rounded">schedule</span>
+            <span class="hero-time-label">Tineri prezenți</span>
+            <span class="hero-time-val">{{ getEntryTimes(nextEvent).youthsArrival }}</span>
+          </span>
+          <span class="hero-time-pill parents" matTooltip="Ora la care părinții aduc mâncarea pregătită (cu 30 min înainte de începere)">
+            <span class="material-symbols-rounded">restaurant_menu</span>
+            <span class="hero-time-label">Părinți — mâncare</span>
+            <span class="hero-time-val">{{ getEntryTimes(nextEvent).parentsFoodArrival }}</span>
+          </span>
+        </div>
       </div>
 
       <div class="hero-right">
@@ -219,6 +237,14 @@
               <span class="sr-coord">
                 <span class="material-symbols-rounded">person</span>
                 {{ entry.coordinator }}
+              </span>
+              <span class="sr-times" matTooltip="Tineri prezenți → Începere program • Părinți mâncare: {{ getEntryTimes(entry).parentsFoodArrival }}">
+                <span class="material-symbols-rounded">schedule</span>
+                {{ getEntryTimes(entry).youthsArrival }} → {{ getEntryTimes(entry).programStart }}
+                <span class="sr-times-parents">
+                  <span class="material-symbols-rounded">restaurant_menu</span>
+                  {{ getEntryTimes(entry).parentsFoodArrival }}
+                </span>
               </span>
             </div>
           </div>

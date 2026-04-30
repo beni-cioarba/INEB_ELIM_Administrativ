@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DataService } from '../../core/services/data.service';
 import { NavigationService } from '../../core/services/navigation.service';
 import { EventNotesService } from '../../core/services/event-notes.service';
-import { ScheduleEntry } from '../../core/models';
+import { ScheduleEntry, getEntryTimes } from '../../core/models';
 import {
   formatDate, formatDateShort, formatJoinedDate, daysBetween, isSameDay,
 } from '../../core/utils/date.utils';
@@ -52,6 +52,7 @@ export class ParentsComponent implements OnInit {
   protected readonly formatJoinedDate = formatJoinedDate;
   protected readonly getTeamColor = getTeamColor;
   protected readonly getTeamNumber = getTeamNumber;
+  protected readonly getEntryTimes = getEntryTimes;
 
   ngOnInit(): void {
     const id = this.nav.consumeExpanded('parent');

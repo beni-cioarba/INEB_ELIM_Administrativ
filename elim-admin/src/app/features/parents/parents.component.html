@@ -32,6 +32,15 @@
               <span class="material-symbols-rounded" style="font-size: 14px;">celebration</span>
               {{ nextSp.entry.programType }}
             </span>
+            <span style="display: flex; align-items: center; gap: 4px;" matTooltip="Începere program">
+              <span class="material-symbols-rounded" style="font-size: 14px;">event</span>
+              {{ getEntryTimes(nextSp.entry).programStart }}
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; color: #c2410c; font-weight: 700;"
+                  matTooltip="Ora la care părinții trebuie să aducă mâncarea (cu 30 min înainte de începere)">
+              <span class="material-symbols-rounded" style="font-size: 14px;">restaurant_menu</span>
+              Mâncare {{ getEntryTimes(nextSp.entry).parentsFoodArrival }}
+            </span>
           </p>
         </div>
       </div>

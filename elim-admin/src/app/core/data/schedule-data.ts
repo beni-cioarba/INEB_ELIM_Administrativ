@@ -25,6 +25,46 @@ export interface ScheduleEntry {
   completed: boolean;
   /** ID-uri de părinți care sprijină punctual ACEASTĂ programare (asignare manuală). */
   parentSupporters?: string[];
+  /** Ora la care începe programul de tineret (HH:mm). Default: 20:30. */
+  programStartTime?: string;
+  /** Ora la care tinerii trebuie să fie prezenți la biserică pentru pregătirea mesei (HH:mm). Default: 19:30. */
+  youthsArrivalTime?: string;
+  /** Ora la care părinții trebuie să aducă mâncarea pregătită (HH:mm). Default (calculat): cu 30 min înainte de începerea programului. */
+  parentsFoodArrivalTime?: string | null;
+}
+
+/** Ora implicită de începere a programului de tineret. */
+export const DEFAULT_PROGRAM_START_TIME = '20:30';
+/** Ora implicită de prezență a tinerilor pentru pregătirea mesei. */
+export const DEFAULT_YOUTHS_ARRIVAL_TIME = '19:30';
+/** Decalajul implicit (în minute) ÎNAINTE de începerea programului la care părinții aduc mâncarea. */
+export const DEFAULT_PARENTS_FOOD_OFFSET_MIN = 30;
+
+/** Helper intern: scade `minutes` minute dintr-o oră în format „HH:mm". */
+function subtractMinutes(time: string, minutes: number): string {
+  const [h, m] = time.split(':').map(Number);
+  const total = (h * 60 + m - minutes + 24 * 60) % (24 * 60);
+  const hh = Math.floor(total / 60).toString().padStart(2, '0');
+  const mm = (total % 60).toString().padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+/**
+ * Returnează orele efective ale unei programări, aplicând valorile implicite.
+ * `parentsFoodArrival` este calculat ca `programStart - DEFAULT_PARENTS_FOOD_OFFSET_MIN`
+ * dacă nu este definit explicit pe entry.
+ */
+export function getEntryTimes(entry: ScheduleEntry): {
+  programStart: string;
+  youthsArrival: string;
+  parentsFoodArrival: string;
+} {
+  const programStart = entry.programStartTime ?? DEFAULT_PROGRAM_START_TIME;
+  const youthsArrival = entry.youthsArrivalTime ?? DEFAULT_YOUTHS_ARRIVAL_TIME;
+  const parentsFoodArrival =
+    entry.parentsFoodArrivalTime ??
+    subtractMinutes(programStart, DEFAULT_PARENTS_FOOD_OFFSET_MIN);
+  return { programStart, youthsArrival, parentsFoodArrival };
 }
 
 /** Membru de echipă (DTO simplu, derivat din Youth pentru UI). */
@@ -146,7 +186,7 @@ export const SCHEDULE_DATA: ScheduleEntry[] = [
   { team: 'Echipa 1', coordinator: 'Halas Luigi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 3, 10),  observations: '', completed: true },
   { team: 'Echipa 2', coordinator: 'Dobre David',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 3, 17),  observations: '', completed: true },
   { team: 'Echipa 3', coordinator: 'Istrătoaie Dina',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 3, 24),  observations: '', completed: true },
-  { team: 'Echipa 4', coordinator: 'Mitoşeriu Miriam',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 8),   observations: 'Primul program în care părinții vor fi implicați din nou la pregătirea mesei.', completed: false, parentSupporters: ['p-004']},
+  { team: 'Echipa 4', coordinator: 'Mitoşeriu Miriam',programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 8),   observations: 'Primul program în care părinții vor fi implicați din nou la pregătirea mesei.', completed: false, parentSupporters: ['p-004'] },
   { team: 'Echipa 5', coordinator: 'Toader Noemi',    programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 15),   observations: '', completed: false, parentSupporters: ['p-002', 'p-007']},
   { team: 'Echipa 6', coordinator: 'Halas Noemi',     programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 22),  observations: '', completed: false, parentSupporters: ['p-008']},
   { team: 'Echipa 7', coordinator: 'Bereza Ionatan',  programType: 'Seară de tineret', estimatedPersons: 60, date: new Date(2026, 4, 29),  observations: '', completed: false, parentSupporters: ['p-003', 'p-004']},

@@ -2324,6 +2324,51 @@ app-root, .app-shell {
 }
 .hero-meta-pill .material-symbols-rounded { font-size: 14px; color: #64748b; }
 
+/* ── Hero times row (program start, youth arrival, parents food) ── */
+.hero-times-row {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 0.45rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed #e2e8f0;
+}
+.hero-time-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px 4px 8px;
+  background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+.hero-time-pill .material-symbols-rounded { font-size: 15px; color: #2563eb; }
+.hero-time-pill .hero-time-label { color: #475569; font-weight: 600; font-size: 0.7rem; }
+.hero-time-pill .hero-time-val { font-weight: 800; color: #0f172a; letter-spacing: 0.02em; }
+.hero-time-pill.parents {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border-color: #fed7aa;
+  color: #7c2d12;
+}
+.hero-time-pill.parents .material-symbols-rounded { color: #ea580c; }
+.hero-time-pill.parents .hero-time-label { color: #9a3412; }
+
+/* ── Schedule row times (small inline) ── */
+.sr-bottom { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.sr-times {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.72rem; font-weight: 600; color: #475569;
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  padding: 2px 8px; border-radius: 999px;
+}
+.sr-times .material-symbols-rounded { font-size: 13px; color: #2563eb; }
+.sr-times-parents {
+  display: inline-flex; align-items: center; gap: 3px;
+  margin-left: 4px; padding-left: 6px;
+  border-left: 1px solid #cbd5e1;
+  color: #c2410c; font-weight: 700;
+}
+.sr-times-parents .material-symbols-rounded { color: #ea580c; }
+
 .hero-right {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
 }
@@ -5078,6 +5123,7 @@ main.main-content { flex: 1 0 auto !important; }
   font-weight: 600;
 }
 .evnotes-pill.done { background: #dcfce7; color: #166534; }
+.evnotes-pill.parents { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
 .evnotes-pill .material-symbols-rounded { font-size: 14px; }
 .evnotes-section { display: flex; flex-direction: column; gap: 0.5rem; }
 .evnotes-label {
