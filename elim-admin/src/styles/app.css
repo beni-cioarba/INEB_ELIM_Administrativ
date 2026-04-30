@@ -3401,10 +3401,16 @@ app-root, .app-shell {
 
 .youth-toolbar {
   display: flex !important;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.5rem !important;
   margin-bottom: 0.65rem !important;
-  align-items: center;
+  align-items: stretch;
+}
+@media (min-width: 600px) {
+  .youth-toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 .youth-search {
   flex: 1 1 220px;
@@ -3417,6 +3423,7 @@ app-root, .app-shell {
   border-radius: var(--ds-radius-pill) !important;
   padding: 5px 10px 5px 12px !important;
   box-shadow: var(--ds-shadow-sm) !important;
+  min-height: 38px;
 }
 .youth-search:focus-within {
   border-color: #1565c0 !important;
