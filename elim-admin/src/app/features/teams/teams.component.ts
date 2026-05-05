@@ -10,6 +10,7 @@ import { EventNotesService } from '../../core/services/event-notes.service';
 import { ScheduleEntry } from '../../core/models';
 import { formatDateShort, daysBetween } from '../../core/utils/date.utils';
 import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
+import { AtmGalleryComponent } from '../../shared/components/atm-gallery/atm-gallery.component';
 
 @Component({
   selector: 'app-teams',
@@ -18,6 +19,7 @@ import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
   imports: [
     CommonModule, MatCardModule, MatButtonModule,
     MatDividerModule, MatTooltipModule,
+    AtmGalleryComponent,
   ],
   templateUrl: './teams.component.html',
 })
