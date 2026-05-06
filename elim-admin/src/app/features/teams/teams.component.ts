@@ -67,5 +67,20 @@ export class TeamsComponent implements OnInit {
     return this.gallery.getByKeyGroup(teamName).length > 0;
   }
 
+  /** Stable key matching the composition timeline (`<team>-<endTime>`). */
+  historyKeyFor(hist: { name: string; endDate: Date }): string {
+    return `${hist.name}-${hist.endDate.getTime()}`;
+  }
+
+  /** Coordinator Youth (if it exists in the youths catalogue) for a historical composition. */
+  historyCoordinator(hist: { coordinator: string }) {
+    return this.data.getYouthByName(hist.coordinator);
+  }
+
+  /** Past events linked to that exact historical composition (newest first). */
+  pastEventsForHistory(hist: { name: string; endDate: Date }) {
+    return this.data.getEventsForHistoryKey(this.historyKeyFor(hist));
+  }
+
   daysUntil(date: Date): number { return daysBetween(date, this.data.today); }
 }

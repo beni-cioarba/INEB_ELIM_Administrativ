@@ -303,6 +303,14 @@ export class DataService {
     const c = this.compositionByEvent.get(entry);
     return c && !c.isActive ? (c.historyKey ?? null) : null;
   }
+  /** All past events that belonged to a historical composition (newest first). */
+  getEventsForHistoryKey(historyKey: string): ScheduleEntry[] {
+    const out: ScheduleEntry[] = [];
+    for (const [entry, comp] of this.compositionByEvent) {
+      if (comp.historyKey === historyKey) out.push(entry);
+    }
+    return out.sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
   /** Coordinator name resolved through the timeline (matches `entry.coordinator` if recorded). */
   getCoordinatorNameForEvent(entry: ScheduleEntry): string {
     /* Always trust the per-event coordinator recorded on the schedule entry — that

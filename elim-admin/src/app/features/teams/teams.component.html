@@ -232,6 +232,22 @@
             </div>
 
             <mat-card-content class="team-body">
+              @if (historyCoordinator(hist); as coord) {
+                <div class="team-coordinator-card linkable"
+                     [style.border-left-color]="getTeamColor(hist.name)"
+                     (click)="nav.goTo('youth', coord.id, $event)"
+                     matTooltip="Vezi profil coordonator">
+                  <div class="team-coord-row">
+                    <span class="material-symbols-rounded team-coord-star">star</span>
+                    <div class="team-coord-info">
+                      <span class="team-coord-label">Coordonator</span>
+                      <span class="team-coord-name">{{ hist.coordinator }}</span>
+                    </div>
+                    <span class="material-symbols-rounded link-arrow">chevron_right</span>
+                  </div>
+                </div>
+              }
+
               <div class="team-members-heading">
                 <span class="material-symbols-rounded">group</span>
                 Membri echipei
@@ -249,6 +265,71 @@
                   </div>
                 }
               </div>
+
+              @if (hasGalleryImages(historyKeyFor(hist))) {
+                <div class="support-section-label">
+                  <span class="material-symbols-rounded">photo_library</span>
+                  Galerie imagini echipă
+                </div>
+                <div class="team-gallery-wrap" (click)="$event.stopPropagation()">
+                  <app-atm-gallery [keyGroup]="historyKeyFor(hist)"></app-atm-gallery>
+                </div>
+              }
+
+              @if (pastEventsForHistory(hist).length > 0) {
+                <div class="support-section-label history-toggle-label"
+                     (click)="togglePastEvents(historyKeyFor(hist), $event)"
+                     role="button">
+                  <span class="material-symbols-rounded">history</span>
+                  Istoric programări
+                  <span class="section-count-pill">{{ pastEventsForHistory(hist).length }}</span>
+                  <span class="material-symbols-rounded history-toggle-chevron">
+                    {{ isPastEventsOpen(historyKeyFor(hist)) ? 'expand_less' : 'expand_more' }}
+                  </span>
+                </div>
+                @if (isPastEventsOpen(historyKeyFor(hist))) {
+                  <div class="event-history-list past-events-list">
+                    @for (e of pastEventsForHistory(hist); track e.date.getTime()) {
+                      <div class="event-history-row past is-historical-comp"
+                           [style.border-left-color]="getTeamColor(e.team) + '99'">
+                        <div class="event-history-date">
+                          <span class="event-history-day">{{ e.date.getDate() }}</span>
+                          <span class="event-history-mo">{{ formatDateShort(e.date).split(' ')[1] }}</span>
+                        </div>
+                        <div class="event-history-info">
+                          <span class="event-history-team">{{ e.programType }}</span>
+                          <span class="event-history-type">
+                            <span class="material-symbols-rounded" style="font-size:12px;vertical-align:middle">person</span>
+                            {{ data.getCoordinatorNameForEvent(e) }}
+                          </span>
+                        </div>
+                        <span class="event-history-year">{{ e.date.getFullYear() }}</span>
+                        @if (notes.hasNotes(e)) {
+                          <div class="sr-note">
+                            <span class="material-symbols-rounded">sticky_note_2</span>
+                            <span class="sr-note-text">{{ e.observations }}</span>
+                          </div>
+                        }
+                        @if (data.getParentsForEvent(e).length > 0) {
+                          <div class="sr-parents">
+                            <span class="material-symbols-rounded">family_restroom</span>
+                            <span class="sr-parents-text">
+                              @for (p of data.getParentsForEvent(e); track p.id) {
+                                <span class="sr-parent-chip"
+                                      [style.background]="p.accentColor + '22'"
+                                      [style.border-color]="p.accentColor + '55'"
+                                      [style.color]="p.accentColor"
+                                      (click)="nav.goTo('parent', p.id, $event)"
+                                      [matTooltip]="p.name">{{ p.name }}</span>
+                              }
+                            </span>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              }
             </mat-card-content>
           </mat-card>
         }
