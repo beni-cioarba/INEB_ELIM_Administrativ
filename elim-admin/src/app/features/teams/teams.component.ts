@@ -11,6 +11,7 @@ import { ScheduleEntry } from '../../core/models';
 import { formatDateShort, daysBetween } from '../../core/utils/date.utils';
 import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
 import { AtmGalleryComponent } from '../../shared/components/atm-gallery/atm-gallery.component';
+import { GalleryService } from '../../shared/components/atm-gallery/gallery.service';
 
 @Component({
   selector: 'app-teams',
@@ -27,6 +28,7 @@ export class TeamsComponent implements OnInit {
   protected readonly data = inject(DataService);
   protected readonly nav = inject(NavigationService);
   protected readonly notes = inject(EventNotesService);
+  protected readonly gallery = inject(GalleryService);
 
   readonly expandedTeam = signal<string | null>(null);
   readonly showHistory = signal(false);
@@ -59,6 +61,10 @@ export class TeamsComponent implements OnInit {
   openNotes(entry: ScheduleEntry, ev: Event): void {
     ev.stopPropagation();
     this.notes.open(entry);
+  }
+
+  hasGalleryImages(teamName: string): boolean {
+    return this.gallery.getByKeyGroup(teamName).length > 0;
   }
 
   daysUntil(date: Date): number { return daysBetween(date, this.data.today); }

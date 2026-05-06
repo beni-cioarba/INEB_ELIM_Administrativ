@@ -67,13 +67,15 @@
             }
           </div>
 
-          <div class="support-section-label">
-            <span class="material-symbols-rounded">photo_library</span>
-            Galerie imagini echipă
-          </div>
-          <div class="team-gallery-wrap" (click)="$event.stopPropagation()">
-            <app-atm-gallery [keyGroup]="team.name"></app-atm-gallery>
-          </div>
+          @if (hasGalleryImages(team.name)) {
+            <div class="support-section-label">
+              <span class="material-symbols-rounded">photo_library</span>
+              Galerie imagini echipă
+            </div>
+            <div class="team-gallery-wrap" (click)="$event.stopPropagation()">
+              <app-atm-gallery [keyGroup]="team.name"></app-atm-gallery>
+            </div>
+          }
 
           @if (data.getUpcomingEventsForTeam(team.name).length > 0) {
             <div class="support-section-label">

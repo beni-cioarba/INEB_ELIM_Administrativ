@@ -5,18 +5,6 @@
     <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem;"></i>
   </div>
 
-  <!-- Empty state -->
-  <div *ngIf="!loading && images.length === 0" class="atm-gallery-empty">
-    <div class="atm-gallery-empty__header">
-      <i class="pi pi-images atm-gallery-empty__header-icon"></i>
-      <span class="atm-gallery-empty__header-title">Galerie imagini</span>
-    </div>
-    <div class="atm-gallery-empty__body">
-      <i class="pi pi-image atm-gallery-empty__icon"></i>
-      <span class="atm-gallery-empty__text">Nu există imagini disponibile</span>
-    </div>
-  </div>
-
   <!-- Galería principal (read-only) -->
   <div *ngIf="!loading && images.length > 0" class="atm-gallery-container"
        [class.atm-gallery-container--simulated-fs]="simulatedFullscreen">
