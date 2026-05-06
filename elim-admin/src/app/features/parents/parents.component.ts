@@ -6,6 +6,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { DataService } from '../../core/services/data.service';
 import { NavigationService } from '../../core/services/navigation.service';
 import { EventNotesService } from '../../core/services/event-notes.service';
@@ -21,7 +22,7 @@ import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, MatButtonModule, MatCardModule, MatChipsModule,
-    MatDividerModule, MatRippleModule, MatTooltipModule,
+    MatDividerModule, MatRippleModule, MatTooltipModule, TranslateModule,
   ],
   templateUrl: './parents.component.html',
 })

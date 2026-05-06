@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { EventNotesService } from '../../core/services/event-notes.service';
 import { formatDate } from '../../core/utils/date.utils';
 import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
@@ -9,7 +10,7 @@ import { getEntryTimes } from '../../core/models';
   selector: 'app-event-notes-dialog',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     @if (notes.openEntry(); as entry) {
       <div class="evnotes-backdrop" (click)="close()"></div>
@@ -24,7 +25,7 @@ import { getEntryTimes } from '../../core/models';
               {{ format(entry.date) }}
             </span>
           </div>
-          <button type="button" class="evnotes-close" (click)="close()" aria-label="Închide">
+          <button type="button" class="evnotes-close" (click)="close()" [attr.aria-label]="'common.close' | translate">
             <span class="material-symbols-rounded">close</span>
           </button>
         </div>
@@ -36,28 +37,28 @@ import { getEntryTimes } from '../../core/models';
             </span>
             <span class="evnotes-pill">
               <span class="material-symbols-rounded">restaurant</span>
-              {{ entry.estimatedPersons }} persoane
+              {{ entry.estimatedPersons }} {{ 'common.people' | translate }}
             </span>
             <span class="evnotes-pill">
               <span class="material-symbols-rounded">celebration</span>
               {{ entry.programType }}
             </span>
-            <span class="evnotes-pill" title="Începere program de tineret">
+            <span class="evnotes-pill" [title]="'event_dialog.tooltip_program_start' | translate">
               <span class="material-symbols-rounded">event</span>
-              Program {{ getEntryTimes(entry).programStart }}
+              {{ 'event_dialog.program' | translate }} {{ getEntryTimes(entry).programStart }}
             </span>
-            <span class="evnotes-pill" title="Tinerii prezenți la biserică pentru pregătirea mesei">
+            <span class="evnotes-pill" [title]="'event_dialog.tooltip_youths_arrival' | translate">
               <span class="material-symbols-rounded">schedule</span>
-              Tineri {{ getEntryTimes(entry).youthsArrival }}
+              {{ 'event_dialog.youths_present' | translate }} {{ getEntryTimes(entry).youthsArrival }}
             </span>
-            <span class="evnotes-pill parents" title="Părinții aduc mâncarea pregătită (cu 30 min înainte de începere)">
+            <span class="evnotes-pill parents" [title]="'event_dialog.tooltip_parents_food' | translate">
               <span class="material-symbols-rounded">restaurant_menu</span>
-              Mâncare {{ getEntryTimes(entry).parentsFoodArrival }}
+              {{ 'event_dialog.food' | translate }} {{ getEntryTimes(entry).parentsFoodArrival }}
             </span>
             @if (entry.completed) {
               <span class="evnotes-pill done">
                 <span class="material-symbols-rounded">check_circle</span>
-                Finalizat
+                {{ 'event_dialog.completed' | translate }}
               </span>
             }
           </div>
@@ -66,12 +67,12 @@ import { getEntryTimes } from '../../core/models';
             <div class="evnotes-section">
               <div class="evnotes-label">
                 <span class="material-symbols-rounded">sticky_note_2</span>
-                Notițe
+                {{ 'event_dialog.notes' | translate }}
               </div>
               <p class="evnotes-personal">{{ entry.observations }}</p>
             </div>
           } @else {
-            <p class="evnotes-empty">Nu există notițe pentru această programare.</p>
+            <p class="evnotes-empty">{{ 'event_dialog.no_notes' | translate }}</p>
           }
         </div>
       </div>

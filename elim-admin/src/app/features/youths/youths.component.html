@@ -6,7 +6,7 @@
     </div>
     <div class="youth-stat-meta">
       <span class="youth-stat-num">{{ data.youthStats.total }}</span>
-      <span class="youth-stat-label">Tineri în total</span>
+      <span class="youth-stat-label">{{ 'youths.stat_total' | translate }}</span>
     </div>
   </div>
   <div class="youth-stat-card">
@@ -15,7 +15,7 @@
     </div>
     <div class="youth-stat-meta">
       <span class="youth-stat-num">{{ data.youthStats.coordinators }}</span>
-      <span class="youth-stat-label">Coordonatori</span>
+      <span class="youth-stat-label">{{ 'youths.stat_coordinators' | translate }}</span>
     </div>
   </div>
   <div class="youth-stat-card">
@@ -24,14 +24,14 @@
     </div>
     <div class="youth-stat-meta">
       <span class="youth-stat-num">{{ data.youthStats.thisWeek }}</span>
-      <span class="youth-stat-label">Implicați urm. eveniment</span>
+      <span class="youth-stat-label">{{ 'youths.stat_involved_next' | translate }}</span>
     </div>
   </div>
 </div>
 
 <h3 class="section-heading">
   <span class="material-symbols-rounded heading-icon">school</span>
-  Director tineri
+  {{ 'youths.youth_director' | translate }}
   <span class="heading-count">{{ data.filteredYouths().length }}</span>
 </h3>
 
@@ -42,11 +42,11 @@
     <input type="text"
            [ngModel]="data.youthSearch()"
            (ngModelChange)="data.setYouthSearch($event)"
-           placeholder="Caută după nume…"
-           aria-label="Caută tânăr">
+           [placeholder]="'youths.search_placeholder' | translate"
+           [attr.aria-label]="'youths.search_aria' | translate">
     @if (data.youthSearch()) {
       <button class="youth-search-clear"
-              (click)="data.clearYouthSearch()" aria-label="Șterge căutarea">
+              (click)="data.clearYouthSearch()" [attr.aria-label]="'youths.clear_search' | translate">
         <span class="material-symbols-rounded">close</span>
       </button>
     }
@@ -54,20 +54,20 @@
   <div class="youth-filter-chips">
     <button class="youth-filter-chip"
             [class.active]="data.youthFilter() === 'toti'"
-            (click)="data.setYouthFilter('toti')">Toți</button>
+            (click)="data.setYouthFilter('toti')">{{ 'youths.filter_all' | translate }}</button>
     <button class="youth-filter-chip"
             [class.active]="data.youthFilter() === 'coordonatori'"
-            (click)="data.setYouthFilter('coordonatori')">Coordonatori</button>
+            (click)="data.setYouthFilter('coordonatori')">{{ 'youths.filter_coordinators' | translate }}</button>
     <button class="youth-filter-chip"
             [class.active]="data.youthFilter() === 'membri'"
-            (click)="data.setYouthFilter('membri')">Membri</button>
+            (click)="data.setYouthFilter('membri')">{{ 'youths.filter_members' | translate }}</button>
   </div>
 </div>
 
 @if (data.filteredYouths().length === 0) {
   <div class="youth-empty">
     <span class="material-symbols-rounded">person_search</span>
-    Niciun tânăr nu se potrivește căutării.
+    {{ 'youths.no_results' | translate }}
   </div>
 }
 
@@ -96,28 +96,28 @@
           <span class="youth-name">{{ y.fullName }}</span>
           <div class="youth-header-meta">
             @if (y.gender === 'F') {
-              <span class="youth-meta-pill icon-only" matTooltip="Fetiță">
+              <span class="youth-meta-pill icon-only" [matTooltip]="'youths.girl' | translate">
                 <span class="material-symbols-rounded">female</span>
               </span>
             }
             @if (y.gender === 'M') {
-              <span class="youth-meta-pill icon-only" matTooltip="Băiat">
+              <span class="youth-meta-pill icon-only" [matTooltip]="'youths.boy' | translate">
                 <span class="material-symbols-rounded">male</span>
               </span>
             }
             @if (y.active === false) {
-              <span class="youth-meta-pill inactive-pill" matTooltip="Membru arhivat">
-                <span class="material-symbols-rounded">history</span>Inactiv
+              <span class="youth-meta-pill inactive-pill" [matTooltip]="'youths.archived_member' | translate">
+                <span class="material-symbols-rounded">history</span>{{ 'youths.inactive' | translate }}
               </span>
             } @else if (data.isActiveCoordinator(y.id)) {
               <span class="youth-meta-pill">
-                <span class="material-symbols-rounded">star</span>Coordonator
+                <span class="material-symbols-rounded">star</span>{{ 'youths.coordinator' | translate }}
               </span>
             }
           </div>
         </div>
         @if (data.isActiveCoordinator(y.id) && y.active !== false) {
-          <span class="youth-coord-badge" matTooltip="Coordonator">
+          <span class="youth-coord-badge" [matTooltip]="'youths.coordinator' | translate">
             <span class="material-symbols-rounded">star</span>
           </span>
         }
@@ -127,28 +127,28 @@
         <div class="team-next-banner youth-inactive-banner">
           <span class="material-symbols-rounded">event_busy</span>
           <span>
-            Inactiv@if (y.inactiveSince) { din <strong>{{ formatDateShort(y.inactiveSince) }}</strong> }
+            {{ 'youths.inactive' | translate }}@if (y.inactiveSince) { {{ 'youths.inactive_since' | translate }} <strong>{{ formatDateShort(y.inactiveSince) }}</strong> }
           </span>
         </div>
       } @else {
         @if (data.getNextEventForYouth(y.id); as nextEv) {
           <div class="team-next-banner youth-next-banner">
             <span class="material-symbols-rounded">event_available</span>
-            <span>Urm. <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
+            <span>{{ 'youths.next_short' | translate }} <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
             @if (!isToday(nextEv.date)) {
               <span class="tl-days-badge support-days-badge"
                     [style.background-color]="getTeamColor(nextEv.team) + '22'"
                     [style.color]="getTeamColor(nextEv.team)">
-                {{ daysUntil(nextEv.date) }}z
+                {{ daysUntil(nextEv.date) }}{{ 'common.day_letter' | translate }}
               </span>
             } @else {
-              <span class="tl-days-badge today-badge">Azi!</span>
+              <span class="tl-days-badge today-badge">{{ 'youths.today_excl' | translate }}</span>
             }
           </div>
         } @else {
           <div class="team-next-banner support-no-assignment">
             <span class="material-symbols-rounded">event_busy</span>
-            Fără echipă activă
+            {{ 'youths.no_active_team' | translate }}
           </div>
         }
       }
@@ -157,13 +157,13 @@
         <mat-card-content class="support-body" (click)="$event.stopPropagation()">
           <div class="support-section-label">
             <span class="material-symbols-rounded">badge</span>
-            Date personale
+            {{ 'youths.personal_data' | translate }}
           </div>
           <div class="youth-personal-grid">
             <div class="youth-personal-pill">
               <span class="youth-personal-icon material-symbols-rounded">how_to_reg</span>
               <div>
-                <span class="youth-personal-label">Membru din</span>
+                <span class="youth-personal-label">{{ 'youths.member_since' | translate }}</span>
                 <span class="youth-personal-value">{{ y.joinedYear }}</span>
               </div>
             </div>
@@ -171,7 +171,7 @@
               <div class="youth-personal-pill inactive-personal-pill">
                 <span class="youth-personal-icon material-symbols-rounded">event_busy</span>
                 <div>
-                  <span class="youth-personal-label">Inactiv din</span>
+                  <span class="youth-personal-label">{{ 'youths.inactive_from' | translate }}</span>
                   <span class="youth-personal-value">{{ formatDateShort(y.inactiveSince) }}</span>
                 </div>
               </div>
@@ -188,7 +188,7 @@
           @if (y.active !== false) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">groups</span>
-              Echipe active
+              {{ 'youths.active_teams' | translate }}
             </div>
             <div class="support-assigned-teams">
             @for (t of data.getActiveTeamsForYouth(y.id); track t.teamName) {
@@ -204,7 +204,7 @@
                         {{ t.teamName }}
                         @if (t.role === 'coordonator') {
                           <span class="youth-role-pill">
-                            <span class="material-symbols-rounded">star</span> Coordonator
+                            <span class="material-symbols-rounded">star</span> {{ 'youths.coordinator' | translate }}
                           </span>
                         }
                       </span>
@@ -218,9 +218,9 @@
                          [class.is-today]="isToday(nextDate.date)">
                       @if (!isToday(nextDate.date)) {
                         <span class="support-cd-num">{{ daysUntil(nextDate.date) }}</span>
-                        <span class="support-cd-unit">{{ daysUntil(nextDate.date) === 1 ? 'zi' : 'zile' }}</span>
+                        <span class="support-cd-unit">{{ daysUntil(nextDate.date) === 1 ? ('common.day' | translate) : ('common.days' | translate) }}</span>
                       } @else {
-                        <span class="support-cd-unit today-strong">Azi!</span>
+                        <span class="support-cd-unit today-strong">{{ 'youths.today_excl' | translate }}</span>
                       }
                     </div>
                   </div>
@@ -229,7 +229,7 @@
             }
             @if (data.getActiveTeamsForYouth(y.id).length === 0) {
               <div class="support-no-teams">
-                Acest tânăr nu este în nicio echipă activă.
+                {{ 'youths.not_in_active_team' | translate }}
               </div>
             }
           </div>
@@ -238,7 +238,7 @@
           @if (data.getHistoricalTeamsForYouth(y.id).length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">history</span>
-              Echipe anterioare
+              {{ 'youths.previous_teams' | translate }}
             </div>
             <div class="youth-history-list">
               @for (h of data.getHistoricalTeamsForYouth(y.id); track h.teamName) {
@@ -252,13 +252,13 @@
                     <span class="youth-history-team">
                       {{ h.teamName }}
                       @if (h.role === 'coordonator') {
-                        <span class="youth-role-pill historical" matTooltip="Coordonator al acestei echipe anterioare">
-                          <span class="material-symbols-rounded">star</span> Coordonator
+                        <span class="youth-role-pill historical" [matTooltip]="'youths.prev_coord_tooltip' | translate">
+                          <span class="material-symbols-rounded">star</span> {{ 'youths.coordinator' | translate }}
                         </span>
                       }
                     </span>
                     @if (h.endDate) {
-                      <span class="youth-history-end">până la {{ formatDateShort(h.endDate) }}</span>
+                      <span class="youth-history-end">{{ 'youths.until' | translate }} {{ formatDateShort(h.endDate) }}</span>
                     }
                   </div>
                 </div>
@@ -269,7 +269,7 @@
           @if (data.getUpcomingEventsForYouth(y.id).length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">event_upcoming</span>
-              Programări viitoare
+              {{ 'youths.upcoming_schedules' | translate }}
               <span class="section-count-pill">{{ data.getUpcomingEventsForYouth(y.id).length }}</span>
             </div>
             <div class="event-history-list">
@@ -287,7 +287,7 @@
                       </span>
                       {{ e.team }}
                       @if (data.getCoordinatorForTeam(e.team)?.id === y.id) {
-                        <span class="event-history-role" matTooltip="Coordonator al echipei">
+                        <span class="event-history-role" [matTooltip]="'youths.team_coordinator_tooltip' | translate">
                           <span class="material-symbols-rounded">star</span>
                         </span>
                       }
@@ -295,12 +295,12 @@
                     <span class="event-history-type">{{ e.programType }}</span>
                   </div>
                   @if (isToday(e.date)) {
-                    <span class="event-history-badge today-badge">Azi!</span>
+                    <span class="event-history-badge today-badge">{{ 'youths.today_excl' | translate }}</span>
                   } @else {
                     <span class="event-history-badge"
                           [style.background-color]="getTeamColor(e.team) + '22'"
                           [style.color]="getTeamColor(e.team)">
-                      în {{ daysUntil(e.date) }}z
+                      {{ 'youths.in_days_short' | translate: { n: daysUntil(e.date) } }}
                     </span>
                   }
                   @if (notes.hasNotes(e)) {
@@ -319,7 +319,7 @@
                  (click)="togglePastEvents(y.id, $event)"
                  role="button">
               <span class="material-symbols-rounded">restaurant_menu</span>
-              Istoric programări
+              {{ 'youths.schedule_history' | translate }}
               <span class="section-count-pill">{{ data.getPastEventsForYouth(y.id).length }}</span>
               <span class="material-symbols-rounded history-toggle-chevron">
                 {{ isPastEventsOpen(y.id) ? 'expand_less' : 'expand_more' }}
@@ -332,7 +332,7 @@
                        [class.is-historical-comp]="data.isHistoricalEvent(h.entry)"
                        [class.linkable]="data.isHistoricalEvent(h.entry)"
                        [style.border-left-color]="getTeamColor(h.teamName) + '99'"
-                       [matTooltip]="data.isHistoricalEvent(h.entry) ? 'Vezi compoziția istorică a echipei' : ''"
+                       [matTooltip]="data.isHistoricalEvent(h.entry) ? ('teams.view_team_history_composition' | translate) : ''"
                        (click)="data.isHistoricalEvent(h.entry) && nav.goToHistoricalTeam(data.getHistoryKeyForEvent(h.entry)!, $event)">
                     <div class="event-history-date">
                       <span class="event-history-day">{{ h.entry.date.getDate() }}</span>
@@ -346,15 +346,15 @@
                         </span>
                         {{ h.teamName }}
                         @if (h.role === 'coordonator') {
-                          <span class="event-history-role" matTooltip="Coordonator atunci">
+                          <span class="event-history-role" [matTooltip]="'youths.coordinator_then' | translate">
                             <span class="material-symbols-rounded">star</span>
                           </span>
                         }
                         @if (data.isHistoricalEvent(h.entry)) {
                           <span class="historical-comp-pill inline"
-                                [matTooltip]="'Compoziție încheiată la ' + formatDateShort(data.getCompositionForEvent(h.entry)!.end!)">
+                                [matTooltip]="'teams.composition_ended_on' | translate: { date: formatDateShort(data.getCompositionForEvent(h.entry)!.end!) }">
                             <span class="material-symbols-rounded">history</span>
-                            istoric
+                            {{ 'teams.history_short' | translate }}
                           </span>
                         }
                       </span>
@@ -376,7 +376,7 @@
           @if (y.interests && y.interests.length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">interests</span>
-              Interese
+              {{ 'youths.interests' | translate }}
             </div>
             <mat-chip-set class="support-skills">
               @for (i of y.interests; track i) {
@@ -388,7 +388,7 @@
           @if (data.getParentsForYouth(y.id).length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">family_restroom</span>
-              Părinți / tutori
+              {{ 'youths.parents_guardians' | translate }}
             </div>
             <div class="parent-children-list">
               @for (link of data.getParentsForYouth(y.id); track link.parent.id) {
@@ -402,9 +402,9 @@
                       {{ link.parent.name }}
                       @for (t of getInvolvedTeams(y.id, link.parent.id); track t) {
                         <span class="parent-involvement-pill"
-                              [matTooltip]="'Părinte de sprijin la ' + t">
+                              [matTooltip]="'youths.support_parent_at' | translate: { team: t }">
                           <span class="material-symbols-rounded">volunteer_activism</span>
-                          sprijin la {{ t }}
+                          {{ 'youths.support_at' | translate: { team: t } }}
                         </span>
                       }
                     </span>
@@ -427,7 +427,7 @@
 
       <div class="team-expand-hint">
         <span class="material-symbols-rounded">{{ expanded() === y.id ? 'expand_less' : 'expand_more' }}</span>
-        {{ expanded() === y.id ? 'Închide profil' : 'Vezi profil' }}
+        {{ expanded() === y.id ? ('youths.close_profile' | translate) : ('youths.view_profile' | translate) }}
       </div>
     </mat-card>
 </ng-template>
@@ -439,7 +439,7 @@
     <button mat-button class="past-toggle" type="button"
             (click)="showArchived.set(!showArchived())">
       <span class="material-symbols-rounded">{{ showArchived() ? 'expand_less' : 'history' }}</span>
-      Foști membri ({{ data.inactiveYouths().length }})
+      {{ 'youths.former_members' | translate }} ({{ data.inactiveYouths().length }})
       <span class="material-symbols-rounded">{{ showArchived() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</span>
     </button>
 

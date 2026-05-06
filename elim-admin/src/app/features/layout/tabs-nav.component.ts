@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { TranslateModule } from '@ngx-translate/core';
 import { TAB_PATHS } from '../../core/constants';
 
 interface NavTab {
   path: string;
   icon: string;
-  label: string;
+  /** Clave i18n para `translate`. */
+  labelKey: string;
   exact: boolean;
 }
 
@@ -22,8 +24,8 @@ interface NavTab {
   selector: 'app-tabs-nav',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTabsModule, RouterLink, RouterLinkActive],
-  host: { 
+  imports: [MatTabsModule, RouterLink, RouterLinkActive, TranslateModule],
+  host: {
     'class': 'nav-container',
     'style': 'display: block; position: sticky; top: 0; z-index: 100;'
   },
@@ -41,7 +43,7 @@ interface NavTab {
            [routerLinkActiveOptions]="{ exact: t.exact }"
            [active]="rla.isActive">
           <span class="material-symbols-rounded tab-icon">{{ t.icon }}</span>
-          <span class="tab-label">{{ t.label }}</span>
+          <span class="tab-label">{{ t.labelKey | translate }}</span>
         </a>
       }
     </nav>
@@ -50,10 +52,10 @@ interface NavTab {
 })
 export class TabsNavComponent {
   readonly tabs: NavTab[] = [
-    { path: TAB_PATHS.schedule, icon: 'calendar_month',  label: 'Programare', exact: true },
-    { path: TAB_PATHS.teams,    icon: 'groups',          label: 'Echipe',     exact: false },
-    { path: TAB_PATHS.youths,   icon: 'school',          label: 'Tineri',     exact: false },
-    { path: TAB_PATHS.parents,  icon: 'family_restroom', label: 'Părinți',    exact: false },
-    { path: TAB_PATHS.rules,    icon: 'menu_book',       label: 'Reguli',     exact: false },
+    { path: TAB_PATHS.schedule, icon: 'calendar_month',  labelKey: 'tabs.schedule', exact: true },
+    { path: TAB_PATHS.teams,    icon: 'groups',          labelKey: 'tabs.teams',    exact: false },
+    { path: TAB_PATHS.youths,   icon: 'school',          labelKey: 'tabs.youths',   exact: false },
+    { path: TAB_PATHS.parents,  icon: 'family_restroom', labelKey: 'tabs.parents',  exact: false },
+    { path: TAB_PATHS.rules,    icon: 'menu_book',       labelKey: 'tabs.rules',    exact: false },
   ];
 }

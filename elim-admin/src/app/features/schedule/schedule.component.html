@@ -4,28 +4,28 @@
     <span class="material-symbols-rounded">event_upcoming</span>
     <div class="home-stat-meta">
       <span class="home-stat-num">{{ data.scheduleStats.upcoming }}</span>
-      <span class="home-stat-label">Programări viitoare</span>
+      <span class="home-stat-label">{{ 'schedule.stat_upcoming' | translate }}</span>
     </div>
   </div>
   <div class="home-stat" data-tone="success">
     <span class="material-symbols-rounded">today</span>
     <div class="home-stat-meta">
       <span class="home-stat-num">{{ data.scheduleStats.thisMonth }}</span>
-      <span class="home-stat-label">În luna aceasta</span>
+      <span class="home-stat-label">{{ 'schedule.stat_this_month' | translate }}</span>
     </div>
   </div>
   <div class="home-stat" data-tone="info">
     <span class="material-symbols-rounded">groups</span>
     <div class="home-stat-meta">
       <span class="home-stat-num">{{ data.scheduleStats.teams }}</span>
-      <span class="home-stat-label">Echipe active</span>
+      <span class="home-stat-label">{{ 'schedule.stat_active_teams' | translate }}</span>
     </div>
   </div>
   <div class="home-stat" data-tone="muted">
     <span class="material-symbols-rounded">history</span>
     <div class="home-stat-meta">
       <span class="home-stat-num">{{ data.scheduleStats.completed }}</span>
-      <span class="home-stat-label">Finalizate</span>
+      <span class="home-stat-label">{{ 'schedule.stat_completed' | translate }}</span>
     </div>
   </div>
 </div>
@@ -36,7 +36,7 @@
             [style.--accent]="getTeamColor(nextEvent.team)">
     <div class="hero-ribbon">
       <span class="material-symbols-rounded">notifications_active</span>
-      Următorul eveniment
+      {{ 'schedule.next_event' | translate }}
       <span class="hero-ribbon-date">{{ formatDateShort(nextEvent.date) }}</span>
     </div>
 
@@ -44,10 +44,10 @@
       <div class="hero-left">
         <div class="hero-team-chip linkable-chip"
              (click)="nav.goTo('team', nextEvent.team)"
-             matTooltip="Vezi echipa">
+             [matTooltip]="'schedule.view_team' | translate">
           <span class="hero-team-num">{{ getTeamNumber(nextEvent.team) }}</span>
           <div class="hero-team-text">
-            <span class="hero-team-label">Echipă</span>
+            <span class="hero-team-label">{{ 'schedule.team' | translate }}</span>
             <span class="hero-team-name">{{ nextEvent.team }}</span>
           </div>
         </div>
@@ -55,10 +55,10 @@
         @if (data.getCoordinatorForTeam(nextEvent.team); as heroCoord) {
           <div class="hero-coord linkable-chip"
                (click)="nav.goTo('youth', heroCoord.id)"
-               matTooltip="Vezi profil coordonator">
+               [matTooltip]="'schedule.view_coordinator' | translate">
             <span class="material-symbols-rounded">star</span>
             <div>
-              <span class="hero-coord-label">Coordonator</span>
+              <span class="hero-coord-label">{{ 'schedule.coordinator' | translate }}</span>
               <span class="hero-coord-name">{{ nextEvent.coordinator }}</span>
             </div>
           </div>
@@ -67,7 +67,7 @@
         <div class="hero-meta-row">
           <span class="hero-meta-pill">
             <span class="material-symbols-rounded">restaurant</span>
-            {{ nextEvent.estimatedPersons }} persoane
+            {{ nextEvent.estimatedPersons }} {{ 'common.people' | translate }}
           </span>
           <span class="hero-meta-pill">
             <span class="material-symbols-rounded">celebration</span>
@@ -76,29 +76,29 @@
           @if (data.getParentsForEvent(nextEvent).length > 0) {
             <span class="hero-meta-pill">
               <span class="material-symbols-rounded">family_restroom</span>
-              {{ data.getParentsForEvent(nextEvent).length }} părinţi
+              {{ data.getParentsForEvent(nextEvent).length }} {{ 'common.parents' | translate }}
             </span>
           }
           <span class="hero-meta-pill">
             <span class="material-symbols-rounded">school</span>
-            {{ data.getYouthsForTeam(nextEvent.team).length }} tineri
+            {{ data.getYouthsForTeam(nextEvent.team).length }} {{ 'common.youths' | translate }}
           </span>
         </div>
 
         <div class="hero-times-row">
-          <span class="hero-time-pill" matTooltip="Ora la care începe programul de tineret">
+          <span class="hero-time-pill" [matTooltip]="'schedule.tooltip_program_start' | translate">
             <span class="material-symbols-rounded">event</span>
-            <span class="hero-time-label">Program</span>
+            <span class="hero-time-label">{{ 'event_dialog.program' | translate }}</span>
             <span class="hero-time-val">{{ getEntryTimes(nextEvent).programStart }}</span>
           </span>
-          <span class="hero-time-pill" matTooltip="Ora la care tinerii trebuie să fie la biserică pentru pregătirea mesei">
+          <span class="hero-time-pill" [matTooltip]="'schedule.tooltip_youths_arrival' | translate">
             <span class="material-symbols-rounded">schedule</span>
-            <span class="hero-time-label">Tineri prezenți</span>
+            <span class="hero-time-label">{{ 'schedule.youths_present' | translate }}</span>
             <span class="hero-time-val">{{ getEntryTimes(nextEvent).youthsArrival }}</span>
           </span>
-          <span class="hero-time-pill parents" matTooltip="Ora la care părinții aduc mâncarea pregătită (cu 30 min înainte de începere)">
+          <span class="hero-time-pill parents" [matTooltip]="'schedule.tooltip_parents_food' | translate">
             <span class="material-symbols-rounded">restaurant_menu</span>
-            <span class="hero-time-label">Părinți — mâncare</span>
+            <span class="hero-time-label">{{ 'schedule.parents_food' | translate }}</span>
             <span class="hero-time-val">{{ getEntryTimes(nextEvent).parentsFoodArrival }}</span>
           </span>
         </div>
@@ -108,14 +108,14 @@
         @if (isToday(nextEvent.date)) {
           <div class="hero-countdown today">
             <span class="material-symbols-rounded hero-cd-icon">priority_high</span>
-            <span class="hero-cd-unit">Astăzi!</span>
+            <span class="hero-cd-unit">{{ 'schedule.today_excl' | translate }}</span>
           </div>
         } @else {
           <div class="hero-countdown">
             <span class="hero-cd-num">{{ daysUntil(nextEvent.date) }}</span>
-            <span class="hero-cd-unit">{{ daysUntil(nextEvent.date) === 1 ? 'zi' : 'zile' }}</span>
+            <span class="hero-cd-unit">{{ daysUntil(nextEvent.date) === 1 ? ('common.day' | translate) : ('common.days' | translate) }}</span>
           </div>
-          <span class="hero-cd-caption">până la eveniment</span>
+          <span class="hero-cd-caption">{{ 'schedule.until_event' | translate }}</span>
         }
       </div>
     </div>
@@ -124,7 +124,7 @@
       <div class="hero-roster">
         <div class="hero-roster-label">
           <span class="material-symbols-rounded">groups</span>
-          Echipa pregătitoare
+          {{ 'schedule.preparing_team' | translate }}
           <span class="hero-roster-count">{{ data.getYouthsForTeam(nextEvent.team).length }}</span>
         </div>
         <div class="hero-roster-avatars">
@@ -143,7 +143,7 @@
             <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
               <span class="hero-roster-parents-label">
                 <span class="material-symbols-rounded">family_restroom</span>
-                Părinţi de sprijin:
+                {{ 'schedule.support_parents' | translate }}
               </span>
               @for (p of data.getParentsForEvent(nextEvent); track p.id) {
                 <span class="sr-parent-chip linkable-chip"
@@ -167,7 +167,7 @@
 <!-- ── Top 3 next ── -->
 <h3 class="section-heading compact">
   <span class="material-symbols-rounded heading-icon">upcoming</span>
-  În curând
+  {{ 'schedule.soon' | translate }}
 </h3>
 @if (data.nextThree.length > 0) {
   <div class="next-three-grid">
@@ -176,7 +176,7 @@
            [class.is-first]="i === 0"
            [style.--accent]="getTeamColor(entry.team)"
            (click)="nav.goTo('team', entry.team)"
-           matTooltip="Vezi echipa"
+           [matTooltip]="'schedule.view_team' | translate"
            matRipple>
         <div class="ntc-date">
           <span class="ntc-day">{{ entry.date.getDate() }}</span>
@@ -190,8 +190,8 @@
           </span>
         </div>
         <div class="ntc-days">
-          @if (isToday(entry.date)) { Azi }
-          @else { {{ daysUntil(entry.date) }}<small>z</small> }
+          @if (isToday(entry.date)) { {{ 'common.today_short' | translate }} }
+          @else { {{ daysUntil(entry.date) }}<small>{{ 'common.day_letter' | translate }}</small> }
         </div>
       </div>
     }
@@ -201,7 +201,7 @@
 <!-- ── Full upcoming, grouped by month ── -->
 <h3 class="section-heading compact with-count">
   <span class="material-symbols-rounded heading-icon">calendar_month</span>
-  Toate programările
+  {{ 'schedule.all_schedules' | translate }}
   <span class="heading-count">{{ data.upcomingSchedule.length }}</span>
 </h3>
 
@@ -238,7 +238,7 @@
                 <span class="material-symbols-rounded">person</span>
                 {{ entry.coordinator }}
               </span>
-              <span class="sr-times" matTooltip="Tineri prezenți → Începere program • Părinți mâncare: {{ getEntryTimes(entry).parentsFoodArrival }}">
+              <span class="sr-times" [matTooltip]="'schedule.tooltip_times_full' | translate: { food: getEntryTimes(entry).parentsFoodArrival }">
                 <span class="material-symbols-rounded">schedule</span>
                 {{ getEntryTimes(entry).youthsArrival }} → {{ getEntryTimes(entry).programStart }}
                 <span class="sr-times-parents">
@@ -250,10 +250,10 @@
           </div>
           <div class="sr-badge">
             @if (isToday(entry.date)) {
-              <span class="sr-badge-today">Azi</span>
+              <span class="sr-badge-today">{{ 'common.today_short' | translate }}</span>
             } @else {
               <span class="sr-badge-num">{{ daysUntil(entry.date) }}</span>
-              <span class="sr-badge-unit">{{ daysUntil(entry.date) === 1 ? 'zi' : 'zile' }}</span>
+              <span class="sr-badge-unit">{{ daysUntil(entry.date) === 1 ? ('common.day' | translate) : ('common.days' | translate) }}</span>
             }
           </div>
           @if (notes.hasNotes(entry)) {
@@ -287,14 +287,14 @@
 @if (data.coordinatorRotations.length > 0) {
   <h3 class="section-heading compact">
     <span class="material-symbols-rounded heading-icon">leaderboard</span>
-    Rezumat coordonatori (istoric)
+    {{ 'schedule.coordinator_summary' | translate }}
   </h3>
   <div class="coord-summary">
     @for (c of topCoordinators; track c.name + '|' + c.team) {
       <div class="coord-summary-row linkable"
            [style.--accent]="c.color"
            (click)="goToCoord(c.name)"
-           matTooltip="Vezi profil coordonator">
+           [matTooltip]="'schedule.view_coordinator' | translate">
         <div class="coord-bullet"></div>
         <span class="coord-name">{{ c.name }}</span>
         <span class="coord-team">{{ c.team }}</span>
@@ -327,7 +327,7 @@
 <div class="past-section">
   <button mat-button class="past-toggle" (click)="showPastSchedule.set(!showPastSchedule())">
     <span class="material-symbols-rounded">{{ showPastSchedule() ? 'expand_less' : 'history' }}</span>
-    Istoric programări ({{ data.pastSchedule.length }})
+    {{ 'teams.schedule_history' | translate }} ({{ data.pastSchedule.length }})
     <span class="material-symbols-rounded">{{ showPastSchedule() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</span>
   </button>
 
@@ -348,7 +348,7 @@
                    (click)="data.isHistoricalEvent(entry)
                               ? nav.goToHistoricalTeam(data.getHistoryKeyForEvent(entry)!, $event)
                               : nav.goTo('team', entry.team)"
-                   [matTooltip]="data.isHistoricalEvent(entry) ? 'Compoziție istorică — vezi cardul în istoric echipe' : ''"
+                   [matTooltip]="data.isHistoricalEvent(entry) ? ('teams.view_team_history_composition' | translate) : ''"
                    matRipple>
                 <div class="sr-date past">
                   <span class="sr-dow">{{ DAYS_LETTER[entry.date.getDay()] }}</span>
@@ -362,7 +362,7 @@
                       @if (data.isHistoricalEvent(entry)) {
                         <span class="historical-comp-pill inline">
                           <span class="material-symbols-rounded">history</span>
-                          istoric
+                          {{ 'teams.history_short' | translate }}
                         </span>
                       }
                     </span>

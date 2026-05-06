@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { DataService } from '../../core/services/data.service';
 import { NavigationService } from '../../core/services/navigation.service';
 import { EventNotesService } from '../../core/services/event-notes.service';
@@ -13,7 +14,7 @@ import {
   formatDate, formatDateShort, getMonthShort, daysBetween, isSameDay,
 } from '../../core/utils/date.utils';
 import { getTeamColor, getTeamNumber } from '../../core/utils/team.utils';
-import { DAYS_LETTER } from '../../core/constants';
+import { localizedConstants } from '../../core/i18n/localized-constants';
 
 @Component({
   selector: 'app-schedule',
@@ -21,7 +22,7 @@ import { DAYS_LETTER } from '../../core/constants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, MatCardModule, MatButtonModule,
-    MatDividerModule, MatRippleModule, MatTooltipModule,
+    MatDividerModule, MatRippleModule, MatTooltipModule, TranslateModule,
   ],
   templateUrl: './schedule.component.html',
 })
@@ -36,7 +37,8 @@ export class ScheduleComponent {
   }
 
   readonly showPastSchedule = signal(false);
-  readonly DAYS_LETTER = DAYS_LETTER;
+  /** Lectura reactiva: el array es reemplazado por `LanguageService` al cambiar de idioma. */
+  get DAYS_LETTER(): readonly string[] { return localizedConstants.DAYS_LETTER; }
 
   readonly topCoordinators = this.data.coordinatorRotations.slice(0, 8);
 

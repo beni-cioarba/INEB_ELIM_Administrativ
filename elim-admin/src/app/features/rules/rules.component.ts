@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
-import { DataService } from '../../core/services/data.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface RuleSection {
   tone: 'primary' | 'success' | 'info' | 'warn';
@@ -16,35 +17,35 @@ interface RuleSection {
   selector: 'app-rules',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, TranslateModule],
   template: `
     <div class="rules-hero">
       <div class="rules-hero-icon">
         <span class="material-symbols-rounded">menu_book</span>
       </div>
       <div class="rules-hero-text">
-        <h2 class="rules-hero-title">Ghid pentru pregătirea mesei</h2>
-        <p class="rules-hero-sub">Responsabilități și pași esențiali pentru fiecare echipă din departamentul de tineret.</p>
+        <h2 class="rules-hero-title">{{ 'rules.title' | translate }}</h2>
+        <p class="rules-hero-sub">{{ 'rules.subtitle' | translate }}</p>
       </div>
     </div>
 
     <div class="rules-meta-row">
       <div class="rules-meta-pill">
         <span class="material-symbols-rounded">workspaces</span>
-        4 secțiuni
+        {{ 'rules.sections_count' | translate: { count: sections().length } }}
       </div>
       <div class="rules-meta-pill">
         <span class="material-symbols-rounded">checklist_rtl</span>
-        Reguli de aplicat
+        {{ 'rules.rules_to_apply' | translate }}
       </div>
       <div class="rules-meta-pill">
         <span class="material-symbols-rounded">groups</span>
-        Pentru toate echipele
+        {{ 'rules.for_all_teams' | translate }}
       </div>
     </div>
 
     <div class="rules-grid">
-      @for (s of sections; track s.num) {
+      @for (s of sections(); track s.num) {
         <mat-card class="rule-card-pro" appearance="outlined">
           <div class="rule-card-head" [attr.data-tone]="s.tone">
             <div class="rule-card-num">{{ s.num }}</div>
@@ -72,12 +73,23 @@ interface RuleSection {
   `,
 })
 export class RulesComponent {
-  private readonly r = inject(DataService).rules;
-  readonly sections: RuleSection[] = [
-    { tone: 'primary', num: 1, icon: 'person',             eyebrow: 'Rol',         title: this.r.coordinatorRole.title,         items: this.r.coordinatorRole.items },
-    { tone: 'success', num: 2, icon: 'checklist',          eyebrow: 'Organizare',  title: this.r.coordinatorOrganization.title, items: this.r.coordinatorOrganization.items },
-    { tone: 'info',    num: 3, icon: 'schedule',           eyebrow: 'Înainte',     title: this.r.beforeProgram.title,           items: this.r.beforeProgram.items },
-    { tone: 'warn',    num: 4, icon: 'cleaning_services',  eyebrow: 'După',        title: this.r.afterProgram.title,            items: this.r.afterProgram.items },
-    { tone: 'primary', num: 5, icon: 'family_restroom',    eyebrow: 'Părinți',     title: this.r.parentsRole.title,             items: this.r.parentsRole.items },
-  ];
+  private readonly translate = inject(TranslateService);
+  private readonly langChange = toSignal(this.translate.onLangChange, { initialValue: null });
+
+  readonly sections = computed<RuleSection[]>(() => {
+    // depend on language changes
+    void this.langChange();
+    const t = (k: string) => this.translate.instant(k) as string;
+    const arr = (k: string): string[] => {
+      const v = this.translate.instant(k);
+      return Array.isArray(v) ? (v as string[]) : [];
+    };
+    return [
+      { tone: 'primary', num: 1, icon: 'person',            eyebrow: t('rules.section_role'),         title: t('rules.coordinator_role'),         items: arr('rules.items.coordinator_role') },
+      { tone: 'success', num: 2, icon: 'checklist',         eyebrow: t('rules.section_organization'), title: t('rules.coordinator_organization'), items: arr('rules.items.coordinator_organization') },
+      { tone: 'info',    num: 3, icon: 'schedule',          eyebrow: t('rules.section_before'),       title: t('rules.before_program'),           items: arr('rules.items.before_program') },
+      { tone: 'warn',    num: 4, icon: 'cleaning_services', eyebrow: t('rules.section_after'),        title: t('rules.after_program'),            items: arr('rules.items.after_program') },
+      { tone: 'primary', num: 5, icon: 'family_restroom',   eyebrow: t('rules.section_parents'),      title: t('rules.parents_role'),             items: arr('rules.items.parents_role') },
+    ];
+  });
 }

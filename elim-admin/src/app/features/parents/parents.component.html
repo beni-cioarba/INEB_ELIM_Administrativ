@@ -2,12 +2,12 @@
   <mat-card class="next-event-card support-hero" appearance="outlined">
     <div class="next-event-ribbon" [style.background-color]="getTeamColor(nextSp.entry.team)">
       <span class="material-symbols-rounded">family_restroom</span>
-      Următorul sprijin
+      {{ 'parents.next_support' | translate }}
     </div>
     <mat-card-content class="next-event-body">
       <div class="next-event-header linkable-chip"
            (click)="nav.goTo('team', nextSp.entry.team, $event)"
-           matTooltip="Vezi detalii echipă"
+           [matTooltip]="'parents.view_team_details' | translate"
            style="cursor: pointer;">
         <div class="next-event-team-badge" [style.background-color]="getTeamColor(nextSp.entry.team)">
           {{ getTeamNumber(nextSp.entry.team) }}
@@ -16,7 +16,7 @@
           <div style="display: flex; align-items: baseline; gap: 8px;">
             <h2 class="next-event-team-name">{{ nextSp.entry.team }}</h2>
             <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
-              • Coord: {{ nextSp.entry.coordinator }}
+              • {{ 'parents.coord_short' | translate }} {{ nextSp.entry.coordinator }}
             </span>
           </div>
           <p class="next-event-date" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
@@ -32,14 +32,14 @@
               <span class="material-symbols-rounded" style="font-size: 14px;">celebration</span>
               {{ nextSp.entry.programType }}
             </span>
-            <span style="display: flex; align-items: center; gap: 4px;" matTooltip="Începere program">
+            <span style="display: flex; align-items: center; gap: 4px;" [matTooltip]="'parents.program_start' | translate">
               <span class="material-symbols-rounded" style="font-size: 14px;">event</span>
               {{ getEntryTimes(nextSp.entry).programStart }}
             </span>
             <span style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; color: #c2410c; font-weight: 700;"
-                  matTooltip="Ora la care părinții trebuie să aducă mâncarea (cu 30 min înainte de începere)">
+                  [matTooltip]="'parents.food_tooltip' | translate">
               <span class="material-symbols-rounded" style="font-size: 14px;">restaurant_menu</span>
-              Mâncare {{ getEntryTimes(nextSp.entry).parentsFoodArrival }}
+              {{ 'parents.food' | translate }} {{ getEntryTimes(nextSp.entry).parentsFoodArrival }}
             </span>
           </p>
         </div>
@@ -48,10 +48,10 @@
       <div class="support-hero-people">
         <div class="support-hero-label" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
           <span class="material-symbols-rounded">groups_2</span>
-          <span style="font-weight: 700;">{{ nextSp.people.length }} Părinț{{ nextSp.people.length === 1 ? 'e' : 'i' }} alocat{{ nextSp.people.length === 1 ? '' : 'i' }}</span>
+          <span style="font-weight: 700;">{{ nextSp.people.length }} {{ 'parents.allocated' | translate }}</span>
           <span style="color: #64748b; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; padding-left: 4px; border-left: 1px solid rgba(0,0,0,0.1);">
             <span class="material-symbols-rounded" style="font-size: 14px;">school</span>
-            {{ data.getYouthsForTeam(nextSp.entry.team).length }} tineri în {{ nextSp.entry.team }}
+            {{ data.getYouthsForTeam(nextSp.entry.team).length }} {{ 'parents.youths_in' | translate: { team: nextSp.entry.team } }}
           </span>
         </div>
         <div class="support-hero-people-list">
@@ -74,7 +74,7 @@
         <div class="next-event-countdown">
           <div class="countdown-circle" [style.border-color]="getTeamColor(nextSp.entry.team)">
             <span class="countdown-number">{{ daysUntil(nextSp.entry.date) }}</span>
-            <span class="countdown-unit">{{ daysUntil(nextSp.entry.date) === 1 ? 'zi' : 'zile' }}</span>
+            <span class="countdown-unit">{{ daysUntil(nextSp.entry.date) === 1 ? ('common.day' | translate) : ('common.days' | translate) }}</span>
           </div>
         </div>
       }
@@ -82,7 +82,7 @@
         <div class="next-event-countdown today-pulse">
           <div class="countdown-circle today-circle">
             <span class="material-symbols-rounded today-icon">priority_high</span>
-            <span class="countdown-unit">Astăzi!</span>
+            <span class="countdown-unit">{{ 'common.today' | translate }}!</span>
           </div>
         </div>
       }
@@ -94,7 +94,7 @@
   <div class="parents-upcoming-summary">
     <div class="purs-header">
       <span class="material-symbols-rounded">calendar_month</span>
-      Următoarele programări cu părinți implicați
+      {{ 'parents.upcoming_with_parents' | translate }}
       <span class="purs-count">{{ data.upcomingParentEvents.length }}</span>
     </div>
     <div class="purs-list">
@@ -118,7 +118,7 @@
               }
             </div>
           </div>
-          <div class="purs-badge">în {{ daysUntil(up.entry.date) }}z</div>
+          <div class="purs-badge">{{ 'parents.in_days_short' | translate: { n: daysUntil(up.entry.date) } }}</div>
         </div>
       }
     </div>
@@ -127,11 +127,11 @@
 
 <h3 class="section-heading">
   <span class="material-symbols-rounded heading-icon">diversity_3</span>
-  Părinți de sprijin
+  {{ 'parents.support_parents' | translate }}
   <span class="heading-count">{{ data.activeParents().length }}</span>
 </h3>
 <p class="support-intro">
-  Părinți și voluntari care ajută echipele atunci când le vine rândul în programare. Apasă pe un card pentru a vedea profilul complet.
+  {{ 'parents.support_intro' | translate }}
 </p>
 
 <div class="support-grid">
@@ -158,7 +158,7 @@
           @if (sp.active === false) {
             <span class="support-role-pill inactive-pill">
               <span class="material-symbols-rounded">history</span>
-              Inactiv
+              {{ 'parents.inactive' | translate }}
             </span>
           } @else if (sp.role) {
             <span class="support-role-pill">
@@ -170,7 +170,7 @@
         @if (sp.active !== false) {
           <span class="support-status-dot"
                 [class.offline]="!sp.available"
-                [matTooltip]="sp.available ? 'Disponibil' : 'Indisponibil'"></span>
+                [matTooltip]="sp.available ? ('parents.available' | translate) : ('parents.unavailable' | translate)"></span>
         }
       </div>
 
@@ -178,28 +178,28 @@
         <div class="team-next-banner youth-inactive-banner">
           <span class="material-symbols-rounded">event_busy</span>
           <span>
-            Inactiv@if (sp.inactiveSince) { din <strong>{{ formatDateShort(sp.inactiveSince) }}</strong> }
+            {{ 'parents.inactive' | translate }}@if (sp.inactiveSince) { {{ 'parents.inactive_since' | translate }} <strong>{{ formatDateShort(sp.inactiveSince) }}</strong> }
           </span>
         </div>
       } @else {
         @if (data.getNextEventForParent(sp.id); as nextEv) {
         <div class="team-next-banner support-next-banner">
           <span class="material-symbols-rounded">event_available</span>
-          <span>Urm. <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
+          <span>{{ 'parents.next_short' | translate }} <strong>{{ nextEv.team }}</strong> &mdash; {{ formatDateShort(nextEv.date) }}</span>
           @if (!isToday(nextEv.date)) {
             <span class="tl-days-badge support-days-badge"
                   [style.background-color]="getTeamColor(nextEv.team) + '22'"
                   [style.color]="getTeamColor(nextEv.team)">
-              {{ daysUntil(nextEv.date) }}z
+              {{ daysUntil(nextEv.date) }}{{ 'common.day_letter' | translate }}
             </span>
           } @else {
-            <span class="tl-days-badge today-badge">Azi!</span>
+            <span class="tl-days-badge today-badge">{{ 'parents.today_excl' | translate }}</span>
           }
         </div>
       } @else {
         <div class="team-next-banner support-no-assignment">
           <span class="material-symbols-rounded">event_busy</span>
-          Fără echipă alocată momentan
+          {{ 'parents.no_team' | translate }}
         </div>
         }
       }
@@ -209,7 +209,7 @@
           @if (sp.skills.length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">stars</span>
-              Abilități
+              {{ 'parents.skills' | translate }}
             </div>
             <mat-chip-set class="support-skills">
               @for (s of sp.skills; track s) {
@@ -221,7 +221,7 @@
           @if (data.getYouthsForParent(sp.id).length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">escalator_warning</span>
-              Copii în departament
+              {{ 'parents.children' | translate }}
             </div>
             <div class="parent-children-list">
               @for (link of data.getYouthsForParent(sp.id); track link.youth.id) {
@@ -243,7 +243,7 @@
           @if (data.getUpcomingEventsForParent(sp.id).length > 0) {
             <div class="support-section-label">
               <span class="material-symbols-rounded">event_upcoming</span>
-              Programări viitoare
+              {{ 'parents.upcoming_schedules' | translate }}
               <span class="section-count-pill">{{ data.getUpcomingEventsForParent(sp.id).length }}</span>
             </div>
             <div class="event-history-list">
@@ -264,12 +264,12 @@
                     <span class="event-history-type">{{ e.programType }}</span>
                   </div>
                   @if (isToday(e.date)) {
-                    <span class="event-history-badge today-badge">Azi!</span>
+                    <span class="event-history-badge today-badge">{{ 'parents.today_excl' | translate }}</span>
                   } @else {
                     <span class="event-history-badge"
                           [style.background-color]="getTeamColor(e.team) + '22'"
                           [style.color]="getTeamColor(e.team)">
-                      în {{ daysUntil(e.date) }}z
+                      {{ 'parents.in_days_short' | translate: { n: daysUntil(e.date) } }}
                     </span>
                   }
                   @if (notes.hasNotes(e)) {
@@ -288,7 +288,7 @@
                  (click)="togglePastEvents(sp.id, $event)"
                  role="button">
               <span class="material-symbols-rounded">restaurant_menu</span>
-              Istoric programări
+              {{ 'parents.schedule_history' | translate }}
               <span class="section-count-pill">{{ data.getPastEventsForParent(sp.id).length }}</span>
               <span class="material-symbols-rounded history-toggle-chevron">
                 {{ isPastEventsOpen(sp.id) ? 'expand_less' : 'expand_more' }}
@@ -301,7 +301,7 @@
                        [class.is-historical-comp]="data.isHistoricalEvent(e)"
                        [class.linkable]="data.isHistoricalEvent(e)"
                        [style.border-left-color]="getTeamColor(e.team) + '99'"
-                       [matTooltip]="data.isHistoricalEvent(e) ? 'Vezi compoziția istorică a echipei' : ''"
+                       [matTooltip]="data.isHistoricalEvent(e) ? ('teams.view_team_history_composition' | translate) : ''"
                        (click)="data.isHistoricalEvent(e) && nav.goToHistoricalTeam(data.getHistoryKeyForEvent(e)!, $event)">
                     <div class="event-history-date">
                       <span class="event-history-day">{{ e.date.getDate() }}</span>
@@ -316,9 +316,9 @@
                         {{ e.team }}
                         @if (data.isHistoricalEvent(e)) {
                           <span class="historical-comp-pill inline"
-                                [matTooltip]="'Compoziție încheiată la ' + formatDateShort(data.getCompositionForEvent(e)!.end!)">
+                                [matTooltip]="'teams.composition_ended_on' | translate: { date: formatDateShort(data.getCompositionForEvent(e)!.end!) }">
                             <span class="material-symbols-rounded">history</span>
-                            istoric
+                            {{ 'teams.history_short' | translate }}
                           </span>
                         }
                       </span>
@@ -340,12 +340,12 @@
           <div class="support-meta-row">
             <div class="support-meta-pill">
               <span class="material-symbols-rounded">how_to_reg</span>
-              Din {{ formatJoinedDate(sp.joinedDate) }}
+              {{ 'parents.member_from' | translate: { date: formatJoinedDate(sp.joinedDate) } }}
             </div>
             @if (sp.active === false && sp.inactiveSince) {
               <div class="support-meta-pill inactive-personal-pill">
                 <span class="material-symbols-rounded">event_busy</span>
-                Inactiv din {{ formatDateShort(sp.inactiveSince) }}
+                {{ 'parents.inactive_from' | translate: { date: formatDateShort(sp.inactiveSince) } }}
               </div>
             }
           </div>
@@ -368,7 +368,7 @@
 
       <div class="team-expand-hint">
         <span class="material-symbols-rounded">{{ expanded() === sp.id ? 'expand_less' : 'expand_more' }}</span>
-        {{ expanded() === sp.id ? 'Închide profil' : 'Vezi profil' }}
+        {{ expanded() === sp.id ? ('parents.close_profile' | translate) : ('parents.view_profile' | translate) }}
       </div>
     </mat-card>
 </ng-template>
@@ -380,7 +380,7 @@
     <button mat-button class="past-toggle" type="button"
             (click)="showArchived.set(!showArchived())">
       <span class="material-symbols-rounded">{{ showArchived() ? 'expand_less' : 'history' }}</span>
-      Foşti părinţi de sprijin ({{ data.inactiveParents().length }})
+      {{ 'parents.former_support' | translate }} ({{ data.inactiveParents().length }})
       <span class="material-symbols-rounded">{{ showArchived() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</span>
     </button>
 

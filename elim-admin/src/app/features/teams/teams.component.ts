@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { DataService } from '../../core/services/data.service';
 import { NavigationService } from '../../core/services/navigation.service';
 import { EventNotesService } from '../../core/services/event-notes.service';
@@ -19,7 +20,7 @@ import { GalleryService } from '../../shared/components/atm-gallery/gallery.serv
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, MatCardModule, MatButtonModule,
-    MatDividerModule, MatTooltipModule,
+    MatDividerModule, MatTooltipModule, TranslateModule,
     AtmGalleryComponent,
   ],
   templateUrl: './teams.component.html',
