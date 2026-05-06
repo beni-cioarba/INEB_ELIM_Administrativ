@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './features/layout/header.component';
 import { FooterComponent } from './features/layout/footer.component';
 import { TabsNavComponent } from './features/layout/tabs-nav.component';
 import { EventNotesDialogComponent } from './features/layout/event-notes-dialog.component';
+import { PwaUpdateService } from './core/services/pwa-update.service';
 
 @Component({
   selector: 'app-root',
@@ -22,4 +23,8 @@ import { EventNotesDialogComponent } from './features/layout/event-notes-dialog.
     <app-event-notes-dialog />
   `,
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+    inject(PwaUpdateService).init();
+  }
+}

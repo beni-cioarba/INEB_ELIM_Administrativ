@@ -48,6 +48,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/manifest.webmanifest",
               { "glob": ".nojekyll", "input": "src/assets/", "output": "/" }
             ],
             "styles": [
@@ -75,12 +76,14 @@
                   "maximumError": "300kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "serviceWorker": "ngsw-config.json"
             }
           },
           "defaultConfiguration": "production"
