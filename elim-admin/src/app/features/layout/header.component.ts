@@ -19,6 +19,9 @@ import { formatDate, getMonthShort, getWeekdayShort } from '../../core/utils/dat
             <div class="logo-frame">
               <img src="assets/logo-elim.png" alt="Logo Biserica ELIM" class="header-logo">
             </div>
+            <div class="logo-frame">
+              <img src="assets/logo_admin-192.png" alt="Logo Departament Administrativ" class="header-logo">
+            </div>
             <div class="header-divider" aria-hidden="true"></div>
             <div class="header-text">
               <h1 class="church-name">Departament de Tineret</h1>

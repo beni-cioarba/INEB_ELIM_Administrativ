@@ -3909,12 +3909,17 @@ main.main-content { flex: 1 0 auto !important; }
   justify-content: center;
   flex-wrap: wrap;
 }
+.footer-logos-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .footer-logo {
   height: 40px !important;
   width: auto;
   opacity: 1 !important;
   filter: brightness(1.05) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-  padding: 4px 8px;
+  padding: 2px 4px;
   border-radius: 6px;
   transition: transform 0.2s ease;
 }

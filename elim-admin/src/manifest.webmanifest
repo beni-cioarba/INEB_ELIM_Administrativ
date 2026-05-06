@@ -12,19 +12,19 @@
   "description": "Programarea pregătirii mesei - Departament Tineret, Biserica ELIM Arganda del Rey",
   "icons": [
     {
-      "src": "assets/logo-elim.png",
+      "src": "assets/logo_admin-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/logo-elim.png",
+      "src": "assets/logo_admin-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/logo-elim.png",
+      "src": "assets/logo_admin.png",
       "sizes": "any",
       "type": "image/png",
       "purpose": "any"

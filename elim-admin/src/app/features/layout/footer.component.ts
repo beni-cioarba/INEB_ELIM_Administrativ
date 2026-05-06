@@ -8,7 +8,10 @@ import { DataService } from '../../core/services/data.service';
   template: `
     <footer class="footer">
       <div class="footer-content">
-        <img src="assets/logo-elim.png" alt="Logo Biserica ELIM" class="footer-logo footer-logo-elim">
+        <div class="footer-logos-left">
+          <img src="assets/logo-elim.png" alt="Logo Biserica ELIM" class="footer-logo footer-logo-elim">
+          <img src="assets/logo_admin-192.png" alt="Logo Departament Administrativ" class="footer-logo">
+        </div>
         <div class="footer-text">
           <p>Biserica ELIM &mdash; Arganda del Rey &copy; {{ year }}</p>
           <p class="footer-sub">Departament Administrativ Tineret</p>
